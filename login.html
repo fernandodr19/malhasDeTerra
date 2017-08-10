@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="login.css">
+        <script src="login.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <title>Título</title>
+		
+        <style>
+            body{
+                position: fixed;
+                overflow-y: scroll;
+                width: 100%;
+                top: -20px;
+                bottom: -40px;
+                left: calc(50%);
+                width: auto;
+                height: auto;
+                background-image: url(http://casteel-corp.com/wp-content/uploads/2015/04/header_renewable_energy_70.jpg);
+                background-size: cover;
+            }
+            
+            .signUp {
+                position: fixed;
+                right: 80px;
+                top: 15px;
+                text-align: center;
+            }
+        </style>
+        
+	</head>
+	<body >
+        <input class="signUp" type="button" onclick="check(this.form)" value="Register">
+		<div class="header">
+			<div>Sub<span>estação</span></div>
+		</div>
+		<br/>
+        <div class="container">
+            <form name="login">
+                <div class="login">
+                    <input type="text" placeholder="username" name="userid"><br>
+                    <input type="password" placeholder="password" name="pswrd"><br>
+                    <input type="button" onclick="checkLogin(this.form)" value="Login"><br>
+                    <p id="error" style="color:red;"></p>
+                </div>
+            </form>    
+        </div>        
+	</body>
+</html>
