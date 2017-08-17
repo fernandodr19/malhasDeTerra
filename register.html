@@ -35,13 +35,16 @@
 			<div>Sub<span>estação</span></div>
 		</div>
 		<br/>
-        <div class="container">
+        <div class="containerRegister">
             <form name="login">
                 <div class="login">
-                    <input type="text" placeholder="username" name="userid"><br>
-                    <input type="password" placeholder="password" name="pswrd"><br>
-                    <input type="button" onclick="checkLogin(this.form)" value="Login"><br>
-                    <p>New here? <a href="file:///C:/Users/fdaros/Desktop/malhasDeTerra/register.html">Create an account!</a></p>
+                    <p>Register</p>
+                    <input type="text" placeholder="Name" name="name"><br>
+                    <input type="text" placeholder="Email" name="email"><br>
+                    <input type="text" placeholder="Username" name="username"><br>
+                    <input type="password" placeholder="Password" name="password"><br>
+                    <input type="password" placeholder="Verify password" name="password2"><br>
+                    <input type="button" onclick="checkRegister(this.form)" value="Register"><br>
                     <p id="error" style="color:red;"></p>
                 </div>
             </form>    
