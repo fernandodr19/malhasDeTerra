@@ -16,12 +16,21 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <style>
-            
+            .modal-footer .add-project {
+    background: #5584ff none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 100px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 30px;
+    position: relative;
+}
         </style>
   </head>
 
   <body>
-
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -39,7 +48,7 @@
                 <ul class="dropdown-menu">
                     <li><a href="#">Project 1</a></li>
                     <li><a href="#">Project 2</a></li>
-                    <li><a href="#">Add Project</a></li>
+                    <li><a href="#" class="add-project" data-toggle="modal" data-target="#add_project"><i class="fa fa-plus circle" aria-hidden="true"></i> Add Project</a></li>
                 </ul>
                 </li>
                 <li><a href="#">Page 2</a></li>
@@ -47,7 +56,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a>Hello, Username</a></li>
-                <li><a href="#">Logout</a></li>
+                <li><a href="login.html">Logout</a></li>
             </ul>
         </div>
       </div>
@@ -88,5 +97,57 @@
         <p>&copy; Company 2014</p>
       </footer>
     </div> <!-- /container -->
+      
+      <!-- Modal -->
+    <div id="add_project1" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header login-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Project</h4>
+                </div>
+                <div class="modal-body">
+                            <input type="text" placeholder="Project Title" name="name">
+                            <input type="text" placeholder="Post of Post" name="mail">
+                            <input type="text" placeholder="Author" name="passsword">
+                            <textarea placeholder="Desicrption"></textarea>
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel" data-dismiss="modal">Close</button>
+                    <button type="button" class="add-project" data-dismiss="modal">Save</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+      
+  <div class="modal fade" id="add_project">
+	<div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Log-in</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+    		<label for="exampleInputEmail1">Email address</label>
+    		<input class="form-control" id="exampleInputEmail1" placeholder="Enter email" type="email">
+  		  </div>
+		  <div class="form-group">
+		  	<label for="exampleInputPassword1">Password</label>
+			<input class="form-control" id="exampleInputPassword1" placeholder="Password" type="password">
+		  </div>
+          <p class="text-right"><a href="#">Forgot password?</a></p>
+        </div>
+        <div class="modal-footer">
+          <a href="#" data-dismiss="modal" class="btn">Close</a>
+          <a href="#" class="btn btn-primary">Log-in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+      
   </body>
 </html>
