@@ -4,7 +4,7 @@ function checkLogin(form)
     $.ajax({
       type: "POST",
       url: "http://localhost/tutorial/login.php",
-      data: {username: form.userid.value, password: form.pswrd.value}
+      data: {email: form.email.value, password: form.password.value}
     }).done(function(msg) {
         document.getElementById("error").innerHTML = msg;
       //alert(msg);
@@ -15,7 +15,6 @@ function checkRegister(form)
 {
     var name = form.name.value
     var email = form.email.value
-    var username = form.username.value
     var password = form.password.value
     var password2 = form.password2.value
     
@@ -42,10 +41,11 @@ function checkRegister(form)
     $.ajax({
       type: "POST",
       url: "http://localhost/tutorial/register.php",
-      data: {username: email, password: password}
+      data: {name: name, email: email, password: password}
     }).done(function(msg) {
         document.getElementById("error").innerHTML = msg;
       //alert(msg);
+        document.getElementById("error").innerHTML = 'done';
     }); 
 
 }

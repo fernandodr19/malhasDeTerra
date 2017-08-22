@@ -4,8 +4,9 @@
         <link rel="stylesheet" type="text/css" href="login.css">
         <script src="login.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <title>Título</title>
-		
+        <title>Malhas de Terra</title>
+		<link rel="shortcut icon" type="image/png" href="http://simpleicon.com/wp-content/uploads/lightning.png" />
+        
         <style>
             body{
                 position: fixed;
@@ -19,18 +20,11 @@
                 background-image: url(http://casteel-corp.com/wp-content/uploads/2015/04/header_renewable_energy_70.jpg);
                 background-size: cover;
             }
-            
-            .signUp {
-                position: fixed;
-                right: 80px;
-                top: 15px;
-                text-align: center;
-            }
+
         </style>
         
 	</head>
 	<body >
-        <input class="signUp" type="button" onclick="check(this.form)" value="Register">
 		<div class="header">
 			<div>Sub<span>estação</span></div>
 		</div>
@@ -38,10 +32,10 @@
         <div class="container">
             <form name="login">
                 <div class="login">
-                    <input type="text" placeholder="username" name="userid"><br>
-                    <input type="password" placeholder="password" name="pswrd"><br>
+                    <input type="text" placeholder="Email" name="email"><br>
+                    <input type="password" placeholder="Senha" name="password"><br>
                     <input type="button" onclick="checkLogin(this.form)" value="Login"><br>
-                    <p>New here? <a href="file:///C:/Users/fdaros/Desktop/malhasDeTerra/register.html">Create an account!</a></p>
+                    <p>New here? <a href="file:///Users/fernandodr/Documents/UFF/2017.2/malhasDeTerra/register.html">Create an account!</a></p>
                     <p id="error" style="color:red;"></p>
                 </div>
             </form>    
