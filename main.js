@@ -15,5 +15,13 @@ function createProject()
 function clearModal()
 {
     document.getElementById('newProjectName').value = '';
-    document.getElementById("projectModalError").innerHTML = '';
+    document.getElementById('projectModalError').innerHTML = '';
+}
+
+function loadProjects()
+{       
+    console.log(localStorage.getItem('name'));
+    document.getElementById('myProjects').innerHTML = '';
+    $("#myProjects").append('<li><a href="#1">Project 1</a></li>');
+    $("#myProjects").append('<li><a href="#" class="add-project" data-toggle="modal" data-target="#add_project" onClick="clearModal()">Add Project</a></li>');
 }

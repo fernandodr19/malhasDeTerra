@@ -5,9 +5,16 @@ function checkLogin(form)
       type: "POST",
       url: "http://localhost/tutorial/login.php",
       data: {email: form.email.value, password: form.password.value}
-    }).done(function(msg) {
-        document.getElementById("error").innerHTML = msg;
-      //alert(msg);
+    }).done(function(response) {
+        var user = JSON.parse(response);
+        //alert(JSON.parse(msg).success);
+        if(user.success) {
+            localStorage.setItem('firstName', user.firstName);
+            localStorage.setItem('email', user.email);
+            window.location.href = "mainWindow.html";
+        } else {
+            document.getElementById("error").innerHTML = 'Invalid username or password.';
+        }
     }); 
 }
 
