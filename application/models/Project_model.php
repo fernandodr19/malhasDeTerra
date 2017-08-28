@@ -20,7 +20,7 @@
 			$this->form_validation->set_rules('newProjectName', 'NewProjectName', 'required');
 
 			if ($this->form_validation->run() == FALSE){
-				$this->form_validation->set_message("The %s value does not exist");
+				$this->form_validation->set_message("The %s value does not exist");//checkHere validation
 			} else {
 				$pName = $this->input->post('newProjectName');
 
@@ -29,8 +29,10 @@
 					'userEmail' => 'fdr'	//checkHere sesion..
 				);
 
-				$this->load->view('formsuccess');
-				
+				$this->load->view('/templates/header');
+				$this->load->view('/pages/home');
+				$this->load->view('/templates/footer');
+
 				return $this->db->insert('projects', $data);
 			}
 		}
