@@ -106,6 +106,7 @@
 			                            <th>Y2 (m)</th>
 			                            <th>Z2 (m)</th>
 			                            <th>Cabo</th>
+			                            <th></th>
 			                        </tr>
 			                    </thead>
 			                    <tbody id="conductorsTable">
@@ -151,8 +152,21 @@
 			</div>
 			<div id="report" class="tab-pane fade">
 		  		<div class="form-group">
-				    <form>  
-				      
+				    <form>
+				    	<table border="0" style="width: 200px">  
+				    		<tr style="width: 30%">
+				      			<td><label>Exibir entrada</label></td>
+				      			<td><input type="checkbox" name="showInput" checked></td>
+				      		</tr>
+				      		<tr>
+			      				<td><label>Exibir malhas de terra</label></td>
+				      			<td><input type="checkbox" name="showGS" checked></td>
+				      		</tr>
+				      		<tr>
+				      			<td><label>Exibir condutores</label></td>
+				      			<td><input type="checkbox" name="showConductors" checked></td>
+			      			</tr>
+			      		</table>
 				    </form>
 			  	</div>
 		  		<a href="#" class="btn btn-success" style="float:right">Gerar Relatório</a>
@@ -178,6 +192,7 @@
 						'<option value="1">Cobre 70mm²</option>' +
 						'<option value="2">DOTTEREL</option>' +
 			 		 '</select></td>' +
+ 		 	'<td><button class="btn btn-xs btn-danger" onClick="deleteRow(this)"><span class="glyphicon glyphicon-remove"></span></button></td>' +
 	 	'</tr>';
 	}
 
@@ -186,6 +201,7 @@
 		 '<tr>' +
 		 	'<td contenteditable=\'true\'>0.000</td>' + 
 		 	'<td contenteditable=\'true\'>0.000</td>' +
+		 	'<td><button class="btn btn-xs btn-danger" onClick="deleteRow(this)"><span class="glyphicon glyphicon-remove"></span></button></td>' +
 	 	'</tr>';
 	}
 
@@ -199,6 +215,7 @@
 		 	'<td contenteditable=\'true\'>0.000</td>' + 
 		 	'<td><input type="checkbox" name="touch" value=1 checked></td>' +
 		 	'<td><input type="checkbox" name="step" value=2></td>' +
+		 	'<td><button class="btn btn-xs btn-danger" onClick="deleteRow(this)"><span class="glyphicon glyphicon-remove"></span></button></td>' +
 	 	'</tr>';
 	}
 
@@ -208,5 +225,9 @@
 			div.style.display = 'none';
 		else
 			div.style.display = 'block';
+	}
+
+	function deleteRow(row) {
+		row.closest('tr').remove();
 	}
 </script>
