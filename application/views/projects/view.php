@@ -5,7 +5,7 @@
 	        <ul class="nav panel-tabs">
 	            <li class="active"><a data-toggle="tab" href="#project">Projeto</a></li>
 				<li><a data-toggle="tab" href="#groudingSystems">Malhas de Terra</a></li>
-				<li><a data-toggle="tab" href="#report" onclick="test()">Relatório</a></li>
+				<li><a data-toggle="tab" href="#report">Relatório</a></li>
 	        </ul>
 	    </span>
 	</div>
@@ -38,7 +38,7 @@
 				    <form>  
 			    	  <label>Nome</label>
 			    	  <input class="form-control" type="text"  name="gs_name" value="">
-			    	  <select name="gs" id="gs" style="width: 50%">
+			    	  <select name="gs" id="gs" style="width: 50%" class="form-control">
 						<option value="">Selecione</option>
 						<option value="RJ">RJ</option>
 						<option value="SC">SC</option>
@@ -52,8 +52,8 @@
 				      <label>Comprimento máximo do segmento do condutor (m)</label>
 				      <input class="form-control" type="text"  name="gs_conductorMaxLength" value="">
 				      <br>
-				      <label>Número de camadas do solo</label><br>
-				      <select name="gs" id="gs" style="width: 50%">
+				      <label>Número de camadas do solo</label>&nbsp;&nbsp;&nbsp;
+				      <select name="gs" id="numberOfLayers" style="width: 5%" class="form-control" onchange="numberOfLayersChanged(this.value)">
 						<option value="1">1</option>
 						<option value="2">2</option>
 			 		 </select>
@@ -64,12 +64,14 @@
 				      <label>Resistividade da primeira camada do solo (&Omega;.m)</label>
 				      <input class="form-control" type="text"  name="gs_firstLayerResistivity" value="">
 				      <br>
-				      <label>Resistividade da segunda camada do solo (&Omega;.m) (se existir checkHere)</label>
-				      <input class="form-control" type="text"  name="gs_secondLayerResistivity" value="">
-				      <br>
-				      <label>Profundidade da camada de brita (m) (se existir checkHere)</label>
-				      <input class="form-control" type="text"  name="gs_crushedStoneLayerDepth" value="">
-				      <br>
+				      <div id="visibleIf2Layers" style="display: none"><!--Check here, verifiacar-->
+					      <label>Resistividade da segunda camada do solo (&Omega;.m) (se existir checkHere)</label>
+					      <input class="form-control" type="text"  name="gs_secondLayerResistivity" value="">
+			      		  <br>
+			      		  <label>Profundidade da camada de brita (m) (se existir checkHere)</label>
+					      <input class="form-control" type="text"  name="gs_crushedStoneLayerDepth" value="">
+					      <br>
+				      </div>
 				      <label>Resistividade da camada de brita (&Omega;.m)</label>
 				      <input class="form-control" type="text"  name="gs_crushedStoneLayerResistivity" value="">
 				      <br>
@@ -77,7 +79,7 @@
 				      <input class="form-control" type="text"  name="gs_secondLayerResistivity" value="">
 				      <br>
 				      <label>Arquivo DXF</label>
-				      <input class="" type="file"  name="gs_secondLayerResistivity" value="" ><!--checkHere css-->
+				      <input class="" type="file"  name="gs_secondLayerResistivity" value="" >
 				      <br>
 				    </form>
 			      	<div class="panel with-nav-tabs panel-primary">
@@ -109,10 +111,39 @@
 			                    <tbody id="conductorsTable">
 			                    </tbody>
 			                </table> 
-			                <a class="btn btn-primary" style="float:right" onclick="addRow();">Adicionar</a>
+			                <a class="btn btn-primary" style="float:right" onclick="addConductorRow();">Adicionar</a>
                         </div>
-                        <div class="tab-pane fade" id="superficialPotentialPoints">Primary 2</div>
-                        <div class="tab-pane fade" id="superficialPotentialProfile">Primary 3</div>
+                        <div class="tab-pane fade" id="superficialPotentialPoints">
+                        	<table class="table table-list-search">
+			                    <thead>
+			                        <tr>
+			                            <th>X (m)</th>
+			                            <th>Y (m)</th>
+			                        </tr>
+			                    </thead>
+			                    <tbody id="pointsTable">
+			                    </tbody>
+			                </table> 
+			                <a class="btn btn-primary" style="float:right" onclick="addPointRow();">Adicionar</a>
+                        </div>
+                        <div class="tab-pane fade" id="superficialPotentialProfile">
+                        	<table class="table table-list-search">
+			                    <thead>
+			                        <tr>
+			                            <th>X1 (m)</th>
+			                            <th>Y1 (m)</th>
+			                            <th>X2 (m)</th>
+			                            <th>Y2 (m)</th>
+			                            <th>Precisão (m)</th>
+			                            <th>Toque</th>
+			                            <th>Passo</th>
+			                        </tr>
+			                    </thead>
+			                    <tbody id="profileTable">
+			                    </tbody>
+			                </table> 
+			                <a class="btn btn-primary" style="float:right" onclick="addProfileRow();">Adicionar</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -133,7 +164,7 @@
 <!--checkHere fazer css para os comboboxes-->
 
 <script type="text/javascript"> //passar pra test.js
-	function addRow() {
+	function addConductorRow() {
 		 document.getElementById("conductorsTable").insertRow(-1).innerHTML = 
 		 '<tr>' +
 		 	'<td contenteditable=\'true\'>0.000</td>' + 
@@ -148,5 +179,34 @@
 						'<option value="2">DOTTEREL</option>' +
 			 		 '</select></td>' +
 	 	'</tr>';
+	}
+
+	function addPointRow() {
+		 document.getElementById("pointsTable").insertRow(-1).innerHTML = 
+		 '<tr>' +
+		 	'<td contenteditable=\'true\'>0.000</td>' + 
+		 	'<td contenteditable=\'true\'>0.000</td>' +
+	 	'</tr>';
+	}
+
+	function addProfileRow() {
+		 document.getElementById("profileTable").insertRow(-1).innerHTML = 
+		 '<tr>' +
+		 	'<td contenteditable=\'true\'>0.000</td>' + 
+		 	'<td contenteditable=\'true\'>0.000</td>' +
+		 	'<td contenteditable=\'true\'>0.000</td>' + 
+		 	'<td contenteditable=\'true\'>0.000</td>' +
+		 	'<td contenteditable=\'true\'>0.000</td>' + 
+		 	'<td><input type="checkbox" name="touch" value=1 checked></td>' +
+		 	'<td><input type="checkbox" name="step" value=2></td>' +
+	 	'</tr>';
+	}
+
+	function numberOfLayersChanged(value) {
+		var div = document.getElementById('visibleIf2Layers');
+		if(value == 1)
+			div.style.display = 'none';
+		else
+			div.style.display = 'block';
 	}
 </script>

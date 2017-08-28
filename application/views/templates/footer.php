@@ -1,4 +1,3 @@
-	</div>
 	<div class="modal fade" id="add_project">
     	<div class="modal-dialog">
       		<div class="modal-content">
