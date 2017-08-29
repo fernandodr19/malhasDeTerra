@@ -28,11 +28,7 @@
 					'pName' => $pName,
 					'userEmail' => 'fdr'	//checkHere sesion..
 				);
-
-				$this->load->view('/templates/header');
-				$this->load->view('/pages/home');
-				$this->load->view('/templates/footer');
-
+				
 				return $this->db->insert('projects', $data);
 			}
 		}

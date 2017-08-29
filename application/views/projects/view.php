@@ -79,10 +79,10 @@ $(function() {
 			      	<input class="form-control" type="text"  name="gs_firstLayerResistivity" value="">
 			      	<br>
 			      	<div id="visibleIf2Layers" style="display: none"><!--Check here, verifiacar-->
-						<label>Resistividade da segunda camada do solo (&Omega;.m) (se existir checkHere)</label>
+						<label>Resistividade da segunda camada do solo (&Omega;.m)</label>
 						<input class="form-control" type="text"  name="gs_secondLayerResistivity" value="">
 						  <br>
-						  <label>Profundidade da camada de brita (m) (se existir checkHere)</label>
+						  <label>Profundidade da camada de brita (m)</label>
 						<input class="form-control" type="text"  name="gs_crushedStoneLayerDepth" value="">
 						<br>
 					</div>
@@ -123,7 +123,7 @@ $(function() {
 				                            <th></th>
 				                        </tr>
 				                    </thead>
-				                    <tbody id="conductorsTable">
+				                    <tbody id="conductorsTableBody">
 				                    </tbody>
 				                </table> 
 				                <a class="btn btn-primary" style="float:right" onclick="addConductorRow();">Adicionar</a>
@@ -136,7 +136,7 @@ $(function() {
 				                            <th>Y (m)</th>
 				                        </tr>
 				                    </thead>
-				                    <tbody id="pointsTable">
+				                    <tbody id="pointsTableBody">
 				                    </tbody>
 				                </table> 
 				                <a class="btn btn-primary" style="float:right" onclick="addPointRow();">Adicionar</a>
@@ -154,7 +154,7 @@ $(function() {
 				                            <th>Passo</th>
 				                        </tr>
 				                    </thead>
-				                    <tbody id="profileTable">
+				                    <tbody id="profileTableBody">
 				                    </tbody>
 				                </table> 
 				                <a class="btn btn-primary" style="float:right" onclick="addProfileRow();">Adicionar</a>
@@ -211,7 +211,7 @@ $(function() {
 
 <script type="text/javascript"> //passar pra test.js
 	function addConductorRow() {
-		 document.getElementById("conductorsTable").insertRow(-1).innerHTML = 
+		 document.getElementById("conductorsTableBody").insertRow(-1).innerHTML = 
 		 '<tr>' +
 		 	'<td contenteditable=\'true\'>0.000</td>' + 
 		 	'<td contenteditable=\'true\'>0.000</td>' +
@@ -229,7 +229,7 @@ $(function() {
 	}
 
 	function addPointRow() {
-		 document.getElementById("pointsTable").insertRow(-1).innerHTML = 
+		 document.getElementById("pointsTableBody").insertRow(-1).innerHTML = 
 		 '<tr>' +
 		 	'<td contenteditable=\'true\'>0.000</td>' + 
 		 	'<td contenteditable=\'true\'>0.000</td>' +
@@ -238,7 +238,7 @@ $(function() {
 	}
 
 	function addProfileRow() {
-		 document.getElementById("profileTable").insertRow(-1).innerHTML = 
+		 document.getElementById("profileTableBody").insertRow(-1).innerHTML = 
 		 '<tr>' +
 		 	'<td contenteditable=\'true\'>0.000</td>' + 
 		 	'<td contenteditable=\'true\'>0.000</td>' +
@@ -263,7 +263,7 @@ $(function() {
 		row.closest('tr').remove();
 	}
 
-	$("#conductorsTable").sortable();
-	$("#superficialPotentialPoints").sortable();
-	$("#superficialPotentialProfile").sortable();
+	$("#conductorsTableBody").sortable();
+	// $("#pointsTableBody").sortable();
+	$("#profileTableBody").sortable();
 </script>

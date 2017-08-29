@@ -39,6 +39,12 @@
 				//echo "<script language=\"javascript\">alert('O campo não pode ficar em branco.');</script>";
 			} else {
 				$this->project_model->create_project();
+				
+				$this->load->view('templates/header');
+				$this->load->view('pages/home');
+				$this->load->view('templates/footer');
+
+				redirect('views/pages/home');
 			}
 		}
 	}
