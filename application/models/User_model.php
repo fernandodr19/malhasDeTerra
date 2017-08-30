@@ -13,4 +13,24 @@
 			$query = $this->db->get_where('users', array('email' => $email));
 			return $query->row_array();
 		}
+
+		function validate() {
+	        $this->db->where('email', $this->input->post('email')); 
+	        $this->db->where('password', $this->input->post('password'));
+
+	        $query = $this->db->get('users'); 
+
+	        if ($query->num_rows() == 1) { 
+	            return true;
+	        }
+	    }
+
+	    function logged() {
+	        $logged = $this->session->userdata('logged');
+
+	        if (!isset($logged) || $logged != true) {
+	            echo 'Voce nao tem permissao para entrar nessa pagina. <a href="http://oficina2015/login">Efetuar Login</a>';
+	            die();
+	        }
+	    }
 	}

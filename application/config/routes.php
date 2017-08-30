@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+
+$route['login'] = 'login';
 $route['projects/myfunction'] = 'projects/myfunction';
 $route['projects/(:any)'] = 'projects/view/$1';
 $route['projects'] = 'projects/index';
