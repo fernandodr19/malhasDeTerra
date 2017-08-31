@@ -20,9 +20,15 @@
 
 	        $query = $this->db->get('users'); 
 
+        	$data['success'] = false;
 	        if ($query->num_rows() == 1) { 
-	            return true;
+	        	$row = $query->row();
+
+	            $data['success'] = true;
+	            $data['email'] = $row->email;
+	            $data['firstName'] = $row->firstName;
 	        }
+	        return $data;
 	    }
 
 	    function logged() {

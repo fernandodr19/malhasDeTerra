@@ -18,16 +18,17 @@ class Login extends CI_Controller {
         $this->form_validation->set_message("email_check", "The value does not exist");
 
         //$this->load->model('user_model', 'users');
-        $query = $this->user_model->validate();
+        $userData = $query = $this->user_model->validate();
 
         if ($this->form_validation->run() == FALSE) {
 
             $this->load->view('login/login_view');
         } else {
 
-            if ($query) {
+            if ($userData['success']) {
                 $data = array(
-                    'username' => $this->input->post('username'),
+                    'email' => $userData['email'],
+                    'firstName' => $userData['firstName'],
                     'logged' => true
                 );
                 $this->session->set_userdata($data);
@@ -41,5 +42,12 @@ class Login extends CI_Controller {
 
             }
         }
+    }
+
+    function logout() {
+        unset($_SESSION['logged']);  
+        session_destroy();
+        
+        redirect('login','refresh');
     }
 }

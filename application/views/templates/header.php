@@ -1,3 +1,9 @@
+<?php 
+  if(!$this->session->userdata('logged')) {
+    redirect('/login', 'refresh'); 
+  }
+?>
+
 <html>
   <head>
     <title>Malhas de Terra</title>
@@ -46,10 +52,10 @@
               <li><a href="#">Page 3</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-              <li class="dropdown"><a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="userFirstName"><i class="fa fa-user circle" aria-hidden="true"></i>  Username <span class="caret"></span></a>
+              <li class="dropdown"><a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="userFirstName"><i class="fa fa-user circle" aria-hidden="true"></i>  <?php echo $this->session->userdata('firstName') ?> <span class="caret"></span></a>
                   <ul class="dropdown-menu">
                       <li><a href="<?php echo base_url(); ?>settings/profile">Settings</a></li>
-                      <li><a href="login.html">Logout</a></li>
+                      <li><a href="<?php echo base_url(); ?>login/logout"">Logout</a></li>
                   </ul>
               </li>
           </ul>
