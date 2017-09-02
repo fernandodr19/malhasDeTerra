@@ -62,8 +62,15 @@ class Login extends CI_Controller {
             $data['error'] = validation_errors();
             $this->load->view('login/register_view', $data);
         } else {
-            $this->user_model->add_user();
-            $this->load->view('login/login_view');
+            if(!$this->user_model->add_user()) {
+                if($this->db->error()['code'] == 1062)
+                    $data['error'] = 'Email já cadastrado';
+                else
+                    $data['error'] = 'Não foi possível criar a conta';
+                $this->load->view('login/register_view', $data);
+            } else {
+                $this->load->view('login/login_view');
+            }
         }
     }
 

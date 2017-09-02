@@ -21,7 +21,7 @@ $(function() {
 	    <div class="tab-content">
 			<div id="project" class="tab-pane fade in active">
 		  		<div class="form-group">
-				    <form>  
+				    <form action="<?php echo base_url(); ?>projects/save" method="POST">
 				      <label>Nome</label>
 				      <input class="form-control" type="text"  name="project_name" value="<?= $project['pName'] ?>" style="width: 50%">
 				      <br>

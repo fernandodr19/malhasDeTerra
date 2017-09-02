@@ -40,7 +40,7 @@
           <a class="navbar-brand" href="<?php echo base_url(); ?>">Malhas de Terra</a>
           <ul class="nav navbar-nav">
               <li class="dropdown"">
-                  <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects <span class="caret"></span></a>
+                  <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projetos <span class="caret"></span></a>
                   <ul class="dropdown-menu" id="myProjects">
                     <?php foreach ($this->project_model->get_projects() as $project) : ?>
                       <li><a href="<?php echo site_url('projects/'.$project['pName']); ?>"><?php echo $project['pName']; ?></a></li>
@@ -48,13 +48,13 @@
                     <li><a href="#" class="add-project" data-toggle="modal" data-target="#add_project" onClick="clearModal()">New Project</a></li>
                   </ul>
               </li>
-              <li><a href="<?php echo base_url(); ?>projects">Ir para projects </a></li>
+              <li><a href="<?php echo base_url(); ?>projects">Ir para projetos </a></li>
               <li><a href="#">Page 3</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
               <li class="dropdown"><a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="userFirstName"><i class="fa fa-user circle" aria-hidden="true"></i>  <?php echo $this->session->userdata('firstName') ?> <span class="caret"></span></a>
                   <ul class="dropdown-menu">
-                      <li><a href="<?php echo base_url(); ?>settings/profile">Settings</a></li>
+                      <li><a href="<?php echo base_url(); ?>settings/profile">Configurações</a></li>
                       <li><a href="<?php echo base_url(); ?>login/logout"">Logout</a></li>
                   </ul>
               </li>

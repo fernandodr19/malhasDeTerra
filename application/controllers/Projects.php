@@ -3,22 +3,21 @@
 		public function index() {
 			$data['title'] = 'Projects';
 
-			$data['projects'] = $this->project_model->get_projects();
-
-			$this->load->view('templates/header', $data);
+			$this->load->view('templates/header');
 			$this->load->view('projects/index', $data);
 			$this->load->view('templates/footer');
 		}
 
 		public function view($pName = '') {
 			$data['project'] = $this->project_model->get_projects($pName);
-			$data['projects'] = $this->project_model->get_projects();
 
 			if(empty($data['project'])) {
 				show_404();
 			}
 
-			$this->load->view('templates/header', $data);
+			//pegar todas as infos do projeto checkHere
+
+			$this->load->view('templates/header');
 			$this->load->view('projects/view', $data);
 			$this->load->view('templates/footer');		
 		}

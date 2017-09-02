@@ -5,6 +5,8 @@
 		}
 
 		public function get_projects($pName = '') {
+			$this->db->where('userEmail', $this->session->userdata('email')); 
+
 			if($pName == '') {
 				$query = $this->db->get('projects');
 				return $query->result_array();
@@ -26,7 +28,7 @@
 
 				$data = array(
 					'pName' => $pName,
-					'userEmail' => 'fdr'	//checkHere sesion..
+					'userEmail' => $this->session->userdata('email') //checkHere trocar para id
 				);
 				
 				return $this->db->insert('projects', $data);
