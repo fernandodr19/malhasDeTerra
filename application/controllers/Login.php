@@ -22,7 +22,8 @@ class Login extends CI_Controller {
 
         if ($this->form_validation->run() == FALSE) {
 
-            $this->load->view('login/login_view');
+            $data['error'] = validation_errors();
+            $this->load->view('login/login_view', $data);
         } else {
 
             if ($userData['success']) {
@@ -42,6 +43,10 @@ class Login extends CI_Controller {
 
             }
         }
+    }
+
+    function register() {
+        
     }
 
     function logout() {
