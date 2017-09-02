@@ -39,4 +39,14 @@
 	            die();
 	        }
 	    }
+
+	    function add_user() {
+	    	$user = array(
+					'email' => $this->input->post('email'),
+					'firstName' => $this->input->post('firstName'),
+					'password' => $this->input->post('password')
+				);
+				
+				return $this->db->insert('users', $user);
+	    }
 	}

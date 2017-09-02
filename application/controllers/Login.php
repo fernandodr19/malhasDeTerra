@@ -46,7 +46,25 @@ class Login extends CI_Controller {
     }
 
     function register() {
-        
+        // VALIDATION RULES
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('email', 'Email', 'required');
+        $this->form_validation->set_rules('firstName', 'Name', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required');
+        $this->form_validation->set_error_delimiters('<p class="error">', '</p>');
+        $this->form_validation->set_message("email_check", "The value does not exist");
+
+        //$this->load->model('user_model', 'users');
+        $userData = $query = $this->user_model->validate();
+
+        if ($this->form_validation->run() == FALSE) {
+
+            $data['error'] = validation_errors();
+            $this->load->view('login/register_view', $data);
+        } else {
+            $this->user_model->add_user();
+            $this->load->view('login/login_view');
+        }
     }
 
     function logout() {

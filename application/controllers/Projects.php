@@ -44,7 +44,7 @@
 				$this->load->view('pages/home');
 				$this->load->view('templates/footer');
 
-				redirect('views/pages/home');
+				//redirect('views/pages/home');
 			}
 		}
 	}
