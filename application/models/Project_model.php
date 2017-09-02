@@ -17,21 +17,22 @@
 		}
 
 		public function create_project() {
-			$this->load->library('form_validation');
+			$pName = $this->input->post('project_name');
 
-			$this->form_validation->set_rules('newProjectName', 'NewProjectName', 'required');
+			$data = array(
+				'pName' => $pName,
+				'userEmail' => $this->session->userdata('email') //checkHere trocar para id
+			);
+			
+			return $this->db->insert('projects', $data);
+		}
 
-			if ($this->form_validation->run() == FALSE){
-				$this->form_validation->set_message("The %s value does not exist");//checkHere validation
-			} else {
-				$pName = $this->input->post('newProjectName');
+		public function update_project($oldName) {
+			$project = array(
+				"pName" => $this->input->post('project_name')
+			);
 
-				$data = array(
-					'pName' => $pName,
-					'userEmail' => $this->session->userdata('email') //checkHere trocar para id
-				);
-				
-				return $this->db->insert('projects', $data);
-			}
+			$this->db->where("pName", $oldName);
+			$this->db->update("projects", $project); 
 		}
 	}

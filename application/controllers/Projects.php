@@ -22,12 +22,7 @@
 			$this->load->view('templates/footer');		
 		}
 
-		public function myfunction() {
-
-			$data['title'] = 'aaa';
-
-			$this->load->library('form_validation');
-
+		public function add_project() {
 			$this->form_validation->set_rules('newProjectName', 'NewProjectName', 'required');
 
 			if ($this->form_validation->run() == FALSE){
@@ -44,6 +39,21 @@
 				$this->load->view('templates/footer');
 
 				//redirect('views/pages/home');
+			}
+		}
+
+		public function update_project($oldName) { //tem que ser id
+			$this->form_validation->set_rules('project_name', 'Project name', 'required');
+
+			$data['error'] = 1;
+			$pName = $this->input->post('project_name');
+			if ($this->form_validation->run() == FALSE){
+				$this->load->view('templates/header');
+				$this->load->view('projects/'.$pName, $data);
+				$this->load->view('templates/footer');		
+			} else {
+				$this->project_model->update_project($oldName);
+				redirect(site_url('projects/'.$pName));
 			}
 		}
 	}

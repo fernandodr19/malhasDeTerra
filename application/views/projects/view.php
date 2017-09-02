@@ -21,7 +21,7 @@ $(function() {
 	    <div class="tab-content">
 			<div id="project" class="tab-pane fade in active">
 		  		<div class="form-group">
-				    <form action="<?php echo base_url(); ?>projects/save" method="POST">
+				    <form action="<?php echo base_url(); ?>projects/update_project/<?= $project['pName'] ?>" method="POST">
 				      <label>Nome</label>
 				      <input class="form-control" type="text"  name="project_name" value="<?= $project['pName'] ?>" style="width: 50%">
 				      <br>
@@ -37,9 +37,9 @@ $(function() {
 				      <label>Data</label>
 				      <input class="form-control" type="text"  name="project_date" value="<?= date('d-m-Y') ?>">
 				      <br>
+  					  <input type="submit" value="Salvar" class="btn btn-success" style="float:right">
 				    </form>
 			  	</div>
-		  		<a href="#" class="btn btn-success" style="float:right">Salvar</a>
 			</div>
 			<div id="groudingSystems" class="tab-pane fade">
 			  <div class="form-group">
@@ -196,7 +196,7 @@ $(function() {
       			<h4 class="modal-title">New Project</h4>
     		</div>
     		<div class="modal-body">
-      			<form action="<?php echo base_url(); ?>projects/myfunction" method="POST">
+      			<form action="<?php echo base_url(); ?>projects/add_project" method="POST">
 				    <label>Project name</label>
 	                <input class="form-control" placeholder="Enter name" type="text" name="newProjectName" id="newProjectName">
 	                <?php echo form_error('newProjectName'); ?>
