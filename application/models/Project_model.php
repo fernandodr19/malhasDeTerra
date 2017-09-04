@@ -17,7 +17,7 @@
 		}
 
 		public function create_project() {
-			$pName = $this->input->post('project_name');
+			$pName = $this->input->post('newProjectName');
 
 			$data = array(
 				'pName' => $pName,
