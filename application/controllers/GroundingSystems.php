@@ -8,7 +8,7 @@
 			$this->load->view('templates/footer');
 		}
 
-		public function view($pName = '') {
+		public function view($pName = '', $data) {
 			$data['project'] = $this->project_model->get_projects($pName);
 
 			if(empty($data['project'])) {
@@ -22,7 +22,7 @@
 			$this->load->view('templates/footer');		
 		}
         
-        public function update_gs() {
+        public function update_gs($pName = '') {
             //name required
             
             $this->form_validation->set_rules('gs_conductorMaxLength', "Comprimento máximo do segmento do condutor", "numeric");
@@ -51,13 +51,11 @@
             $this->form_validation->set_rules('profiles[y2]', "Perfil de potencial superficial Y2", "numeric");
             $this->form_validation->set_rules('profiles[precision]', "Perfil de potencial superficial Precisão", "numeric");
             
+            $data['tab'] = 'gs';
             if ($this->form_validation->run() == FALSE){
                 $data['error'] = validation_errors();
-                //$data['tab'] = 'gs';
-                print(validation_errors());
-                
-                //$this->view('aba'); //checkHere ideal seria voltar pra aba malhas de terra com a msg de erro
             } else {
+                $data['success'] = 'success';
                 $gs['name'] = 'name';
                 
                 $gs['conductorsMaxLength'] = $this->input->post('gs_conductorMaxLength');
@@ -157,5 +155,6 @@
                     print("<br>");
                 }
             }
+            $this->view($pName, $data);
         }
 	}
