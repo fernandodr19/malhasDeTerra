@@ -128,6 +128,8 @@
                 }
                 
                 $profiles = $this->input->post('profiles');
+                $touchIndex = 1;
+                $stepIndex = 1;
                 for ($i = 0; $i < sizeof($profiles['x1']); $i++) {
                     print($profiles['x1'][$i]);
                     print(" ");
@@ -139,15 +141,19 @@
                     print(" ");
                     print($profiles['precision'][$i]);
                     print(" ");
-                    //print(isset($profiles['touch'][$i]) && $profiles['touch'][$i] == 'on');
-                    //print($profiles['touch'][$i] == 'touch');
-                    //print(" ");
-                    //print(isset($profiles['step'][$i]) && $profiles['step'][$i] == 'on');
-                    print(sizeof($profiles['touch']));
+                    if(isset($profiles['touch'][$i + $touchIndex]) and $profiles['touch'][$i + $touchIndex] == 'touch') {
+                        print('touch');
+                        $touchIndex = $touchIndex + 1;
+                    } else {
+                        print('not touch');
+                    }
                     print(" ");
-                    print(sizeof($profiles['step']));
-                    print(" ");
-                    print(sizeof($profiles['x1']));
+                    if(isset($profiles['step'][$i + $stepIndex]) and $profiles['step'][$i + $stepIndex] == 'step') {
+                        print('step');
+                        $stepIndex = $stepIndex + 1;
+                    } else {
+                        print('not step');
+                    }
                     print("<br>");
                 }
             }

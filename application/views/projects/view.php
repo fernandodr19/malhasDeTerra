@@ -146,7 +146,9 @@ $(function() {
                                                 <th>X2 (m)</th>
                                                 <th>Y2 (m)</th>
                                                 <th>Precisão (m)</th>
+                                                <th width="0px"></th>
                                                 <th>Toque</th>
+                                                <th width="0px"></th>
                                                 <th>Passo</th>
                                             </tr>
                                         </thead>
@@ -251,7 +253,9 @@ $(function() {
 		 	'<td><input type="text" class="tableInput" value="0.000" name="profiles[x2][]"></td>' + 
 		 	'<td><input type="text" class="tableInput" value="0.000" name="profiles[y2][]"></td>' +
 		 	'<td><input type="text" class="tableInput" value="0.000" name="profiles[precision][]"></td>' + 
+            '<td><input type="hidden" value="hidden" name="profiles[touch][]"></td>' +
 		 	'<td><input type="checkbox" value="touch" name="profiles[touch][]" checked></td>' +
+            '<td><input type="hidden" value="hidden" name="profiles[step][]"></td>' +
 		 	'<td><input type="checkbox" value="step" name="profiles[step][]" checked></td>' +
 		 	'<td><button class="btn btn-xs btn-danger" onClick="deleteRow(this)"><span class="glyphicon glyphicon-remove"></span></button></td>' +
 	 	'</tr>';
