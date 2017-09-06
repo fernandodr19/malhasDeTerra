@@ -43,7 +43,7 @@ $(function() {
 			</div>
 			<div id="groudingSystems" class="tab-pane fade">
 			  <div class="form-group">
-			    <form>  
+			    <form action="<?php echo base_url(); ?>projects/update_gs/<?= $project['pName'] ?>" method="POST"> <!--Pass gs id instead of pName-->
 		    	  	<label>Malha de Terra</label>
 		    	  	<div class="input-group">
 					    <select name="gs" id="gs" style="width: 100%" class="form-control">
@@ -95,73 +95,75 @@ $(function() {
 					<label>Arquivo DXF</label>
 					<input class="" type="file"  name="gs_secondLayerResistivity" value="" >
 					<br>
-			    </form>
-		      	<div class="panel with-nav-tabs panel-primary">
-                	<div class="panel-heading">
-	                    <h3 class="panel-title">Nome da malha</h3>
-					    <span class="pull-right">
-					        <ul class="nav panel-tabs">
-					            <li class="active"><a href="#conductors" data-toggle="tab">Condutores</a></li>
-		                        <li><a href="#superficialPotentialPoints" data-toggle="tab">Pontos de potencial superficial</a></li>
-		                        <li><a href="#superficialPotentialProfile" data-toggle="tab">Perfil de potencial superficial</a></li>
-					        </ul>
-				    	</span>
-                	</div>
-	                <div class="panel-body">
-	                    <div class="tab-content">
-	                        <div class="tab-pane fade in active" id="conductors">
-	                        	<table class="table table-list-search">
-				                    <thead>
-				                        <tr>
-				                            <th>X1 (m)</th>
-				                            <th>Y1 (m)</th>
-				                            <th>Z1 (m)</th>
-				                            <th>X2 (m)</th>
-				                            <th>Y2 (m)</th>
-				                            <th>Z2 (m)</th>
-				                            <th>Cabo</th>
-				                            <th></th>
-				                        </tr>
-				                    </thead>
-				                    <tbody id="conductorsTableBody">
-				                    </tbody>
-				                </table> 
-				                <a class="btn btn-primary" style="float:right" onclick="addConductorRow();">Adicionar</a>
-	                        </div>
-	                        <div class="tab-pane fade" id="superficialPotentialPoints">
-	                        	<table class="table table-list-search">
-				                    <thead>
-				                        <tr>
-				                            <th>X (m)</th>
-				                            <th>Y (m)</th>
-				                        </tr>
-				                    </thead>
-				                    <tbody id="pointsTableBody">
-				                    </tbody>
-				                </table> 
-				                <a class="btn btn-primary" style="float:right" onclick="addPointRow();">Adicionar</a>
-	                        </div>
-	                        <div class="tab-pane fade" id="superficialPotentialProfile">
-	                        	<table class="table table-list-search">
-				                    <thead>
-				                        <tr>
-				                            <th>X1 (m)</th>
-				                            <th>Y1 (m)</th>
-				                            <th>X2 (m)</th>
-				                            <th>Y2 (m)</th>
-				                            <th>Precisão (m)</th>
-				                            <th>Toque</th>
-				                            <th>Passo</th>
-				                        </tr>
-				                    </thead>
-				                    <tbody id="profileTableBody">
-				                    </tbody>
-				                </table> 
-				                <a class="btn btn-primary" style="float:right" onclick="addProfileRow();">Adicionar</a>
-	                        </div>
-	                    </div>
-	                </div>
-            	</div>
+			    
+                    <div class="panel with-nav-tabs panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Nome da malha</h3>
+                            <span class="pull-right">
+                                <ul class="nav panel-tabs">
+                                    <li class="active"><a href="#conductors" data-toggle="tab">Condutores</a></li>
+                                    <li><a href="#superficialPotentialPoints" data-toggle="tab">Pontos de potencial superficial</a></li>
+                                    <li><a href="#superficialPotentialProfile" data-toggle="tab">Perfil de potencial superficial</a></li>
+                                </ul>
+                            </span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div class="tab-pane fade in active" id="conductors">
+                                    <table class="table table-list-search">
+                                        <thead>
+                                            <tr>
+                                                <th>X1 (m)</th>
+                                                <th>Y1 (m)</th>
+                                                <th>Z1 (m)</th>
+                                                <th>X2 (m)</th>
+                                                <th>Y2 (m)</th>
+                                                <th>Z2 (m)</th>
+                                                <th>Cabo</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="conductorsTableBody">
+                                        </tbody>
+                                    </table> 
+                                    <a class="btn btn-primary" style="float:right" onclick="addConductorRow();">Adicionar</a>
+                                </div>
+                                <div class="tab-pane fade" id="superficialPotentialPoints">
+                                    <table class="table table-list-search">
+                                        <thead>
+                                            <tr>
+                                                <th>X (m)</th>
+                                                <th>Y (m)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="pointsTableBody">
+                                        </tbody>
+                                    </table> 
+                                    <a class="btn btn-primary" style="float:right" onclick="addPointRow();">Adicionar</a>
+                                </div>
+                                <div class="tab-pane fade" id="superficialPotentialProfile">
+                                    <table class="table table-list-search">
+                                        <thead>
+                                            <tr>
+                                                <th>X1 (m)</th>
+                                                <th>Y1 (m)</th>
+                                                <th>X2 (m)</th>
+                                                <th>Y2 (m)</th>
+                                                <th>Precisão (m)</th>
+                                                <th>Toque</th>
+                                                <th>Passo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="profileTableBody">
+                                        </tbody>
+                                    </table> 
+                                    <a class="btn btn-primary" style="float:right" onclick="addProfileRow();">Adicionar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" value="Salvar" class="btn btn-success" style="float:right">
+                </form>
 		  	  </div>
 			</div>
 			<div id="report" class="tab-pane fade">
@@ -209,16 +211,24 @@ $(function() {
 	</div>
 </div>
 
+<style> /*checkHere Passar pro css*/
+    .tableInput {
+        width: 60px;
+        height: 40px;
+        border: none
+    }
+</style>
+
 <script type="text/javascript"> //passar pra test.js
 	function addConductorRow() {
 		 document.getElementById("conductorsTableBody").insertRow(-1).innerHTML = 
 		 '<tr>' +
-		 	'<td contenteditable=\'true\'>0.000</td>' + 
-		 	'<td contenteditable=\'true\'>0.000</td>' +
-		 	'<td contenteditable=\'true\'>0.000</td>' +
-		 	'<td contenteditable=\'true\'>0.000</td>' + 
-		 	'<td contenteditable=\'true\'>0.000</td>' +
-		 	'<td contenteditable=\'true\'>0.000</td>' +
+		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[x1][]"></td>' + 
+		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[y1][]"></td>' +
+		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[z1][]"></td>' +
+		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[x2][]"></td>' + 
+		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[y2][]"></td>' +
+		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[z2][]"></td>' +
 		 	'<td><select name="gs" id="gs" style="width: 50%">' +
 						'<option value="">Cabos</option>' +
 						'<option value="1">Cobre 70mm²</option>' +
@@ -263,7 +273,7 @@ $(function() {
 		row.closest('tr').remove();
 	}
 
-	$("#conductorsTableBody").sortable();
+	//$("#conductorsTableBody").sortable();
 	// $("#pointsTableBody").sortable();
-	$("#profileTableBody").sortable();
+	//$("#profileTableBody").sortable();
 </script>
