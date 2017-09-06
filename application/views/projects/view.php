@@ -43,7 +43,7 @@ $(function() {
 			</div>
 			<div id="groudingSystems" class="tab-pane fade">
 			  <div class="form-group">
-			    <form action="<?php echo base_url(); ?>groundingSystems/update_gs/<?= $project['pName'] ?>" method="POST"> <!--Pass gs id instead of pName-->
+			    <form action="<?php echo base_url(); ?>groundingSystems/update_gs/<?= $project['pName'] ?>" method="POST"> <!--Pass gs id instead of pName checkHere-->
 		    	  	<label>Malha de Terra</label>
 		    	  	<div class="input-group">
 					    <select name="gs" id="gs" style="width: 100%" class="form-control">
@@ -60,10 +60,7 @@ $(function() {
 		    	  	<label>Nome</label>
 		    	  	<input class="form-control" type="text"  name="gs_name" value="">					 
 				 	<br>
-				 	<label>Comprimento máximo do segmento do condutor</label>
-			      	<input class="form-control" type="text"  name="gs_conductorMaxLength" value="">
-		    	  	<br>
-			      	<label>Comprimento máximo do segmento do condutor (m)</label>
+				 	<label>Comprimento máximo do segmento do condutor (m)</label>
 			      	<input class="form-control" type="text"  name="gs_conductorMaxLength" value="">
 			      	<br>
 			      	<label>Número de camadas do solo</label>&nbsp;&nbsp;&nbsp;
@@ -78,7 +75,7 @@ $(function() {
 			      	<label>Resistividade da primeira camada do solo (&Omega;.m)</label>
 			      	<input class="form-control" type="text"  name="gs_firstLayerResistivity" value="">
 			      	<br>
-			      	<div id="visibleIf2Layers" style="display: none"><!--Check here, verifiacar-->
+			      	<div id="visibleIf2Layers" style="display: none">
 						<label>Resistividade da segunda camada do solo (&Omega;.m)</label>
 						<input class="form-control" type="text"  name="gs_secondLayerResistivity" value="">
 						  <br>
@@ -90,12 +87,11 @@ $(function() {
 					<input class="form-control" type="text"  name="gs_crushedStoneLayerResistivity" value="">
 					<br>
 					<label>Corrente injetada (A)</label>
-					<input class="form-control" type="text"  name="gs_secondLayerResistivity" value="">
+					<input class="form-control" type="text"  name="gs_injectedCurrent" value="">
 					<br>
 					<label>Arquivo DXF</label>
-					<input class="" type="file"  name="gs_secondLayerResistivity" value="" >
+					<input class="" type="file"  name="gs_file" value="" >
 					<br>
-			    
                     <div class="panel with-nav-tabs panel-primary">
                         <div class="panel-heading">
                             <h3 class="panel-title">Nome da malha</h3>
@@ -214,7 +210,6 @@ $(function() {
 <style> /*checkHere Passar pro css*/
     .tableInput {
         width: 60px;
-        height: 40px;
         border: none
     }
 </style>
@@ -229,11 +224,12 @@ $(function() {
 		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[x2][]"></td>' + 
 		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[y2][]"></td>' +
 		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[z2][]"></td>' +
-		 	'<td><select name="gs" id="gs" style="width: 50%">' +
-						'<option value="">Cabos</option>' +
-						'<option value="1">Cobre 70mm²</option>' +
-						'<option value="2">DOTTEREL</option>' +
-			 		 '</select></td>' +
+		 	'<td>' +
+                '<select name="conductorCables[]" id="gs" style="width: 50%">' +
+                    '<option value="-1">Cabos</option>' +
+                    '<option value="0">Cobre 70mm²</option>' + //value = cable.id; name = cable.name
+                    '<option value="1">DOTTEREL</option>' +
+                 '</select></td>' +
  		 	'<td><button class="btn btn-xs btn-danger" onClick="deleteRow(this)"><span class="glyphicon glyphicon-remove"></span></button></td>' +
 	 	'</tr>';
 	}
@@ -241,8 +237,8 @@ $(function() {
 	function addPointRow() {
 		 document.getElementById("pointsTableBody").insertRow(-1).innerHTML = 
 		 '<tr>' +
-		 	'<td contenteditable=\'true\'>0.000</td>' + 
-		 	'<td contenteditable=\'true\'>0.000</td>' +
+		 	'<td><input type="text" class="tableInput" value="0.000" name="points[x][]"></td>' + 
+		 	'<td><input type="text" class="tableInput" value="0.000" name="points[y][]"></td>' +
 		 	'<td><button class="btn btn-xs btn-danger" onClick="deleteRow(this)"><span class="glyphicon glyphicon-remove"></span></button></td>' +
 	 	'</tr>';
 	}
@@ -250,13 +246,13 @@ $(function() {
 	function addProfileRow() {
 		 document.getElementById("profileTableBody").insertRow(-1).innerHTML = 
 		 '<tr>' +
-		 	'<td contenteditable=\'true\'>0.000</td>' + 
-		 	'<td contenteditable=\'true\'>0.000</td>' +
-		 	'<td contenteditable=\'true\'>0.000</td>' + 
-		 	'<td contenteditable=\'true\'>0.000</td>' +
-		 	'<td contenteditable=\'true\'>0.000</td>' + 
-		 	'<td><input type="checkbox" name="touch" value=1 checked></td>' +
-		 	'<td><input type="checkbox" name="step" value=2></td>' +
+		 	'<td><input type="text" class="tableInput" value="0.000" name="profiles[x1][]"></td>' + 
+		 	'<td><input type="text" class="tableInput" value="0.000" name="profiles[y1][]"></td>' +
+		 	'<td><input type="text" class="tableInput" value="0.000" name="profiles[x2][]"></td>' + 
+		 	'<td><input type="text" class="tableInput" value="0.000" name="profiles[y2][]"></td>' +
+		 	'<td><input type="text" class="tableInput" value="0.000" name="profiles[precision][]"></td>' + 
+		 	'<td><input type="checkbox" value="touch" name="profiles[touch][]" checked></td>' +
+		 	'<td><input type="checkbox" value="step" name="profiles[step][]" checked></td>' +
 		 	'<td><button class="btn btn-xs btn-danger" onClick="deleteRow(this)"><span class="glyphicon glyphicon-remove"></span></button></td>' +
 	 	'</tr>';
 	}
