@@ -43,7 +43,7 @@ $(function() {
 			</div>
 			<div id="groudingSystems" class="tab-pane fade">
 			  <div class="form-group">
-			    <form action="<?php echo base_url(); ?>projects/update_gs/<?= $project['pName'] ?>" method="POST"> <!--Pass gs id instead of pName-->
+			    <form action="<?php echo base_url(); ?>groundingSystems/update_gs/<?= $project['pName'] ?>" method="POST"> <!--Pass gs id instead of pName-->
 		    	  	<label>Malha de Terra</label>
 		    	  	<div class="input-group">
 					    <select name="gs" id="gs" style="width: 100%" class="form-control">
