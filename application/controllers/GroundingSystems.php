@@ -155,6 +155,7 @@
                     print("<br>");
                 }
             }
-            $this->view($pName, $data);
+            //$this->view($pName, $data);
+            redirect(site_url('projects/'.$pName)); // falta redirecionar para a aba gs
         }
 	}
