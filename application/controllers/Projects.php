@@ -8,9 +8,12 @@
 			$this->load->view('templates/footer');
 		}
 
-		public function view($pName = '') {
+		public function view($pName = '', $tab = '') {
 			$data['project'] = $this->project_model->get_projects($pName);
-
+            
+            if($tab == '')
+                $tab = 'projectTab';
+            $data['tab'] = $tab;
 			if(empty($data['project'])) {
 				show_404();
 			}

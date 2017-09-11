@@ -11,15 +11,15 @@ $(function() {
 	    <h3 class="panel-title"><?= $project['pName'] ?></h3>
 	    <span class="pull-right">
 	        <ul class="nav panel-tabs">
-	            <li class="active"><a data-toggle="tab" href="#project">Projeto</a></li>
-				<li><a data-toggle="tab" href="#groudingSystems">Malhas de Terra</a></li>
-				<li><a data-toggle="tab" href="#report">Relatório</a></li>
+	            <li class="<?php echo ($tab == 'projectTab') ? 'active' : ''; ?>"><a data-toggle="tab" href="#project">Projeto</a></li>
+				<li class="<?php echo ($tab == 'gsTab') ? 'active' : ''; ?>"><a data-toggle="tab" href="#groudingSystems">Malhas de Terra</a></li>
+				<li class="<?php echo ($tab == 'reportTab') ? 'active' : ''; ?>"><a data-toggle="tab" href="#report">Relatório</a></li>
 	        </ul>
 	    </span>
 	</div>
 	<div class="panel-body">
 	    <div class="tab-content">
-			<div id="project" class="tab-pane fade in active">
+			<div id="project" class="tab-pane fade <?php echo ($tab == 'projectTab') ? 'in active' : ''; ?>">
 		  		<div class="form-group">
 				    <form action="<?php echo base_url(); ?>projects/update_project/<?= $project['pName'] ?>" method="POST">
 				      <label>Nome</label>
@@ -41,7 +41,7 @@ $(function() {
 				    </form>
 			  	</div>
 			</div>
-			<div id="groudingSystems" class="tab-pane fade">
+			<div id="groudingSystems" class="tab-pane fade <?php echo ($tab == 'gsTab') ? 'in active' : ''; ?>">
 			  <div class="form-group">
 			    <form action="<?php echo base_url(); ?>groundingSystems/update_gs/<?= $project['pName'] ?>" method="POST"> <!--Pass gs id instead of pName checkHere-->
 		    	  	<label>Malha de Terra</label>
@@ -164,7 +164,7 @@ $(function() {
                 </form>
 		  	  </div>
 			</div>
-			<div id="report" class="tab-pane fade">
+			<div id="report" class="tab-pane fade <?php echo ($tab == 'reportTab') ? 'in active' : ''; ?>">
 		  		<div class="form-group">
 				    <form>
 				    	<table border="0" style="width: 200px">  

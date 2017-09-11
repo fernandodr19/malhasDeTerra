@@ -6,6 +6,7 @@ $route['login'] = 'login';
 $route['projects/add_project'] = 'projects/add_project';
 $route['projects/update_project/(:any)'] = 'projects/update_project/$1';
 $route['projects/(:any)'] = 'projects/view/$1';
+$route['projects/(:any)/(:any)'] = 'projects/view/$1/$2';
 $route['projects'] = 'projects/index';
 
 $route['settings'] = 'settings/index';
