@@ -17,5 +17,23 @@
           	</div>
         </div>
       </div>
+	<div class="modal fade" id="gs_add">
+    	<div class="modal-dialog">
+      		<div class="modal-content">
+            	<div class="modal-header">
+              		<h4 class="modal-title">Nova malha de terra</h4>
+            	</div>
+            	<div class="modal-body">
+              		<form action="<?php echo base_url(); ?>groundingSystems/add_gs/<?php echo $project['id'] ?>" method="POST">
+					    <label>Nome da malha de terra</label>
+		                <input class="form-control" placeholder="Enter name" type="text" name="newGSName" id="newGSName">
+				    	<div class="modal-footer">
+				    		<input class="btn btn-primary" type="submit" value="Create">
+			    		</div>
+			  		</form>
+			  	</div>
+          	</div>
+        </div>
+      </div>
 	</body>
 </html> 

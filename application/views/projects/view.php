@@ -43,25 +43,36 @@ $(function() {
 			</div>
 			<div id="groudingSystems" class="tab-pane fade <?php echo ($tab == 'gsTab') ? 'in active' : ''; ?>">
 			  <div class="form-group">
-			    <form action="<?php echo base_url(); ?>groundingSystems/update_gs/<?= $project['id'] ?>" method="POST">
+                <?php
+                    $gs['id'] = 1;
+                    if($this->groundingSystem_model->get_groundingSystems($project['id']) != null)
+                        $gs = $this->groundingSystem_model->get_groundingSystems($project['id'])[0];
+                          
+                ?>
+			    <form action="<?php echo base_url(); ?>groundingSystems/update_gs/<?= $project['id'] ?>/<?= $gs['id'] ?>" method="POST">
 		    	  	<label>Malha de Terra</label>
 		    	  	<div class="input-group">
 					    <select name="gs" id="gs" style="width: 100%" class="form-control">
-							<option value="1">1</option>
-							<option value="2">2</option>
+							<?php foreach ($this->groundingSystem_model->get_groundingSystems($project['id']) as $gsTemp) : ?>
+                                <option value="<?php echo $gsTemp['id']; ?>"><?php echo $gsTemp['name']; ?></option>
+                            <?php endforeach; ?>
 		 		 		</select>
 					    <span class="input-group-btn">
 					        <a href="#" class="btn btn-danger">Deletar</a>
+                            <a href="#" class="btn btn-success" data-toggle="modal" data-target="#gs_add">Adicionar nova Malha</a>
 					    </span>
 					</div>
-      				<a href="#" class="btn btn-success" style="float:right">Adicionar nova Malha</a>
-		 		 	<br>
 			      	<br>
 		    	  	<label>Nome</label>
-		    	  	<input class="form-control" type="text"  name="gs_name" value="">					 
+		    	  	<input class="form-control" type="text"  name="gs_name" value="<?php if(isset($gs)) {echo $gs['name'];} ?>">					 
 				 	<br>
 				 	<label>Comprimento máximo do segmento do condutor (m)</label>
-			      	<input class="form-control" type="text"  name="gs_conductorMaxLength" value="">
+                    <div class="input-group">
+                      <input class="form-control" type="text"  name="gs_conductorMaxLength" value="">
+                      <span class="input-group-btn">
+                         <a href="#" class="btn btn-info">?</a>
+                      </span>
+                    </div>
 			      	<br>
 			      	<label>Número de camadas do solo</label>&nbsp;&nbsp;&nbsp;
 			      	<select name="nLayers" id="numberOfLayers" style="width: 5%" class="form-control" onchange="numberOfLayersChanged(this.value)">

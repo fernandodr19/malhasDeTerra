@@ -22,9 +22,27 @@
 			$this->load->view('templates/footer');		
 		}
         
-        public function update_gs($projectId = '') {
+        public function add_gs($projectId) {
+			$this->form_validation->set_rules('newGSName', 'Nome da malha', 'required');
+
+			if ($this->form_validation->run() == FALSE){
+				//print_r('expression<br>expression<br>expression<br>expression<br>expression<br>');
+				//$this->form_validation->set_message("The %s value does not exist");
+				//$this->index();
+				redirect('/');
+				//echo "<script language=\"javascript\">alert('O campo não pode ficar em branco.');</script>";
+			} else {
+				$this->groundingSystem_model->create_groundingSystem($projectId); //chechHere checar se conseguiu
+				redirect(site_url('projects/'.$projectId.'/gsTab'));
+			}
+		}
+        
+        public function update_gs($projectId = '', $gsId = '') {
+            if($projectId == '' || $gsId == '')
+                return;
             //name required
             
+            $this->form_validation->set_rules('gs_name', "Nome", "required");
             $this->form_validation->set_rules('gs_conductorMaxLength', "Comprimento máximo do segmento do condutor", "numeric");
             $this->form_validation->set_rules('gs_firstLayerDepth', "Profundidade da primeira camada do solo", "numeric");
             $this->form_validation->set_rules('gs_firstLayerResistivity', "Resistividade da primeira camada do solo", "numeric");
@@ -92,6 +110,9 @@
                 print($gs['injectedCurrent']);
                 print('<br>');
                 
+//                $this->groundingSystem_model->update_groundingSystem($gsId);
+                $this->groundingSystem_model->update_groundingSystem($gsId);
+                
                 $gs['file'] = $this->input->post('gs_file');
                 print($gs['file']);
                 print('<br>');
@@ -155,6 +176,7 @@
                     print("<br>");
                 }
             }
-            redirect(site_url('projects/'.$id.'/gsTab'));
+            
+            redirect(site_url('projects/'.$projectId.'/gsTab'));
         }
 	}

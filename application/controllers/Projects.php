@@ -8,8 +8,8 @@
 			$this->load->view('templates/footer');
 		}
 
-		public function view($name = '', $tab = '') {
-			$data['project'] = $this->project_model->get_project($name);
+		public function view($id = '', $tab = '') {
+			$data['project'] = $this->project_model->get_project($id);
             
             if($tab == '')
                 $tab = 'projectTab';
@@ -18,11 +18,9 @@
 				show_404();
 			}
 
-			//pegar todas as infos do projeto checkHere
-
 			$this->load->view('templates/header');
 			$this->load->view('projects/view', $data);
-			$this->load->view('templates/footer');		
+			$this->load->view('templates/footer');
 		}
 
 		public function add_project() {
