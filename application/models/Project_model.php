@@ -28,15 +28,17 @@
 				'name' => $name
 			);
             $this->db->insert('projects', $projectData);
+            $projectId = $this->db->insert_id();
             
             $userProjectsData = array(
                 'userId' => $this->session->userdata('id'),
-                'projectId' => $this->db->insert_id(),
+                'projectId' => $projectId,
                 'owner' => true,
                 'readOnly' => false
             );
 			
-			return $this->db->insert('userProjects', $userProjectsData);
+			$this->db->insert('userProjects', $userProjectsData);
+            return $projectId;
 		}
 
 		public function update_project($id) {
