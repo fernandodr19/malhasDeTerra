@@ -8,7 +8,7 @@ $(function() {
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-	    <h3 class="panel-title"><?= $project['pName'] ?></h3>
+	    <h3 class="panel-title"><?= $project['name'] ?></h3>
 	    <span class="pull-right">
 	        <ul class="nav panel-tabs">
 	            <li class="<?php echo ($tab == 'projectTab') ? 'active' : ''; ?>"><a data-toggle="tab" href="#project">Projeto</a></li>
@@ -21,18 +21,18 @@ $(function() {
 	    <div class="tab-content">
 			<div id="project" class="tab-pane fade <?php echo ($tab == 'projectTab') ? 'in active' : ''; ?>">
 		  		<div class="form-group">
-				    <form action="<?php echo base_url(); ?>projects/update_project/<?= $project['pName'] ?>" method="POST">
+				    <form action="<?php echo base_url(); ?>projects/update_project/<?= $project['id'] ?>" method="POST">
 				      <label>Nome</label>
-				      <input class="form-control" type="text"  name="project_name" value="<?= $project['pName'] ?>" style="width: 50%">
+				      <input class="form-control" type="text"  name="project_name" value="<?= $project['name'] ?>" style="width: 50%">
 				      <br>
 				      <label>Subestação</label>
-				      <input class="form-control" type="text"  name="project_substation" value="">
+				      <input class="form-control" type="text"  name="project_substation" value="<?= $project['substation'] ?>">
 				      <br>
 				      <label>Descrição</label>
-				      <textarea class="form-control" type="text" name="project_description" rows="5" cols="10"></textarea>
+				      <textarea class="form-control" type="text" name="project_description" rows="5" cols="10"><?= $project['description'] ?></textarea>
 				      <br>
 				      <label>Projetista</label>
-				      <input class="form-control" type="text"  name="project_designer" value="">
+				      <input class="form-control" type="text"  name="project_designer" value="<?= $project['designer'] ?>">
 				      <br>
 				      <label>Data</label>
 				      <input class="form-control" type="text"  name="project_date" value="<?= date('d-m-Y') ?>">
@@ -43,7 +43,7 @@ $(function() {
 			</div>
 			<div id="groudingSystems" class="tab-pane fade <?php echo ($tab == 'gsTab') ? 'in active' : ''; ?>">
 			  <div class="form-group">
-			    <form action="<?php echo base_url(); ?>groundingSystems/update_gs/<?= $project['pName'] ?>" method="POST"> <!--Pass gs id instead of pName checkHere-->
+			    <form action="<?php echo base_url(); ?>groundingSystems/update_gs/<?= $project['id'] ?>" method="POST">
 		    	  	<label>Malha de Terra</label>
 		    	  	<div class="input-group">
 					    <select name="gs" id="gs" style="width: 100%" class="form-control">

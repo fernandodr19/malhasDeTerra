@@ -9,7 +9,7 @@
 		}
 
 		public function view($pName = '', $data) {
-			$data['project'] = $this->project_model->get_projects($pName);
+			$data['project'] = $this->project_model->get_project($pName);
 
 			if(empty($data['project'])) {
 				show_404();
@@ -22,7 +22,7 @@
 			$this->load->view('templates/footer');		
 		}
         
-        public function update_gs($pName = '') {
+        public function update_gs($projectId = '') {
             //name required
             
             $this->form_validation->set_rules('gs_conductorMaxLength', "Comprimento máximo do segmento do condutor", "numeric");
@@ -155,7 +155,6 @@
                     print("<br>");
                 }
             }
-            //$this->view($pName, $data);
-            redirect(site_url('projects/'.$pName.'/gsTab'));
+            redirect(site_url('projects/'.$id.'/gsTab'));
         }
 	}

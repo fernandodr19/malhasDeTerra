@@ -43,7 +43,7 @@
                   <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projetos <span class="caret"></span></a>
                   <ul class="dropdown-menu" id="myProjects">
                     <?php foreach ($this->project_model->get_projects() as $project) : ?>
-                      <li><a href="<?php echo site_url('projects/'.$project['pName']); ?>"><?php echo $project['pName']; ?></a></li>
+                      <li><a href="<?php echo site_url('projects/'.$project['id']); ?>"><?php echo $project['name']; ?></a></li>
                     <?php endforeach; ?>
                     <li><a href="#" class="add-project" data-toggle="modal" data-target="#add_project" onClick="clearModal()">New Project</a></li>
                   </ul>

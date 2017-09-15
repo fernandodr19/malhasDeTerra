@@ -8,8 +8,8 @@
 			$this->load->view('templates/footer');
 		}
 
-		public function view($pName = '', $tab = '') {
-			$data['project'] = $this->project_model->get_projects($pName);
+		public function view($name = '', $tab = '') {
+			$data['project'] = $this->project_model->get_project($name);
             
             if($tab == '')
                 $tab = 'projectTab';
@@ -35,7 +35,7 @@
 				redirect('/');
 				//echo "<script language=\"javascript\">alert('O campo não pode ficar em branco.');</script>";
 			} else {
-				$this->project_model->create_project();
+				$this->project_model->create_project(); //chechHere checar se conseguiu
 				
 				$this->load->view('templates/header');
 				$this->load->view('pages/home');
@@ -45,18 +45,16 @@
 			}
 		}
 
-		public function update_project($oldName) { //tem que ser id
+		public function update_project($id) {
 			$this->form_validation->set_rules('project_name', 'Project name', 'required');
 
-			$data['error'] = 1;
-			$pName = $this->input->post('project_name');
 			if ($this->form_validation->run() == FALSE){
 				$this->load->view('templates/header');
-				$this->load->view('projects/'.$pName, $data);
+				$this->load->view('projects/'.$id, $data);
 				$this->load->view('templates/footer');		
 			} else {
-				$this->project_model->update_project($oldName);
-				redirect(site_url('projects/'.$pName));
+				$this->project_model->update_project($id);
+				redirect(site_url('projects/'.$id));
 			}
 		}
 	}

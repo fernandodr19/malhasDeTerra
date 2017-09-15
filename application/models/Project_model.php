@@ -4,35 +4,50 @@
 			$this->load->database();
 		}
 
-		public function get_projects($pName = '') {
-			$this->db->where('userEmail', $this->session->userdata('email')); 
-
-			if($pName == '') {
-				$query = $this->db->get('projects');
-				return $query->result_array();
-			}
-
-			$query = $this->db->get_where('projects', array('pName' => $pName));
-			return $query->row_array();
+		public function get_projects() {
+			$this->db->where('userId', $this->session->userdata('id')); 
+            $this->db->from('userProjects');
+            $this->db->join('projects', 'userProjects.projectId= projects.id');
+            $query = $this->db->get();
+            return $query->result_array();
 		}
+        
+        public function get_project($id = '') {
+            $this->db->where('userId', $this->session->userdata('id')); 
+            $this->db->where('id', $id);
+            $this->db->from('userProjects');
+            $this->db->join('projects', 'userProjects.projectId= projects.id');
+			$query = $this->db->get();
+			return $query->row_array();
+        }
 
 		public function create_project() {
-			$pName = $this->input->post('newProjectName');
+			$name = $this->input->post('newProjectName');
 
-			$data = array(
-				'pName' => $pName,
-				'userEmail' => $this->session->userdata('email') //checkHere trocar para id
+			$projectData = array(
+				'name' => $name
 			);
+            $this->db->insert('projects', $projectData);
+            
+            $userProjectsData = array(
+                'userId' => $this->session->userdata('id'),
+                'projectId' => $this->db->insert_id(),
+                'owner' => true,
+                'readOnly' => false
+            );
 			
-			return $this->db->insert('projects', $data);
+			return $this->db->insert('userProjects', $userProjectsData);
 		}
 
-		public function update_project($oldName) {
-			$project = array(
-				"pName" => $this->input->post('project_name')
+		public function update_project($id) {
+			$data = array(
+				'name' => $this->input->post('project_name'),
+                'substation' => $this->input->post('project_substation'),
+                'description' => $this->input->post('project_description'),
+                'designer' => $this->input->post('project_designer')
 			);
 
-			$this->db->where("pName", $oldName);
-			$this->db->update("projects", $project); 
+			$this->db->where("id", $id);
+			$this->db->update("projects", $data); 
 		}
 	}
