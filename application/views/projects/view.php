@@ -1,9 +1,19 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
-$(function() {
-	$("#sortable").sortable();
-	$("#sortable").disableSelection();
-});
+    $(function() {
+        $("#sortable").sortable();
+        $("#sortable").disableSelection();
+    });
+
+    $(function() {
+       var sel = document.getElementById('gs');
+        for(var i = 0, j = sel.options.length; i < j; ++i) {
+            if(sel.options[i].value == <?= $gs['id'] ?>) {
+               sel.selectedIndex = i;
+               break;
+            }
+        }
+    });
 </script>
 
 <div class="panel panel-primary">
@@ -43,12 +53,6 @@ $(function() {
 			</div>
 			<div id="groudingSystems" class="tab-pane fade <?php echo ($tab == 'gsTab') ? 'in active' : ''; ?>">
 			  <div class="form-group">
-                <?php
-                    $gs['id'] = 1;
-                    if($this->groundingSystem_model->get_groundingSystems($project['id']) != null)
-                        $gs = $this->groundingSystem_model->get_groundingSystems($project['id'])[0];
-                          
-                ?>
 			    <form action="<?php echo base_url(); ?>groundingSystems/update_gs/<?= $project['id'] ?>/<?= $gs['id'] ?>" method="POST">
 		    	  	<label>Malha de Terra</label>
 		    	  	<div class="input-group">
@@ -64,7 +68,7 @@ $(function() {
 					</div>
 			      	<br>
 		    	  	<label>Nome</label>
-		    	  	<input class="form-control" type="text"  name="gs_name" value="<?php if(isset($gs)) {echo $gs['name'];} ?>">					 
+		    	  	<input class="form-control" type="text"  name="gs_name" value="<?php echo $gs['name']; ?>">					 
 				 	<br>
 				 	<label>Comprimento máximo do segmento do condutor (m)</label>
                     <div class="input-group">

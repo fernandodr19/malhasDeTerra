@@ -15,7 +15,7 @@
 		}
         
         public function get_groundingSystem($id = '') {
-            if($id = '')
+            if($id == '')
                 return;
             
             $this->db->where('id', $id); 

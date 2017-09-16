@@ -33,7 +33,7 @@
 				//echo "<script language=\"javascript\">alert('O campo não pode ficar em branco.');</script>";
 			} else {
 				$this->groundingSystem_model->create_groundingSystem($projectId); //chechHere checar se conseguiu
-				redirect(site_url('projects/'.$projectId.'/gsTab'));
+				redirect(site_url('projects/'.$projectId.'/gsTab')); //checkHere
 			}
 		}
         
@@ -110,8 +110,8 @@
                 print($gs['injectedCurrent']);
                 print('<br>');
                 
-//                $this->groundingSystem_model->update_groundingSystem($gsId);
                 $this->groundingSystem_model->update_groundingSystem($gsId);
+                ///////////////////////////////////////////////////////////
                 
                 $gs['file'] = $this->input->post('gs_file');
                 print($gs['file']);

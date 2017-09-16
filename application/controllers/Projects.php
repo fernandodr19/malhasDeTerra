@@ -8,8 +8,11 @@
 			$this->load->view('templates/footer');
 		}
 
-		public function view($id = '', $tab = '') {
-			$data['project'] = $this->project_model->get_project($id);
+		public function view($projectId = '', $tab = '') {
+			$data['project'] = $this->project_model->get_project($projectId);
+            $data['gs'] = $this->groundingSystem_model->get_groundingSystem(8); //project_lastGsId
+            if(empty($data['gs']) && isset($this->groundingSystem_model->get_groundingSystems($projectId)[0])) // if empty, get first
+                    $data['gs'] = $this->groundingSystem_model->get_groundingSystems($projectId)[0];
             
             if($tab == '')
                 $tab = 'projectTab';
