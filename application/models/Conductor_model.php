@@ -24,7 +24,7 @@
                     'x2' => $conductors['x2'][$i],
                     'y2' => $conductors['y2'][$i],
                     'z2' => $conductors['z2'][$i],
-                    'cableId' => 1// $conductorCables[$i] checkHEre
+                    'cableId' => $conductorCables[$i]
                  );
 
                 $this->db->insert('conductors', $conductorData);

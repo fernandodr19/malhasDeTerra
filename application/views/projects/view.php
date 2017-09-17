@@ -15,6 +15,7 @@
             }
         }
         
+       
        var conductors = <?php echo json_encode($conductors) ?>;
        for(var i = 0; i < conductors.length; i++) {
             var x1 = conductors[i].x1;
@@ -23,7 +24,8 @@
             var x2 = conductors[i].x2;
             var y2 = conductors[i].y2;
             var z2 = conductors[i].z2;
-            addConductorRow(x1, y1, z1, x2, y2, z2);
+            var cableId = conductors[i].cableId;
+            addConductorRow(x1, y1, z1, x2, y2, z2, cableId);
         }
     });
        
@@ -248,8 +250,8 @@
 </style>
 
 <script type="text/javascript"> //passar pra test.js
-	function addConductorRow(x1 = '0.000', y1 = '0.000', z1 = '0.000', x2 = '0.000', y2 = '0.000', z2 = '0.000') {
-		 document.getElementById("conductorsTableBody").insertRow(-1).innerHTML = 
+	function addConductorRow(x1 = '0.000', y1 = '0.000', z1 = '0.000', x2 = '0.000', y2 = '0.000', z2 = '0.000', cableId = 0) {
+        var body = 
 		 '<tr>' +
 		 	'<td><input type="text" class="tableInput" value="' + x1 + '" name="conductors[x1][]"></td>' + 
 		 	'<td><input type="text" class="tableInput" value="' + y1 + '" name="conductors[y1][]"></td>' +
@@ -258,13 +260,18 @@
 		 	'<td><input type="text" class="tableInput" value="' + y2 + '" name="conductors[y2][]"></td>' +
 		 	'<td><input type="text" class="tableInput" value="' + z2 + '" name="conductors[z2][]"></td>' +
 		 	'<td>' +
-                '<select name="conductorCables[]" id="gs" style="width: 50%">' +
-                    '<option value="-1">Cabos</option>' +
-                    '<option value="0">Cobre 70mm²</option>' + //value = cable.id; name = cable.name
-                    '<option value="1">DOTTEREL</option>' +
-                 '</select></td>' +
+                '<select name="conductorCables[]" id="gs" style="width: 50%">'
+                var cables = <?php echo json_encode($cables) ?>;    
+                for(var i = 0; i < cables.length; i++) {
+                    if(i == cableId - 1)
+                        body += '<option selected="selected" value="' + cables[i].id + '">' + cables[i].code + '</option>';    
+                    else
+                        body += '<option value="' + cables[i].id + '">' + cables[i].code + '</option>';    
+                }
+                 body += '</select></td>' +
  		 	'<td><button class="btn btn-xs btn-danger" onClick="deleteRow(this)"><span class="glyphicon glyphicon-remove"></span></button></td>' +
 	 	'</tr>';
+        document.getElementById("conductorsTableBody").insertRow(-1).innerHTML = body;
 	}
 
 	function addPointRow() {
