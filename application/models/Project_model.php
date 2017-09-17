@@ -53,7 +53,7 @@
 			$this->db->update("projects", $data); 
 		}
         
-        public function setLastGsId($projectId, $lastGsId = '') {
+        public function setLastGsId($projectId, $lastGsId) {
             if($projectId == '' or $lastGsId == '')
                 return;
             

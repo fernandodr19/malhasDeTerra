@@ -34,14 +34,13 @@
 			} else {
 				$gsId = $this->groundingSystem_model->create_groundingSystem($projectId);
                 $this->project_model->setLastGsId($projectId, $gsId);
-				redirect(site_url('projects/'.$projectId.'/gsTab')); //checkHere
+				redirect(site_url('projects/'.$projectId.'/gsTab'));
 			}
 		}
         
         public function update_gs($projectId = '', $gsId = '') {
             if($projectId == '' || $gsId == '')
                 return;
-            //name required
             
             $this->form_validation->set_rules('gs_name', "Nome", "required");
             $this->form_validation->set_rules('gs_conductorsMaxLength', "Comprimento máximo do segmento do condutor", "numeric");
@@ -74,45 +73,10 @@
             if ($this->form_validation->run() == FALSE){
                 $data['error'] = validation_errors();
             } else {
-                $data['success'] = 'success';
-                $gs['name'] = 'name';
+                $data['success'] = 'success'; //checkHere do i need it?
+                $this->groundingSystem_model->update_groundingSystem($gsId); //save gs
                 
-                $gs['conductorsMaxLength'] = $this->input->post('gs_conductorsMaxLength');
-                print($gs['conductorsMaxLength']);
-                print('<br>');
-                
-                $gs['nLayers'] = $this->input->post('nLayers');
-                print($gs['nLayers']);
-                print('<br>');
-                
-                $gs['firstLayerDepth'] = $this->input->post('gs_firstLayerDepth');
-                print($gs['firstLayerDepth']);
-                print('<br>');
-                
-                $gs['firstLayerResistivity'] = $this->input->post('gs_firstLayerResistivity');
-                print($gs['firstLayerResistivity']);
-                print('<br>');
-                
-                if($gs['nLayers'] == 2) {
-                    $gs['secondLayerResistivity'] = $this->input->post('gs_secondLayerResistivity');
-                    print($gs['secondLayerResistivity']);
-                    print('<br>');
-                    
-                    $gs['crushedStoneLayerDepth'] = $this->input->post('gs_crushedStoneLayerDepth');
-                    print($gs['crushedStoneLayerDepth']);
-                    print('<br>');
-                }
-                
-                $gs['crushedStoneLayerResistivity'] = $this->input->post('gs_crushedStoneLayerResistivity');
-                print($gs['crushedStoneLayerResistivity']);
-                print('<br>');
-                
-                $gs['injectedCurrent'] = $this->input->post('gs_injectedCurrent');
-                print($gs['injectedCurrent']);
-                print('<br>');
-                
-                $this->groundingSystem_model->update_groundingSystem($gsId);
-                ///////////////////////////////////////////////////////////
+                //////////////SAVE CONDUCTORS//////////////
                 
                 $gs['file'] = $this->input->post('gs_file');
                 print($gs['file']);
@@ -139,6 +103,8 @@
                     print("<br>");
                 }
                 
+                //////////////SAVE POINTS//////////////
+                
                 $points = $this->input->post('points');
                 for ($i = 0; $i < sizeof($points['x']); $i++) {
                     print($points['x'][$i]);
@@ -146,6 +112,8 @@
                     print($points['y'][$i]);
                     print("<br>");
                 }
+                
+                //////////////SAVE PROFILES//////////////
                 
                 $profiles = $this->input->post('profiles');
                 $touchIndex = 1;

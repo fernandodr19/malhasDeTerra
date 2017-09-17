@@ -14,6 +14,8 @@
             }
         }
     });
+            
+
 </script>
 
 <div class="panel panel-primary">
@@ -288,6 +290,10 @@
 		row.closest('tr').remove();
 	}
 
+    $('#gs').change(function() {
+        window.location.href = "<?php echo base_url(); ?>projects/setLastGsId/<?= $project['id'] ?>/" + this.value;
+    });
+    
 	//$("#conductorsTableBody").sortable();
 	// $("#pointsTableBody").sortable();
 	//$("#profileTableBody").sortable();

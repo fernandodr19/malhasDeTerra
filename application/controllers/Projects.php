@@ -54,4 +54,9 @@
 				redirect(site_url('projects/'.$id));
 			}
 		}
+        
+        public function setLastGsId($projectId, $lastGsId) {
+            $this->project_model->setLastGsId($projectId, $lastGsId);
+            redirect(site_url('projects/'.$projectId.'/gsTab'));
+        }
 	}
