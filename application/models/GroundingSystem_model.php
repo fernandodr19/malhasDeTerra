@@ -25,14 +25,13 @@
         }
         
 		public function create_groundingSystem($projectId) {
-			$name = $this->input->post('newGSName');
-
 			$projectData = array(
-				'name' => $name,
-                'projectId' => $projectId
+                'projectId' => $projectId,
+				'name' => $this->input->post('newGSName')
 			);
             
-            return $this->db->insert('groundingSystems', $projectData);
+            $this->db->insert('groundingSystems', $projectData);
+            return $this->db->insert_id();
 		}
 
 		public function update_groundingSystem($id) {
@@ -40,7 +39,15 @@
                 return;
             
 			$data = array(
-				'name' => $this->input->post('gs_name')
+				'name' => $this->input->post('gs_name'),
+                'conductorsMaxLength' => $this->input->post('gs_conductorsMaxLength'),
+                'nLayers' => $this->input->post('gs_nLayers'),
+                'firstLayerDepth' => $this->input->post('gs_firstLayerDepth'),
+                'firstLayerResistivity' => $this->input->post('gs_firstLayerResistivity'),
+                'secondLayerResistivity' => $this->input->post('gs_secondLayerResistivity'),
+                'crushedStoneLayerDepth' => $this->input->post('gs_crushedStoneLayerDepth'),
+                'crushedStoneLayerResistivity' => $this->input->post('gs_crushedStoneLayerResistivity'),
+                'injectedCurrent' => $this->input->post('gs_injectedCurrent')
 			);
 
 			$this->db->where("id", $id);

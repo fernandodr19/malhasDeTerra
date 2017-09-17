@@ -52,4 +52,16 @@
 			$this->db->where("id", $id);
 			$this->db->update("projects", $data); 
 		}
+        
+        public function setLastGsId($projectId, $lastGsId = '') {
+            if($projectId == '' or $lastGsId == '')
+                return;
+            
+            $data = array(
+				'lastGsId' => $lastGsId
+            );
+            
+            $this->db->where("id", $projectId);
+			$this->db->update("projects", $data);
+        }
 	}

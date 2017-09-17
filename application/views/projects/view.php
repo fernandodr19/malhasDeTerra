@@ -72,44 +72,44 @@
 				 	<br>
 				 	<label>Comprimento máximo do segmento do condutor (m)</label>
                     <div class="input-group">
-                      <input class="form-control" type="text"  name="gs_conductorMaxLength" value="">
+                      <input class="form-control" type="text"  name="gs_conductorsMaxLength" value="<?php echo $gs['conductorsMaxLength']; ?>">
                       <span class="input-group-btn">
                          <a href="#" class="btn btn-info">?</a>
                       </span>
                     </div>
 			      	<br>
 			      	<label>Número de camadas do solo</label>&nbsp;&nbsp;&nbsp;
-			      	<select name="nLayers" id="numberOfLayers" style="width: 5%" class="form-control" onchange="numberOfLayersChanged(this.value)">
+			      	<select name="gs_nLayers" id="numberOfLayers" style="width: 5%" class="form-control" onchange="numberOfLayersChanged(this.value)">
 						<option value="1">1</option>
 						<option value="2">2</option>
 		 		 	</select>
 		 		 	<br>
 		 		 	<label>Profundidade da primeira camada do solo (m)</label>
-			      	<input class="form-control" type="text"  name="gs_firstLayerDepth" value="">
+			      	<input class="form-control" type="text"  name="gs_firstLayerDepth" value="<?php echo $gs['firstLayerDepth']; ?>">
 			      	<br>
 			      	<label>Resistividade da primeira camada do solo (&Omega;.m)</label>
-			      	<input class="form-control" type="text"  name="gs_firstLayerResistivity" value="">
+			      	<input class="form-control" type="text"  name="gs_firstLayerResistivity" value="<?php echo $gs['firstLayerResistivity']; ?>">
 			      	<br>
 			      	<div id="visibleIf2Layers" style="display: none">
 						<label>Resistividade da segunda camada do solo (&Omega;.m)</label>
-						<input class="form-control" type="text"  name="gs_secondLayerResistivity" value="">
+						<input class="form-control" type="text"  name="gs_secondLayerResistivity" value="<?php echo $gs['secondLayerResistivity']; ?>">
 						  <br>
 						  <label>Profundidade da camada de brita (m)</label>
-						<input class="form-control" type="text"  name="gs_crushedStoneLayerDepth" value="">
+						<input class="form-control" type="text"  name="gs_crushedStoneLayerDepth" value="<?php echo $gs['crushedStoneLayerDepth']; ?>">
 						<br>
 					</div>
 					<label>Resistividade da camada de brita (&Omega;.m)</label>
-					<input class="form-control" type="text"  name="gs_crushedStoneLayerResistivity" value="">
+					<input class="form-control" type="text"  name="gs_crushedStoneLayerResistivity" value="<?php echo $gs['crushedStoneLayerResistivity']; ?>">
 					<br>
 					<label>Corrente injetada (A)</label>
-					<input class="form-control" type="text"  name="gs_injectedCurrent" value="">
+					<input class="form-control" type="text"  name="gs_injectedCurrent" value="<?php echo $gs['injectedCurrent']; ?>">
 					<br>
 					<label>Arquivo DXF</label>
 					<input class="" type="file"  name="gs_file" value="" >
 					<br>
                     <div class="panel with-nav-tabs panel-primary">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Nome da malha</h3>
+                            <h3 class="panel-title"><?php echo $gs['name']; ?></h3>
                             <span class="pull-right">
                                 <ul class="nav panel-tabs">
                                     <li class="active"><a href="#conductors" data-toggle="tab">Condutores</a></li>

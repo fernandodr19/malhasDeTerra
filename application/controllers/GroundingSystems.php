@@ -32,7 +32,8 @@
 				redirect('/');
 				//echo "<script language=\"javascript\">alert('O campo não pode ficar em branco.');</script>";
 			} else {
-				$this->groundingSystem_model->create_groundingSystem($projectId); //chechHere checar se conseguiu
+				$gsId = $this->groundingSystem_model->create_groundingSystem($projectId);
+                $this->project_model->setLastGsId($projectId, $gsId);
 				redirect(site_url('projects/'.$projectId.'/gsTab')); //checkHere
 			}
 		}
@@ -43,7 +44,7 @@
             //name required
             
             $this->form_validation->set_rules('gs_name', "Nome", "required");
-            $this->form_validation->set_rules('gs_conductorMaxLength', "Comprimento máximo do segmento do condutor", "numeric");
+            $this->form_validation->set_rules('gs_conductorsMaxLength', "Comprimento máximo do segmento do condutor", "numeric");
             $this->form_validation->set_rules('gs_firstLayerDepth', "Profundidade da primeira camada do solo", "numeric");
             $this->form_validation->set_rules('gs_firstLayerResistivity', "Resistividade da primeira camada do solo", "numeric");
             if($this->input->post('nLayers') == 2) {
@@ -76,7 +77,7 @@
                 $data['success'] = 'success';
                 $gs['name'] = 'name';
                 
-                $gs['conductorsMaxLength'] = $this->input->post('gs_conductorMaxLength');
+                $gs['conductorsMaxLength'] = $this->input->post('gs_conductorsMaxLength');
                 print($gs['conductorsMaxLength']);
                 print('<br>');
                 
