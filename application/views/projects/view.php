@@ -249,7 +249,7 @@
     }
 </style>
 
-<script type="text/javascript"> //passar pra test.js
+<script type="text/javascript">
 	function addConductorRow(x1 = '0.000', y1 = '0.000', z1 = '0.000', x2 = '0.000', y2 = '0.000', z2 = '0.000', cableId = 0) {
         var body = 
 		 '<tr>' +

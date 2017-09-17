@@ -81,13 +81,8 @@
                 
                 //////////////SAVE POINTS//////////////
                 
-                $points = $this->input->post('points');
-                for ($i = 0; $i < sizeof($points['x']); $i++) {
-                    print($points['x'][$i]);
-                    print(" ");
-                    print($points['y'][$i]);
-                    print("<br>");
-                }
+                $this->point_model->delete_points($gsId);
+                $this->point_model->create_points($gsId);
                 
                 //////////////SAVE PROFILES//////////////
                 

@@ -12,7 +12,6 @@
 		}
         
         public function create_conductors($gsId) {
-            
             $conductors = $this->input->post('conductors');
             $conductorCables = $this->input->post('conductorCables');
             for ($i = 0; $i < sizeof($conductors['x1']); $i++) {
