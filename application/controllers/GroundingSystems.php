@@ -38,10 +38,7 @@
 			}
 		}
         
-        public function update_gs($projectId = '', $gsId = '') {
-            if($projectId == '' || $gsId == '')
-                return;
-            
+        public function update_gs($projectId, $gsId) {
             $this->form_validation->set_rules('gs_name', "Nome", "required");
             $this->form_validation->set_rules('gs_conductorsMaxLength', "Comprimento máximo do segmento do condutor", "numeric");
             $this->form_validation->set_rules('gs_firstLayerDepth', "Profundidade da primeira camada do solo", "numeric");
@@ -76,9 +73,11 @@
                 $data['success'] = 'success'; //checkHere do i need it?
                 $this->groundingSystem_model->update_groundingSystem($gsId); //save gs
                 
+                $gs['file'] = $this->input->post('gs_file');
                 //////////////SAVE CONDUCTORS//////////////
                 
-                $gs['file'] = $this->input->post('gs_file');
+                $this->conductor_model->delete_conductors($gsId);
+                $this->conductor_model->create_conductors($gsId);
                 print($gs['file']);
                 print('<br>');
                 

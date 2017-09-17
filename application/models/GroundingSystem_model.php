@@ -4,20 +4,14 @@
 			$this->load->database();
 		}
 
-		public function get_groundingSystems($projectId = '') {
-            if($projectId == '')
-                return;
-            
-			$this->db->where('projectId', $projectId); 
+		public function get_groundingSystems($projectId) {
+            $this->db->where('projectId', $projectId); 
             $this->db->from('groundingSystems');
             $query = $this->db->get();
             return $query->result_array();
 		}
         
-        public function get_groundingSystem($id = '') {
-            if($id == '')
-                return;
-            
+        public function get_groundingSystem($id) {
             $this->db->where('id', $id); 
             $this->db->from('groundingSystems');
 			$query = $this->db->get();
@@ -25,20 +19,17 @@
         }
         
 		public function create_groundingSystem($projectId) {
-			$projectData = array(
+			$gsData = array(
                 'projectId' => $projectId,
 				'name' => $this->input->post('newGSName')
 			);
             
-            $this->db->insert('groundingSystems', $projectData);
+            $this->db->insert('groundingSystems', $gsData);
             return $this->db->insert_id();
 		}
 
 		public function update_groundingSystem($id) {
-            if($id == '')
-                return;
-            
-			$data = array(
+            $data = array(
 				'name' => $this->input->post('gs_name'),
                 'conductorsMaxLength' => $this->input->post('gs_conductorsMaxLength'),
                 'nLayers' => $this->input->post('gs_nLayers'),
