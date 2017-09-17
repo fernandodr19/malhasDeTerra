@@ -78,29 +78,6 @@
                 
                 $this->conductor_model->delete_conductors($gsId);
                 $this->conductor_model->create_conductors($gsId);
-                print($gs['file']);
-                print('<br>');
-                
-                $conductors = $this->input->post('conductors');
-                $conductorCables = $this->input->post('conductorCables');
-                for ($i = 0; $i < sizeof($conductors['x1']); $i++) {
-                    print($conductors['x1'][$i]);
-                    print(" ");
-                    print($conductors['y1'][$i]);
-                    print(" ");
-                    print($conductors['z1'][$i]);
-                    print(" ");
-                    print($conductors['x2'][$i]);
-                    print(" ");
-                    print($conductors['y2'][$i]);
-                    print(" ");
-                    print($conductors['z2'][$i]);
-                    print(" ");
-                    print($conductors['z2'][$i]);
-                    print(" ");
-                    print($conductorCables[$i]);
-                    print("<br>");
-                }
                 
                 //////////////SAVE POINTS//////////////
                 

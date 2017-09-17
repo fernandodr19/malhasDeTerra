@@ -6,15 +6,29 @@
     });
 
     $(function() {
-       var sel = document.getElementById('gs');
-        for(var i = 0, j = sel.options.length; i < j; ++i) {
+        //initialize data    
+        var sel = document.getElementById('gs');
+        for(var i = 0; i < sel.options.length; i++) {
             if(sel.options[i].value == <?= $gs['id'] ?>) {
                sel.selectedIndex = i;
                break;
             }
         }
+        
+       var conductors = <?php echo json_encode($conductors) ?>;
+       for(var i = 0; i < conductors.length; i++) {
+            var x1 = conductors[i].x1;
+            var y1 = conductors[i].y1;
+            var z1 = conductors[i].z1;
+            var x2 = conductors[i].x2;
+            var y2 = conductors[i].y2;
+            var z2 = conductors[i].z2;
+            addConductorRow(x1, y1, z1, x2, y2, z2);
+        }
     });
-            
+       
+    
+
 
 </script>
 
@@ -234,15 +248,15 @@
 </style>
 
 <script type="text/javascript"> //passar pra test.js
-	function addConductorRow() {
+	function addConductorRow(x1 = '0.000', y1 = '0.000', z1 = '0.000', x2 = '0.000', y2 = '0.000', z2 = '0.000') {
 		 document.getElementById("conductorsTableBody").insertRow(-1).innerHTML = 
 		 '<tr>' +
-		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[x1][]"></td>' + 
-		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[y1][]"></td>' +
-		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[z1][]"></td>' +
-		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[x2][]"></td>' + 
-		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[y2][]"></td>' +
-		 	'<td><input type="text" class="tableInput" value="0.000" name="conductors[z2][]"></td>' +
+		 	'<td><input type="text" class="tableInput" value="' + x1 + '" name="conductors[x1][]"></td>' + 
+		 	'<td><input type="text" class="tableInput" value="' + y1 + '" name="conductors[y1][]"></td>' +
+		 	'<td><input type="text" class="tableInput" value="' + z1 + '" name="conductors[z1][]"></td>' +
+		 	'<td><input type="text" class="tableInput" value="' + x2 + '" name="conductors[x2][]"></td>' + 
+		 	'<td><input type="text" class="tableInput" value="' + y2 + '" name="conductors[y2][]"></td>' +
+		 	'<td><input type="text" class="tableInput" value="' + z2 + '" name="conductors[z2][]"></td>' +
 		 	'<td>' +
                 '<select name="conductorCables[]" id="gs" style="width: 50%">' +
                     '<option value="-1">Cabos</option>' +
