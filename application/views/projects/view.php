@@ -27,6 +27,24 @@
             var cableId = conductors[i].cableId;
             addConductorRow(x1, y1, z1, x2, y2, z2, cableId);
         }
+            
+        var points = <?php echo json_encode($points) ?>;
+        for(var i = 0; i < points.length; i++) {
+            var x = points[i].x;
+            var y = points[i].y;
+            addPointRow(x, y);
+        }
+            
+        <?php foreach ($profiles as $profile) : ?>
+            var x1 = <?= $profile['x1'] ?>;
+            var y1 = <?= $profile['y1'] ?>;
+            var x2 = <?= $profile['x2'] ?>;
+            var y2 = <?= $profile['y2'] ?>;
+            var precision = <?= $profile['precision'] ?>;
+            var touch = <?= $profile['touch'] ?>;
+            var step = <?= $profile['step'] ?>;
+            addProfileRow(x1, y1, x2, y2, precision, touch, step);
+        <?php endforeach; ?> 
     });
        
     
@@ -274,29 +292,37 @@
         document.getElementById("conductorsTableBody").insertRow(-1).innerHTML = body;
 	}
 
-	function addPointRow() {
+	function addPointRow(x = '0.000', y = '0.000') {
 		 document.getElementById("pointsTableBody").insertRow(-1).innerHTML = 
 		 '<tr>' +
-		 	'<td><input type="text" class="tableInput" value="0.000" name="points[x][]"></td>' + 
-		 	'<td><input type="text" class="tableInput" value="0.000" name="points[y][]"></td>' +
+		 	'<td><input type="text" class="tableInput" value="' + x + '" name="points[x][]"></td>' + 
+		 	'<td><input type="text" class="tableInput" value="' + y + '" name="points[y][]"></td>' +
 		 	'<td><button class="btn btn-xs btn-danger" onClick="deleteRow(this)"><span class="glyphicon glyphicon-remove"></span></button></td>' +
 	 	'</tr>';
 	}
 
-	function addProfileRow() {
-		 document.getElementById("profileTableBody").insertRow(-1).innerHTML = 
+	function addProfileRow(x1 = '0.000', y1 = '0.000', x2 = '0.000', y2 = '0.000', precision = '0.000', touch = true, step = true) {
+		 var body =
 		 '<tr>' +
-		 	'<td><input type="text" class="tableInput" value="0.000" name="profiles[x1][]"></td>' + 
-		 	'<td><input type="text" class="tableInput" value="0.000" name="profiles[y1][]"></td>' +
-		 	'<td><input type="text" class="tableInput" value="0.000" name="profiles[x2][]"></td>' + 
-		 	'<td><input type="text" class="tableInput" value="0.000" name="profiles[y2][]"></td>' +
-		 	'<td><input type="text" class="tableInput" value="0.000" name="profiles[precision][]"></td>' + 
-            '<td><input type="hidden" value="hidden" name="profiles[touch][]"></td>' +
-		 	'<td><input type="checkbox" value="touch" name="profiles[touch][]" checked></td>' +
-            '<td><input type="hidden" value="hidden" name="profiles[step][]"></td>' +
-		 	'<td><input type="checkbox" value="step" name="profiles[step][]" checked></td>' +
+		 	'<td><input type="text" class="tableInput" value="' + x1 + '" name="profiles[x1][]"></td>' + 
+		 	'<td><input type="text" class="tableInput" value="' + y1 + '" name="profiles[y1][]"></td>' +
+		 	'<td><input type="text" class="tableInput" value="' + x2 + '" name="profiles[x2][]"></td>' + 
+		 	'<td><input type="text" class="tableInput" value="' + y2 + '" name="profiles[y2][]"></td>' +
+		 	'<td><input type="text" class="tableInput" value="' + precision + '" name="profiles[precision][]"></td>' + 
+            '<td><input type="hidden" value="hidden" name="profiles[touch][]"></td>';
+            if(touch)
+		 	    body += '<td><input type="checkbox" value="touch" name="profiles[touch][]" checked></td>';
+            else
+                body += '<td><input type="checkbox" value="touch" name="profiles[touch][]"></td>';
+            body += '<td><input type="hidden" value="hidden" name="profiles[step][]"></td>';
+            if(step)
+		 	    body += '<td><input type="checkbox" value="step" name="profiles[step][]" checked></td>';
+            else
+                body += '<td><input type="checkbox" value="step" name="profiles[step][]"></td>';
+            body +=
 		 	'<td><button class="btn btn-xs btn-danger" onClick="deleteRow(this)"><span class="glyphicon glyphicon-remove"></span></button></td>' +
 	 	'</tr>';
+        document.getElementById("profileTableBody").insertRow(-1).innerHTML = body;
 	}
 
 	function numberOfLayersChanged(value) {

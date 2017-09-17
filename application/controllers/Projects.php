@@ -12,7 +12,10 @@
 			$data['project'] = $this->project_model->get_project($projectId);
             $data['gs'] = $this->groundingSystem_model->get_groundingSystem($data['project']['lastGsId']);
             $data['conductors'] = $this->conductor_model->get_conductors($data['project']['lastGsId']);
+            $data['points'] = $this->point_model->get_points($data['project']['lastGsId']);
+            $data['profiles'] = $this->profile_model->get_profiles($data['project']['lastGsId']);
             $data['cables'] = $this->cable_model->get_cables();
+            
             if(empty($data['gs']) && isset($this->groundingSystem_model->get_groundingSystems($projectId)[0]))
                     $data['gs'] = $this->groundingSystem_model->get_groundingSystems($projectId)[0];
             

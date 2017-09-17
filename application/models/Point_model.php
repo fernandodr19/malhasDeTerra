@@ -14,18 +14,18 @@
         public function create_points($gsId) { 
             $points = $this->input->post('points');
             for ($i = 0; $i < sizeof($points['x']); $i++) {
-                $conductorData = array(
+                $pointData = array(
                     'gsId' => $gsId,
                     'x' => $points['x'][$i],
                     'y' => $points['y'][$i]
                  );
 
-                $this->db->insert('points', $conductorData);
+                $this->db->insert('points', $pointData);
             }
 		}
 
 		public function delete_points($gsId) {
-            $this->db->where("gsId", $gsId);
-			$this->db->delete("points"); 
+            $this->db->where('gsId', $gsId);
+			$this->db->delete('points'); 
 		}
 	}

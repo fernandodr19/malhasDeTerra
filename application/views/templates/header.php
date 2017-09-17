@@ -7,7 +7,6 @@
 <html>
   <head>
     <title>Malhas de Terra</title>
-<!--    <link rel="shortcut icon" type="image/png" href="http://simpleicon.com/wp-content/uploads/lightning.png"/>-->
       <link rel="shortcut icon" type="image/png" href="<?php echo base_url(); ?>/assets/icons/lightning.png"/>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">

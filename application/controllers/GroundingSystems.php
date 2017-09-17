@@ -75,46 +75,16 @@
                 
                 $gs['file'] = $this->input->post('gs_file');
                 //////////////SAVE CONDUCTORS//////////////
-                
                 $this->conductor_model->delete_conductors($gsId);
                 $this->conductor_model->create_conductors($gsId);
                 
                 //////////////SAVE POINTS//////////////
-                
                 $this->point_model->delete_points($gsId);
                 $this->point_model->create_points($gsId);
                 
                 //////////////SAVE PROFILES//////////////
-                
-                $profiles = $this->input->post('profiles');
-                $touchIndex = 1;
-                $stepIndex = 1;
-                for ($i = 0; $i < sizeof($profiles['x1']); $i++) {
-                    print($profiles['x1'][$i]);
-                    print(" ");
-                    print($profiles['y1'][$i]);
-                    print(" ");
-                    print($profiles['x2'][$i]);
-                    print(" ");
-                    print($profiles['y2'][$i]);
-                    print(" ");
-                    print($profiles['precision'][$i]);
-                    print(" ");
-                    if(isset($profiles['touch'][$i + $touchIndex]) and $profiles['touch'][$i + $touchIndex] == 'touch') {
-                        print('touch');
-                        $touchIndex = $touchIndex + 1;
-                    } else {
-                        print('not touch');
-                    }
-                    print(" ");
-                    if(isset($profiles['step'][$i + $stepIndex]) and $profiles['step'][$i + $stepIndex] == 'step') {
-                        print('step');
-                        $stepIndex = $stepIndex + 1;
-                    } else {
-                        print('not step');
-                    }
-                    print("<br>");
-                }
+                $this->profile_model->delete_profiles($gsId);
+                $this->profile_model->create_profiles($gsId);
             }
             
             redirect(site_url('projects/'.$projectId.'/gsTab'));
