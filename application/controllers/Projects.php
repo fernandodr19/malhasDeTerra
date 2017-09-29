@@ -8,8 +8,16 @@
 			$this->load->view('templates/footer');
 		}
 
-		public function view($pName = '', $tab = '') {
-			$data['project'] = $this->project_model->get_projects($pName);
+		public function view($projectId = '', $tab = '') {
+			$data['project'] = $this->project_model->get_project($projectId);
+            $data['gs'] = $this->groundingSystem_model->get_groundingSystem($data['project']['lastGsId']);
+            $data['conductors'] = $this->conductor_model->get_conductors($data['project']['lastGsId']);
+            $data['points'] = $this->point_model->get_points($data['project']['lastGsId']);
+            $data['profiles'] = $this->profile_model->get_profiles($data['project']['lastGsId']);
+            $data['cables'] = $this->cable_model->get_cables();
+            
+            if(empty($data['gs']) && isset($this->groundingSystem_model->get_groundingSystems($projectId)[0]))
+                    $data['gs'] = $this->groundingSystem_model->get_groundingSystems($projectId)[0];
             
             if($tab == '')
                 $tab = 'projectTab';
@@ -18,11 +26,9 @@
 				show_404();
 			}
 
-			//pegar todas as infos do projeto checkHere
-
 			$this->load->view('templates/header');
 			$this->load->view('projects/view', $data);
-			$this->load->view('templates/footer');		
+			$this->load->view('templates/footer');
 		}
 
 		public function add_project() {
@@ -35,28 +41,27 @@
 				redirect('/');
 				//echo "<script language=\"javascript\">alert('O campo não pode ficar em branco.');</script>";
 			} else {
-				$this->project_model->create_project();
+				$projectId = $this->project_model->create_project(); //chechHere checar se conseguiu
 				
-				$this->load->view('templates/header');
-				$this->load->view('pages/home');
-				$this->load->view('templates/footer');
-
-				//redirect('views/pages/home');
+				redirect(site_url('projects/'.$projectId));
 			}
 		}
 
-		public function update_project($oldName) { //tem que ser id
+		public function update_project($id) {
 			$this->form_validation->set_rules('project_name', 'Project name', 'required');
 
-			$data['error'] = 1;
-			$pName = $this->input->post('project_name');
 			if ($this->form_validation->run() == FALSE){
 				$this->load->view('templates/header');
-				$this->load->view('projects/'.$pName, $data);
+				$this->load->view('projects/'.$id, $data);
 				$this->load->view('templates/footer');		
 			} else {
-				$this->project_model->update_project($oldName);
-				redirect(site_url('projects/'.$pName));
+				$this->project_model->update_project($id);
+				redirect(site_url('projects/'.$id));
 			}
 		}
+        
+        public function setLastGsId($projectId, $lastGsId) {
+            $this->project_model->setLastGsId($projectId, $lastGsId);
+            redirect(site_url('projects/'.$projectId.'/gsTab'));
+        }
 	}

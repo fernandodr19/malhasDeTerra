@@ -26,6 +26,7 @@
                         </p>
                         <form class="login" action="<?php echo base_url(); ?>login/register" method="POST">
                             <input type="text" placeholder="Primeiro nome" name="firstName">
+                            <input type="text" placeholder="Sobrenome" name="lastName">
                             <input type="text" placeholder="Email" name="email">
                             <input type="password" placeholder="Senha" name="password">
                             <input type="submit" value="Registrar" class="btn btn-success btn-sm">

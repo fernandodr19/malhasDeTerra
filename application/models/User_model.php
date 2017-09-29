@@ -4,7 +4,7 @@
 			$this->load->database();
 		}
 
-		public function get_users($email = '') {
+		public function get_user($email = '') {
 			if($email == '') {
 				$query = $this->db->get('users');
 				return $query->result_array();
@@ -25,8 +25,10 @@
 	        	$row = $query->row();
 
 	            $data['success'] = true;
+                $data['id'] = $row->id;
 	            $data['email'] = $row->email;
 	            $data['firstName'] = $row->firstName;
+                $data['lastName'] = $row->lastName;
 	        }
 	        return $data;
 	    }
@@ -35,7 +37,7 @@
 	        $logged = $this->session->userdata('logged');
 
 	        if (!isset($logged) || $logged != true) {
-	            echo 'Voce nao tem permissao para entrar nessa pagina. <a href="http://oficina2015/login">Efetuar Login</a>';
+	            echo 'Voce não tem permissao para entrar nessa pagina. <a href="http://oficina2015/login">Efetuar Login</a>';
 	            die();
 	        }
 	    }
@@ -44,6 +46,7 @@
 	    	$user = array(
 					'email' => $this->input->post('email'),
 					'firstName' => $this->input->post('firstName'),
+                    'lastName' => $this->input->post('lastName'),
 					'password' => $this->input->post('password')
 				);
 				

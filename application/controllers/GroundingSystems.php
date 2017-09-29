@@ -9,7 +9,7 @@
 		}
 
 		public function view($pName = '', $data) {
-			$data['project'] = $this->project_model->get_projects($pName);
+			$data['project'] = $this->project_model->get_project($pName);
 
 			if(empty($data['project'])) {
 				show_404();
@@ -22,10 +22,25 @@
 			$this->load->view('templates/footer');		
 		}
         
-        public function update_gs($pName = '') {
-            //name required
-            
-            $this->form_validation->set_rules('gs_conductorMaxLength', "Comprimento máximo do segmento do condutor", "numeric");
+        public function add_gs($projectId) {
+			$this->form_validation->set_rules('newGSName', 'Nome da malha', 'required');
+
+			if ($this->form_validation->run() == FALSE){
+				//print_r('expression<br>expression<br>expression<br>expression<br>expression<br>');
+				//$this->form_validation->set_message("The %s value does not exist");
+				//$this->index();
+				redirect('/');
+				//echo "<script language=\"javascript\">alert('O campo não pode ficar em branco.');</script>";
+			} else {
+				$gsId = $this->groundingSystem_model->create_groundingSystem($projectId);
+                $this->project_model->setLastGsId($projectId, $gsId);
+				redirect(site_url('projects/'.$projectId.'/gsTab'));
+			}
+		}
+        
+        public function update_gs($projectId, $gsId) {
+            $this->form_validation->set_rules('gs_name', "Nome", "required");
+            $this->form_validation->set_rules('gs_conductorsMaxLength', "Comprimento máximo do segmento do condutor", "numeric");
             $this->form_validation->set_rules('gs_firstLayerDepth', "Profundidade da primeira camada do solo", "numeric");
             $this->form_validation->set_rules('gs_firstLayerResistivity', "Resistividade da primeira camada do solo", "numeric");
             if($this->input->post('nLayers') == 2) {
@@ -55,107 +70,23 @@
             if ($this->form_validation->run() == FALSE){
                 $data['error'] = validation_errors();
             } else {
-                $data['success'] = 'success';
-                $gs['name'] = 'name';
-                
-                $gs['conductorsMaxLength'] = $this->input->post('gs_conductorMaxLength');
-                print($gs['conductorsMaxLength']);
-                print('<br>');
-                
-                $gs['nLayers'] = $this->input->post('nLayers');
-                print($gs['nLayers']);
-                print('<br>');
-                
-                $gs['firstLayerDepth'] = $this->input->post('gs_firstLayerDepth');
-                print($gs['firstLayerDepth']);
-                print('<br>');
-                
-                $gs['firstLayerResistivity'] = $this->input->post('gs_firstLayerResistivity');
-                print($gs['firstLayerResistivity']);
-                print('<br>');
-                
-                if($gs['nLayers'] == 2) {
-                    $gs['secondLayerResistivity'] = $this->input->post('gs_secondLayerResistivity');
-                    print($gs['secondLayerResistivity']);
-                    print('<br>');
-                    
-                    $gs['crushedStoneLayerDepth'] = $this->input->post('gs_crushedStoneLayerDepth');
-                    print($gs['crushedStoneLayerDepth']);
-                    print('<br>');
-                }
-                
-                $gs['crushedStoneLayerResistivity'] = $this->input->post('gs_crushedStoneLayerResistivity');
-                print($gs['crushedStoneLayerResistivity']);
-                print('<br>');
-                
-                $gs['injectedCurrent'] = $this->input->post('gs_injectedCurrent');
-                print($gs['injectedCurrent']);
-                print('<br>');
+                $data['success'] = 'success'; //checkHere do i need it?
+                $this->groundingSystem_model->update_groundingSystem($gsId); //save gs
                 
                 $gs['file'] = $this->input->post('gs_file');
-                print($gs['file']);
-                print('<br>');
+                //////////////SAVE CONDUCTORS//////////////
+                $this->conductor_model->delete_conductors($gsId);
+                $this->conductor_model->create_conductors($gsId);
                 
-                $conductors = $this->input->post('conductors');
-                $conductorCables = $this->input->post('conductorCables');
-                for ($i = 0; $i < sizeof($conductors['x1']); $i++) {
-                    print($conductors['x1'][$i]);
-                    print(" ");
-                    print($conductors['y1'][$i]);
-                    print(" ");
-                    print($conductors['z1'][$i]);
-                    print(" ");
-                    print($conductors['x2'][$i]);
-                    print(" ");
-                    print($conductors['y2'][$i]);
-                    print(" ");
-                    print($conductors['z2'][$i]);
-                    print(" ");
-                    print($conductors['z2'][$i]);
-                    print(" ");
-                    print($conductorCables[$i]);
-                    print("<br>");
-                }
+                //////////////SAVE POINTS//////////////
+                $this->point_model->delete_points($gsId);
+                $this->point_model->create_points($gsId);
                 
-                $points = $this->input->post('points');
-                for ($i = 0; $i < sizeof($points['x']); $i++) {
-                    print($points['x'][$i]);
-                    print(" ");
-                    print($points['y'][$i]);
-                    print("<br>");
-                }
-                
-                $profiles = $this->input->post('profiles');
-                $touchIndex = 1;
-                $stepIndex = 1;
-                for ($i = 0; $i < sizeof($profiles['x1']); $i++) {
-                    print($profiles['x1'][$i]);
-                    print(" ");
-                    print($profiles['y1'][$i]);
-                    print(" ");
-                    print($profiles['x2'][$i]);
-                    print(" ");
-                    print($profiles['y2'][$i]);
-                    print(" ");
-                    print($profiles['precision'][$i]);
-                    print(" ");
-                    if(isset($profiles['touch'][$i + $touchIndex]) and $profiles['touch'][$i + $touchIndex] == 'touch') {
-                        print('touch');
-                        $touchIndex = $touchIndex + 1;
-                    } else {
-                        print('not touch');
-                    }
-                    print(" ");
-                    if(isset($profiles['step'][$i + $stepIndex]) and $profiles['step'][$i + $stepIndex] == 'step') {
-                        print('step');
-                        $stepIndex = $stepIndex + 1;
-                    } else {
-                        print('not step');
-                    }
-                    print("<br>");
-                }
+                //////////////SAVE PROFILES//////////////
+                $this->profile_model->delete_profiles($gsId);
+                $this->profile_model->create_profiles($gsId);
             }
-            //$this->view($pName, $data);
-            redirect(site_url('projects/'.$pName.'/gsTab'));
+            
+            redirect(site_url('projects/'.$projectId.'/gsTab'));
         }
 	}

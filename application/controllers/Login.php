@@ -28,8 +28,10 @@ class Login extends CI_Controller {
 
             if ($userData['success']) {
                 $data = array(
+                    'id' => $userData['id'],
                     'email' => $userData['email'],
                     'firstName' => $userData['firstName'],
+                    'lastName' => $userData['lastName'],
                     'logged' => true
                 );
                 $this->session->set_userdata($data);

@@ -4,7 +4,7 @@
 		public function profile() {
 			$data['title'] = 'Profile';
 
-			$data['user'] = $this->user_model->get_users('fdr');
+			$data['user'] = $this->user_model->get_user($this->session->userdata('id')); //checkHEre
 
 			$this->load->view('templates/header', $data);
 			$this->load->view('settings/index');
