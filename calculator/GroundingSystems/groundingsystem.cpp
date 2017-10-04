@@ -7,7 +7,9 @@
 #include <tmath.h>
 #include <QFile>
 #include <QTextCodec>
-#include <cabletype.h>
+#include <cable.h>
+#include <project.h>
+#include <settings.h>
 //#include <thirdparty/dxflib/dl_dxf.h>
 //#include <thirdparty/dxflib/dl_creationadapter.h>
 
@@ -29,168 +31,158 @@ GroundingSystem::GroundingSystem()
 
 }
 
-void GroundingSystem::load()
+void GroundingSystem::load(QSettings *settings)
 {
-    //    Application::load(settings);
-    //    m_showPoints = settings->value("showPoints", false).toBool();
-    //    m_showConductors = settings->value("showConductors", true).toBool();
+    m_showPoints = settings->value("showPoints", false).toBool();
+    m_showConductors = settings->value("showConductors", true).toBool();
 
+    settings->beginGroup("Conductors");
+    m_conductors.clear();
+    QStringList conductors = settings->childGroups();
+    for(const QString& conductorGroup : conductors) {
+        settings->beginGroup(conductorGroup);
+        Conductor conductor;
+        conductor.p0.setX(settings->value("x0").toDouble());
+        conductor.p0.setY(settings->value("y0").toDouble());
+        conductor.p0.setZ(settings->value("z0").toDouble());
+        conductor.p1.setX(settings->value("x1").toDouble());
+        conductor.p1.setY(settings->value("y1").toDouble());
+        conductor.p1.setZ(settings->value("z1").toDouble());
 
-//    settings->beginGroup("Conductors");
-//    m_conductors.clear();
-//    QStringList conductors = settings->childGroups();
-//    for(const QString& conductorGroup : conductors) {
-//        settings->beginGroup(conductorGroup);
-//        Conductor conductor;
-//        conductor.p0.setX(settings->value("x0").toDouble());
-//        conductor.p0.setY(settings->value("y0").toDouble());
-//        conductor.p0.setZ(settings->value("z0").toDouble());
-//        conductor.p1.setX(settings->value("x1").toDouble());
-//        conductor.p1.setY(settings->value("y1").toDouble());
-//        conductor.p1.setZ(settings->value("z1").toDouble());
+        uint typeId = settings->value("typeId").toUInt();//rename to cableId
+        conductor.cable = g_database->getCableById(typeId);
 
-//        uint typeId = settings->value("typeId").toUInt();
-//        conductor.cable = g_database->getCableById(typeId);
+        if(!conductor.cable) {
+            const QVector<CablePtr>& shieldWires = g_database->getCablesByCategory(CableCategory_ShieldWire);
+            if(!shieldWires.empty())
+                conductor.cable = shieldWires.first();
+        }
 
-//        if(!conductor.cable) {
-//            const QVector<CableTypePtr>& shieldWires = g_database->getCablesByCategory(CableCategory_ShieldWire);
-//            if(!shieldWires.empty())
-//                conductor.cable = shieldWires.first();
-//        }
+        m_conductors.push_back(conductor);
+        settings->endGroup();
+    }
+    settings->endGroup();
 
-//        m_conductors.push_back(conductor);
-//        settings->endGroup();
-//    }
-//    settings->endGroup();
+    settings->beginGroup("SurfaceVoltagePoints");
+    m_surfaceVoltagePoints.clear();
+    QStringList points = settings->childGroups();
+    for(const QString& group : points) {
+        settings->beginGroup(group);
+        Vector3Dd point;
+        point.setX(settings->value("x").toDouble());
+        point.setY(settings->value("y").toDouble());
+        m_surfaceVoltagePoints.push_back(point);
+        settings->endGroup();
+    }
+    settings->endGroup();
 
-//    settings->beginGroup("SurfaceVoltagePoints");
-//    m_surfaceVoltagePoints.clear();
-//    QStringList points = settings->childGroups();
-//    for(const QString& group : points) {
-//        settings->beginGroup(group);
-//        Vector3Dd point;
-//        point.setX(settings->value("x").toDouble());
-//        point.setY(settings->value("y").toDouble());
-//        m_surfaceVoltagePoints.push_back(point);
-//        settings->endGroup();
-//    }
-//    settings->endGroup();
+    settings->beginGroup("SurfaceVoltageProfiles");
+    m_surfaceVoltageProfiles.clear();
+    QStringList profiles = settings->childGroups();
+    for(const QString& group : profiles) {
+        settings->beginGroup(group);
+        SurfaceVoltageProfile<Vector3Dd> profile;
+        profile.pi.setX(settings->value("x0").toDouble());
+        profile.pi.setY(settings->value("y0").toDouble());
+        profile.pf.setX(settings->value("x1").toDouble());
+        profile.pf.setY(settings->value("y1").toDouble());
+        profile.precision = settings->value("precision", 1).toDouble();
+        profile.touch = settings->value("touch", true).toBool();
+        profile.step = settings->value("step", true).toBool();
+        m_surfaceVoltageProfiles.push_back(profile);
+        settings->endGroup();
+    }
+    settings->endGroup();
 
-//    settings->beginGroup("SurfaceVoltageProfiles");
-//    m_surfaceVoltageProfiles.clear();
-//    QStringList profiles = settings->childGroups();
-//    for(const QString& group : profiles) {
-//        settings->beginGroup(group);
-//        SurfaceVoltageProfile<Vector3Dd> profile;
-//        profile.pi.setX(settings->value("x0").toDouble());
-//        profile.pi.setY(settings->value("y0").toDouble());
-//        profile.pf.setX(settings->value("x1").toDouble());
-//        profile.pf.setY(settings->value("y1").toDouble());
-//        profile.precision = settings->value("precision", 1).toDouble();
-//        profile.touch = settings->value("touch", true).toBool();
-//        profile.step = settings->value("step", true).toBool();
-//        m_surfaceVoltageProfiles.push_back(profile);
-//        settings->endGroup();
-//    }
-//    settings->endGroup();
-
-//    m_name = settings->value("name").toString();
-//    m_numberOfLayers = settings->value("numberOfLayers").toInt();
-//    m_segmentMaximumLength = settings->value("segmentMaximumLength").toString();
-//    m_crushedStoneLayerDepth = settings->value("crushedStoneLayerDepth").toString();
-//    m_crushedStoneLayerResistivity = settings->value("crushedStoneLayerResistivity").toString();
-//    m_firstLayerDepth = settings->value("firstLayerDepth").toString();
-//    m_firstLayerResistivity = settings->value("firstLayerResistivity").toString();
-//    m_secondLayerResistivity = settings->value("secondLayerResistivity").toString();
-//    m_injectedCurrent = settings->value("injectedCurrent").toString();
-//    m_ignored = settings->value("ignored", false).toBool();
+    m_name = settings->value("name").toString();
+    m_numberOfLayers = settings->value("numberOfLayers").toInt();
+    m_segmentMaximumLength = settings->value("segmentMaximumLength").toString();
+    m_crushedStoneLayerDepth = settings->value("crushedStoneLayerDepth").toString();
+    m_crushedStoneLayerResistivity = settings->value("crushedStoneLayerResistivity").toString();
+    m_firstLayerDepth = settings->value("firstLayerDepth").toString();
+    m_firstLayerResistivity = settings->value("firstLayerResistivity").toString();
+    m_secondLayerResistivity = settings->value("secondLayerResistivity").toString();
+    m_injectedCurrent = settings->value("injectedCurrent").toString();
 //    setDxfFile(settings->value("dxfFile").toString());
 }
 
-void GroundingSystem::save()
+void GroundingSystem::save(QSettings *settings, bool saveTemporary)
 {
+    settings->beginGroup("Conductors");
+    settings->setValue("_isArray", true);
+    int conductorsCount = m_conductors.size();
+    int tDigits = (int)std::log10(conductorsCount) + 1;
+    for(int i = 0; i < conductorsCount; ++i) {
+        Conductor& conductor = m_conductors[i];
+        settings->beginGroup(QString("Conductor%1").arg(i, tDigits, 10, QChar('0')));
+        settings->setValue("x0", conductor.p0.x());
+        settings->setValue("y0", conductor.p0.y());
+        settings->setValue("z0", conductor.p0.z());
+        settings->setValue("x1", conductor.p1.x());
+        settings->setValue("y1", conductor.p1.y());
+        settings->setValue("z1", conductor.p1.z());
+        if(conductor.cable)
+            settings->setValue("typeId", conductor.cable->getId());
+        if(saveTemporary)
+            settings->setValue("length", conductor.length());
+        settings->endGroup();
+    }
+    settings->endGroup();
 
-    //    Application::save(settings, saveTemporary);
-    //    settings->setValue("showPoints", m_showPoints);
-    //    settings->setValue("showConductors", m_showConductors);
+    settings->beginGroup("SurfaceVoltagePoints");
+    settings->setValue("_isArray", true);
+    int pointsCount = m_surfaceVoltagePoints.size();
+    int pDigits = (int)std::log10(pointsCount) + 1;
+    for(int i = 0; i < pointsCount; ++i) {
+        Vector3Dd& point = m_surfaceVoltagePoints[i];
+        settings->beginGroup(QString("Point%1").arg(i, pDigits, 10, QChar('0')));
+        settings->setValue("x", point.x());
+        settings->setValue("y", point.y());
+        settings->endGroup();
+    }
+    settings->endGroup();
 
+    settings->beginGroup("SurfaceVoltageProfiles");
+    settings->setValue("_isArray", true);
+    int profilesCount = m_surfaceVoltageProfiles.size();
+    int prDigits = (int)std::log10(profilesCount) + 1;
+    for(int i = 0; i < profilesCount; ++i) {
+        SurfaceVoltageProfile<Vector3Dd>& profile = m_surfaceVoltageProfiles[i];
+        settings->beginGroup(QString("Profile%1").arg(i, prDigits, 10, QChar('0')));
+        settings->setValue("x0", profile.pi.x());
+        settings->setValue("y0", profile.pi.y());
+        settings->setValue("x1", profile.pf.x());
+        settings->setValue("y1", profile.pf.y());
+        settings->setValue("precision", profile.precision);
+        settings->setValue("touch", profile.touch);
+        settings->setValue("step", profile.step);
 
-//    settings->beginGroup("Conductors");
-//    settings->setValue("_isArray", true);
-//    int conductorsCount = m_conductors.size();
-//    int tDigits = (int)std::log10(conductorsCount) + 1;
-//    for(int i = 0; i < conductorsCount; ++i) {
-//        Conductor& conductor = m_conductors[i];
-//        settings->beginGroup(QString("Conductor%1").arg(i, tDigits, 10, QChar('0')));
-//        settings->setValue("x0", conductor.p0.x());
-//        settings->setValue("y0", conductor.p0.y());
-//        settings->setValue("z0", conductor.p0.z());
-//        settings->setValue("x1", conductor.p1.x());
-//        settings->setValue("y1", conductor.p1.y());
-//        settings->setValue("z1", conductor.p1.z());
-//        if(conductor.cable)
-//            settings->setValue("typeId", conductor.cable->getId());
-//        if(saveTemporary)
-//            settings->setValue("length", conductor.length());
-//        settings->endGroup();
-//    }
-//    settings->endGroup();
+        if(saveTemporary) {
+            settings->setValue("maxTouchVoltage", profile.maxTouchVoltage);
+            Settings::saveVector3D(settings, "maxTouchVoltagePos", profile.maxTouchVoltagePos);
+            settings->setValue("maxStepVoltage", profile.maxStepVoltage);
+            Settings::saveVector3D(settings, "maxStepVoltagePos1", profile.maxStepVoltagePos1);
+            Settings::saveVector3D(settings, "maxStepVoltagePos2", profile.maxStepVoltagePos2);
+        }
+        settings->endGroup();
+    }
+    settings->endGroup();
 
-//    settings->beginGroup("SurfaceVoltagePoints");
-//    settings->setValue("_isArray", true);
-//    int pointsCount = m_surfaceVoltagePoints.size();
-//    int pDigits = (int)std::log10(pointsCount) + 1;
-//    for(int i = 0; i < pointsCount; ++i) {
-//        Vector3Dd& point = m_surfaceVoltagePoints[i];
-//        settings->beginGroup(QString("Point%1").arg(i, pDigits, 10, QChar('0')));
-//        settings->setValue("x", point.x());
-//        settings->setValue("y", point.y());
-//        settings->endGroup();
-//    }
-//    settings->endGroup();
+    settings->setValue("name", m_name);
+    settings->setValue("numberOfLayers", m_numberOfLayers);
+    settings->setValue("segmentMaximumLength", m_segmentMaximumLength);
+    settings->setValue("crushedStoneLayerDepth", m_crushedStoneLayerDepth);
+    settings->setValue("crushedStoneLayerResistivity", m_crushedStoneLayerResistivity);
+    settings->setValue("firstLayerDepth", m_firstLayerDepth);
+    settings->setValue("firstLayerResistivity", m_firstLayerResistivity);
+    settings->setValue("secondLayerResistivity", m_secondLayerResistivity);
+    settings->setValue("injectedCurrent", m_injectedCurrent);
+    settings->setValue("dxfFile", m_dxfFile);
 
-//    settings->beginGroup("SurfaceVoltageProfiles");
-//    settings->setValue("_isArray", true);
-//    int profilesCount = m_surfaceVoltageProfiles.size();
-//    int prDigits = (int)std::log10(profilesCount) + 1;
-//    for(int i = 0; i < profilesCount; ++i) {
-//        SurfaceVoltageProfile<Vector3Dd>& profile = m_surfaceVoltageProfiles[i];
-//        settings->beginGroup(QString("Profile%1").arg(i, prDigits, 10, QChar('0')));
-//        settings->setValue("x0", profile.pi.x());
-//        settings->setValue("y0", profile.pi.y());
-//        settings->setValue("x1", profile.pf.x());
-//        settings->setValue("y1", profile.pf.y());
-//        settings->setValue("precision", profile.precision);
-//        settings->setValue("touch", profile.touch);
-//        settings->setValue("step", profile.step);
-
-//        if(saveTemporary) {
-//            settings->setValue("maxTouchVoltage", profile.maxTouchVoltage);
-//            Settings::saveVector3D(settings, "maxTouchVoltagePos", profile.maxTouchVoltagePos);
-//            settings->setValue("maxStepVoltage", profile.maxStepVoltage);
-//            Settings::saveVector3D(settings, "maxStepVoltagePos1", profile.maxStepVoltagePos1);
-//            Settings::saveVector3D(settings, "maxStepVoltagePos2", profile.maxStepVoltagePos2);
-//        }
-//        settings->endGroup();
-//    }
-//    settings->endGroup();
-
-//    settings->setValue("name", m_name);
-//    settings->setValue("numberOfLayers", m_numberOfLayers);
-//    settings->setValue("segmentMaximumLength", m_segmentMaximumLength);
-//    settings->setValue("crushedStoneLayerDepth", m_crushedStoneLayerDepth);
-//    settings->setValue("crushedStoneLayerResistivity", m_crushedStoneLayerResistivity);
-//    settings->setValue("firstLayerDepth", m_firstLayerDepth);
-//    settings->setValue("firstLayerResistivity", m_firstLayerResistivity);
-//    settings->setValue("secondLayerResistivity", m_secondLayerResistivity);
-//    settings->setValue("injectedCurrent", m_injectedCurrent);
-//    settings->setValue("dxfFile", m_dxfFile);
-//    settings->setValue("ignored", m_ignored);
-
-//    if(saveTemporary) {
+    if(saveTemporary) {
 //        settings->setValue("id", getId());
-//        settings->setValue("resistance", m_resistance);
-//    }
+        settings->setValue("resistance", m_resistance);
+    }
 }
 
 bool GroundingSystem::validate(QString& error)
@@ -260,22 +252,7 @@ bool GroundingSystem::validate(QString& error)
     return true;
 }
 
-bool GroundingSystem::calculate(QString& error)
-{
-//    for(GroundingSystemPtr gs : m_project->getGroundingSystems()) {
-//        if(gs->isIgnored())
-//            continue;
-
-//        if(!calculateResistance(gs, error))
-//            return false;
-
-//        calculateSurfaceVoltage(gs);
-//    }
-
-    return true;
-}
-
-void GroundingSystem::addConductor(const Vector3Dd& pos1, const Vector3Dd& pos2, const CableTypePtr& cable)
+void GroundingSystem::addConductor(const Vector3Dd& pos1, const Vector3Dd& pos2, const CablePtr& cable)
 {
     Conductor c;
     c.p0 = pos1;
@@ -1246,24 +1223,24 @@ void GroundingSystem::calculateConductorSegments(const Conductor& conductor)
     }
 }
 
-CableTypePtr GroundingSystem::getCableByDiameter(double diameter)
+CablePtr GroundingSystem::getCableByDiameter(double diameter)
 {
-    CableTypePtr cable;// = g_database->getCableByDiameterAndType(CableCategory_ShieldWire, diameter, "Copperweld");
+    CablePtr cable = g_database->getCableByDiameterAndType(CableCategory_ShieldWire, diameter, "Copperweld");
 
-//    if(!cable) // Priority to copper cables
-//        cable = g_database->getCableByDiameterAndType(CableCategory_ShieldWire, diameter, "Copper");
+    if(!cable) // Priority to copper cables
+        cable = g_database->getCableByDiameterAndType(CableCategory_ShieldWire, diameter, "Copper");
 
-//    if(!cable) // Priority to copperweld cables
-//        cable = g_database->getCableByDiameterAndType(CableCategory_ShieldWire, diameter, "Copperweld");
+    if(!cable) // Priority to copperweld cables
+        cable = g_database->getCableByDiameterAndType(CableCategory_ShieldWire, diameter, "Copperweld");
 
-//    if(!cable) // Priority to cable with same diameter
-//        cable = g_database->getCableByDiameter(CableCategory_ShieldWire, diameter);
+    if(!cable) // Priority to cable with same diameter
+        cable = g_database->getCableByDiameter(CableCategory_ShieldWire, diameter);
 
-//    if(!cable) { // Any shield wire cable
-//        const QVector<CableTypePtr>& shieldWires = g_database->getCablesByCategory(CableCategory_ShieldWire);
-//        if(!shieldWires.empty())
-//            cable = shieldWires.first();
-//    }
+    if(!cable) { // Any shield wire cable
+        const QVector<CablePtr>& shieldWires = g_database->getCablesByCategory(CableCategory_ShieldWire);
+        if(!shieldWires.empty())
+            cable = shieldWires.first();
+    }
     return cable;
 }
 
@@ -1286,75 +1263,73 @@ double Conductor::getDiameter() const
     return 1;
 }
 
-
-
-
 //////////////////////////////////////////////
 
-//}
+bool GroundingSystem::calculateResistance(GroundingSystemPtr gs, QString& error)
+{
+    int i, j;
+    if(gs->canMergeConductors(i, j)) {
+        error += QObject::tr("Conductors %1 and %2 can be merged.\nA calculation error might happen if they are overlapping each other.\nIt's recommended to press 'Join' button on data input.").arg(i+1).arg(j+1);
+        return false;
+    }
 
-//bool GroundingSystems::calculateResistance(GroundingSystemPtr gs, QString& error)
-//{
-//    int i, j;
-//    if(gs->canMergeConductors(i, j))
-//        m_project->onError(tr("Conductors %1 and %2 can be merged.\nA calculation error might happen if they are overlapping each other.\nIt's recommended to press 'Join' button on data input.").arg(i+1).arg(j+1));
 
-//    for(int i = 0; i < 10; ++i) { // 10 tries to calculate resistance
-//        try {
-//            if(gs->calculateResistance(error))
-//                return true;
-//        }
-//        catch(std::bad_alloc&) {
-//            double length = gs->getSegmentMaximumLength() * 2;
-//            m_project->onError(tr("Out of memory. New maximum segment length is %1.").arg(length));
-//            gs->setSegmentMaximumLength(QString::number(length));
-//        }
-//    }
-//    return false;
-//}
+    for(int i = 0; i < 10; ++i) { // 10 tries to calculate resistance
+        try {
+            if(gs->calculateResistance(error))
+                return true;
+        }
+        catch(std::bad_alloc&) {
+            double length = gs->getSegmentMaximumLength() * 2;
+            error += QObject::tr("Out of memory. New maximum segment length is %1.").arg(length);
+            gs->setSegmentMaximumLength(QString::number(length));
+        }
+    }
+    return false;
+}
 
-//void GroundingSystems::calculateSurfaceVoltage(GroundingSystemPtr gs)
-//{
-//    for(const Vector3Dd& point : gs->getSurfaceVoltagePoints())
-//        gs->getSurfaceVoltage(point);
+void GroundingSystem::calculateSurfaceVoltage(GroundingSystemPtr gs)
+{
+    for(const Vector3Dd& point : gs->getSurfaceVoltagePoints())
+        gs->getSurfaceVoltage(point);
 
-//    double meshVoltage = gs->getResistance() * gs->getInjectedCurrent();
+    double meshVoltage = gs->getResistance() * gs->getInjectedCurrent();
 
-//    for(SurfaceVoltageProfile<Vector3Dd>& profile : gs->getSurfaceVoltageProfiles()) {
-//        Vector3Dd dir = (profile.pf - profile.pi).normalized();
+    for(SurfaceVoltageProfile<Vector3Dd>& profile : gs->getSurfaceVoltageProfiles()) {
+        Vector3Dd dir = (profile.pf - profile.pi).normalized();
 
-//        profile.maxTouchVoltage = 0;
-//        profile.maxStepVoltage = 0;
+        profile.maxTouchVoltage = 0;
+        profile.maxStepVoltage = 0;
 
-//        double x0 = 0;
-//        double x1 = profile.pi.distanceTo(profile.pf);
-//        for(double x = x0; x <= x1; x += profile.precision) {
-//            Vector3Dd point = profile.pi + dir * x;
-//            double v = gs->getSurfaceVoltage(point);
+        double x0 = 0;
+        double x1 = profile.pi.distanceTo(profile.pf);
+        for(double x = x0; x <= x1; x += profile.precision) {
+            Vector3Dd point = profile.pi + dir * x;
+            double v = gs->getSurfaceVoltage(point);
 
-//            double touchVoltage = std::abs(meshVoltage - v);
-//            if(touchVoltage > profile.maxTouchVoltage) {
-//                profile.maxTouchVoltage = touchVoltage;
-//                profile.maxTouchVoltagePos = point;
-//            }
-//        }
+            double touchVoltage = std::abs(meshVoltage - v);
+            if(touchVoltage > profile.maxTouchVoltage) {
+                profile.maxTouchVoltage = touchVoltage;
+                profile.maxTouchVoltagePos = point;
+            }
+        }
 
-//        double stepSize = 1; // m
-//        x0 = -profile.stepSearchMargin;
-//        x1 = profile.pi.distanceTo(profile.pf) + profile.stepSearchMargin;
-//        for(double x = x0; x <= x1 - stepSize; x += profile.precision) {
-//            Vector3Dd point = profile.pi + dir * x;
-//            Vector3Dd pointStep = profile.pi + dir * (x + stepSize);
+        double stepSize = 1; // m
+        x0 = -profile.stepSearchMargin;
+        x1 = profile.pi.distanceTo(profile.pf) + profile.stepSearchMargin;
+        for(double x = x0; x <= x1 - stepSize; x += profile.precision) {
+            Vector3Dd point = profile.pi + dir * x;
+            Vector3Dd pointStep = profile.pi + dir * (x + stepSize);
 
-//            double v = gs->getSurfaceVoltage(point);
-//            double vStep = gs->getSurfaceVoltage(pointStep);
+            double v = gs->getSurfaceVoltage(point);
+            double vStep = gs->getSurfaceVoltage(pointStep);
 
-//            double stepVoltage = std::abs(vStep - v);
-//            if(stepVoltage > profile.maxStepVoltage) {
-//                profile.maxStepVoltage = stepVoltage;
-//                profile.maxStepVoltagePos1 = point;
-//                profile.maxStepVoltagePos2 = pointStep;
-//            }
-//        }
-//    }
-//}
+            double stepVoltage = std::abs(vStep - v);
+            if(stepVoltage > profile.maxStepVoltage) {
+                profile.maxStepVoltage = stepVoltage;
+                profile.maxStepVoltagePos1 = point;
+                profile.maxStepVoltagePos2 = pointStep;
+            }
+        }
+    }
+}

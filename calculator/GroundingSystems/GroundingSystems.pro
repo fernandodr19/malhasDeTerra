@@ -10,22 +10,26 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    cable.cpp \
-    cabletype.cpp \
     groundingsystem.cpp \
     groundingsystemreport.cpp \
     polynomial.cpp \
     tmath.cpp \
+    cable.cpp \
+    project.cpp \
+    settings.cpp \
+    database.cpp
 
 
 HEADERS += const.h \
-    cable.h \
-    cabletype.h \
     groundingsystem.h \
     groundingsystemreport.h \
     polynomial.h \
     tmath.h \
     vector3d.h \
+    cable.h \
+    project.h \
+    settings.h \
+    database.h
 
 
 # The following define makes your compiler emit warnings if you use

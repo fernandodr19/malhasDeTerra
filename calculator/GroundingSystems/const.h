@@ -106,10 +106,10 @@ enum Direction {
     Direction_Right,
 };
 
-enum CableTypeSaleUnit
+enum CableSaleUnit
 {
-    CableTypeSaleUnit_Kilometer = 0,
-    CableTypeSaleUnit_Tonne,
+    CableSaleUnit_Kilometer = 0,
+    CableSaleUnit_Tonne,
 };
 
 enum TowerTypeType
@@ -136,9 +136,9 @@ enum TowerTypeTypeBySupport {
     TowerTypeTypeBySupport_SelfSupporting,
 };
 
-class CableType;
-typedef std::shared_ptr<CableType> CableTypePtr;
-typedef std::weak_ptr<CableType> CableTypeWeakPtr;
+class Cable;
+typedef std::shared_ptr<Cable> CablePtr;
+typedef std::weak_ptr<Cable> CableWeakPtr;
 class InsulatorType;
 typedef std::shared_ptr<InsulatorType> InsulatorTypePtr;
 typedef std::weak_ptr<InsulatorType> InsulatorTypeWeakPtr;

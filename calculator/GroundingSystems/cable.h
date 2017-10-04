@@ -2,195 +2,138 @@
 #define CABLE_H
 
 #include <QString>
-#include <QVector>
 #include <QMap>
-#include <const.h>
-//#include <catenary.h>
+#include "const.h"
+#include <memory>
 
 class QSettings;
 class Project;
-//struct Catenary;
-
-class CableSag
-{
-public:
-    bool validate(QString& error, int i);
-
-    void setType(CableConditionType type) { m_type = type; }
-    void setSag(const QString& sag) { m_sag = sag; }
-    void setSpan(const QString& span) { m_span = span; }
-
-    CableConditionType getType() const { return m_type; }
-    QString getSag() const { return m_sag; }
-    QString getSpan() const { return m_span; }
-
-private:
-    CableConditionType m_type = CableConditionType_Other;
-    QString m_sag;
-    QString m_span;
-};
-
-struct CableConditionSag
-{
-    double initialHorizontalTension; // kgf
-    double initialTangentialTension; // kgf
-    double initialSag; // m
-    double finalHorizontalTension; // kgf
-    double finalTangentialTension; // kgf
-    double finalSag; // m
-};
-
-//struct CableConditionResult
-//{
-//    double horizontalTension;
-//    double cableSag;
-//    double chainSag;
-//    double totalSag;
-
-//    double catenaryMaximumSagX;
-//    double catenaryMaximumSagY;
-//    double catenaryLowerPointX;
-//    double catenaryLowerPointY;
-
-//    InsulatorStringTypePtr cadL;
-//    InsulatorStringTypePtr cadR;
-//    Catenary cat;
-//};
-
-class CableCondition
-{
-public:
-    explicit CableCondition();
-
-    void load(QSettings *settings);
-    void save(QSettings *settings, bool saveTemporary);
-
-    bool validate(Project *project, QString& error, bool governmentCondition, int i);
-
-    void setType(CableConditionType type) { m_type = type; }
-    void setName(const QString& name) { m_name = name; }
-    void setTemperature(const QString& temperature) { m_temperature = temperature; }
-    void setWindPressure(const QString& windPressure) { m_windPressure = windPressure; }
-    void setUltimateLoading(const QString& loading) { m_ultimateLoading = loading; }
-    void setLoadingCondition(LoadingCondition condition) { m_loadingCondition = condition; }
-
-    CableConditionType getType() { return m_type; }
-    QString getName() { return m_name; }
-    QString getTemperature() { return m_temperature; }
-    QString getWindPressure() { return m_windPressure; }
-    QString getUltimateLoading() { return m_ultimateLoading; }
-//    const QMap<QString, CableConditionResult>& getSagResults() { return m_sagResults; }
-    QMap<QString, CableConditionSag>& getConditionSag() { return m_sags; }
-    LoadingCondition getLoadingCondition() { return m_loadingCondition; }
-
-private:
-    CableConditionType m_type = CableConditionType_Other;
-    QString m_name;
-    QString m_temperature; // oC
-    QString m_windPressure; // kgf/m2
-    QString m_ultimateLoading; // ultimateLoading +(%) / Sag -(m)
-    LoadingCondition m_loadingCondition = LoadingCondition_None;
-
-    // Cache
-    QMap<QString, CableConditionSag> m_sags;
-//    QMap<QString, CableConditionResult> m_sagResults;
-
-    friend class ProfileGraph;
-    friend class CableSwing;
-    friend class SagTension;
-    friend class SagTensionSubstation;
-    friend class tst_SagTension;
-    friend class InsulationCoordination;
-};
 
 class Cable : public std::enable_shared_from_this<Cable>
 {
 public:
-    explicit Cable(TransmissionLineWeakPtr transmissionLine);
+    explicit Cable();
 
     void load(QSettings *settings);
     void save(QSettings *settings, bool saveTemporary);
 
-    bool validate(QString& error);
+    bool validate(Project *project, QString& error);
 
-    int getId();
-    QString getName();
-    CableTypeWeakPtr getCableType() { return m_cableType; }
-    InputOption getInputOption() { return m_inputOption; }
-    double getSag(CableConditionType type, double span);
-    double getCalculatedSag(CableConditionType type, const QString& span);
-    QVector<CableSagPtr>& getSags() { return m_sags; }
-    CableCondition *getGovernmentCondition(CableConditionType type);
-    QVector<CableCondition*>& getGovernmentConditions() { return m_governingConditions; }
-    CableCondition *getLoading(CableConditionType type);
-    QVector<CableCondition*>& getLoadings() { return m_loadings; }
-    QString getDescriptionText() { return m_description; }
-    double getAverageSag() { return m_averageSag.toDouble(); }
-    QString getAverageSagText() { return m_averageSag; }
-    double getLongDurationSag() { return m_longDurationSag.toDouble(); }
-    QString getLongDurationSagText() { return m_longDurationSag; }
-    double getShortDurationSag() { return m_shortDurationSag.toDouble(); }
-    QString getShortDurationSagText() { return m_shortDurationSag; }
-    double getInitialTemperature() { return m_initialTemperature.toDouble(); }
-    QString getInitialTemperatureText() { return m_initialTemperature; }
-    double getFinalTemperature() { return m_finalTemperature.toDouble(); }
-    QString getFinalTemperatureText() { return m_finalTemperature; }
-    double getTemperatureInterval() { return m_temperatureInterval.toDouble(); }
-    QString getTemperatureIntervalText() { return m_temperatureInterval; }
-    double getSurfaceFactor() { return m_surfaceFactor.toDouble(); }
-    QString getSurfaceFactorText() { return m_surfaceFactor; }
-    double getEmissivityCoefficient() { return m_emissivityCoefficient.toDouble(); }
-    QString getEmissivityCoefficientText() { return m_emissivityCoefficient; }
-    double getSolarAbsorptivityCoefficient() { return m_solarAbsorptivityCoefficient.toDouble(); }
-    QString getSolarAbsorptivityCoefficientText() { return m_solarAbsorptivityCoefficient; }
+    uint getId() { return m_id; }
+    QString getCode() { return m_code; }
+    CableCategory getCategory() { return m_category; }
+    QString getType() { return m_type; }
+    QString getSize() { return m_size; }
+    QString getStranding() { return m_stranding; }
+    double getDiameter() { return m_diameter.toDouble(); }
+    QString getDiameterText() { return m_diameter; }
+    QString getNumberWiresExternalLayerText() { return m_numberWiresExternalLayer; }
+    QString getWiresDiameterText() { return m_wiresDiameter; }
+    QString getRelativeWirePermeabilityText() { return m_relativeWirePermeability; }
+    double getInitialElasticModulus() { return m_initialElasticModulus.toDouble(); }
+    QString getInitialElasticModulusText() { return m_initialElasticModulus; }
+    double getFinalElasticModulus() { return m_finalElasticModulus.toDouble(); }
+    QString getFinalElasticModulusText() { return m_finalElasticModulus; }
+    double getLinearExpansionCoeff() { return m_linearExpansionCoeff.toDouble(); }
+    QString getLinearExpansionCoeffText() { return m_linearExpansionCoeff; }
+    QString getConductivityText() { return m_conductivity; }
+    double getACResistance() { return m_acResistance.toDouble(); }
+    QString getACResistanceText() { return m_acResistance; }
+    double getACResistanceTemperature() { return m_acResistanceTemperature.toDouble(); }
+    QString getACResistanceTemperatureText() { return m_acResistanceTemperature; }
+    double getACResistanceFrequency() { return m_acResistanceFrequency.toDouble(); }
+    QString getACResistanceFrequencyText() { return m_acResistanceFrequency; }
+    QString getACResistanceCurrentText() { return m_acResistanceCurrent; }
+    double getDCResistance() { return m_dcResistance.toDouble(); }
+    QString getDCResistanceText() { return m_dcResistance; }
+    QString getDCResistanceTemperatureText() { return m_dcResistanceTemperature; }
+    double getInternalReactance1m();
+    double getInternalReactance1ft() { return m_internalReactance1ft.toDouble(); }
+    QString getInternalReactance1ftText() { return m_internalReactance1ft; }
+    double getInternalReactance1ftFrequency() { return m_internalReactance1ftFrequency.toDouble(); }
+    QString getInternalReactance1ftFrequencyText() { return m_internalReactance1ftFrequency; }
+    QString getInternalReactance1ftCurrentText() { return m_internalReactance1ftCurrent; }
+    double getCrossSection() { return m_crossSection.toDouble(); }
+    QString getCrossSectionText() { return m_crossSection; }
+    double getLinearWeight() { return m_linearWeight.toDouble(); }
+    QString getLinearWeightText() { return m_linearWeight; }
+    double getUnitPrice() { return m_unitPrice.toDouble(); }
+    QString getUnitPriceText() { return m_unitPrice; }
+    double getTensileStrength() { return m_tensileStrength.toDouble(); }
+    QString getTensileStrengthText() { return m_tensileStrength; }
+    double getCurrentCapacity() { return m_currentCapacity.toDouble(); }
+    QString getCurrentCapacityText() { return m_currentCapacity; }
+    CableSaleUnit getSaleUnit() { return m_saleUnit; }
 
-    void setCableType(const CableTypePtr& cableType) { m_cableType = cableType; }
-    void setInputOption(const InputOption inputOption) { m_inputOption = inputOption; }
-    void setDescriptionText(const QString& description) { m_description = description; }
-    void setAverageSagText(const QString& averageSag) { m_averageSag = averageSag; }
-    void setLongDurationSagText(const QString& longDurationSag) { m_longDurationSag = longDurationSag; }
-    void setShortDurationSagText(const QString& shortDurationSag) { m_shortDurationSag = shortDurationSag; }
-    void setInitialTemperature(const QString& temperature) { m_initialTemperature = temperature; }
-    void setFinalTemperature(const QString& temperature) { m_finalTemperature = temperature; }
-    void setTemperatureInterval(const QString& temperature) { m_temperatureInterval = temperature; }
-    void setSurfaceFactorText(const QString& surfaceFactor) { m_surfaceFactor = surfaceFactor; }
-    void setEmissivityCoefficientText(const QString& emissivityCoefficient) { m_emissivityCoefficient = emissivityCoefficient; }
-    void setSolarAbsorptivityCoefficientText(const QString& solarAbsorptivityCoefficient) { m_solarAbsorptivityCoefficient = solarAbsorptivityCoefficient; }
+    bool isConductor() { return m_category == CableCategory_Conductor; }
+    bool isShieldWire() { return m_category == CableCategory_ShieldWire; }
+    bool isSteel();
 
-    void addSpan(const QString &span);
-    bool removeSpan(int index);
-    void removeSpans();
-    QString getSpan(int index);
-    QVector<QString>& getSpans() { return m_spans; }
-    bool moveSpans(int fromIndex, int toIndex);
-    TransmissionLineWeakPtr getTransmissionLine() { return m_transmissionLine; }
-    QString getErrorLocation();
+    void setId(uint id) { m_id = id; }
+    void setCode(const QString& code) { m_code = code; }
+    void setCategory(CableCategory category) { m_category = category; }
+    void setType(const QString& type) { m_type = type; }
+    void setSize(const QString& size) { m_size = size; }
+    void setStranding(const QString& stranding) { m_stranding = stranding; }
+    void setDiameterText(const QString& diameter) { m_diameter = diameter; }
+    void setNumberWiresExternalLayerText(const QString& numberWiresExternalLayer) { m_numberWiresExternalLayer = numberWiresExternalLayer; }
+    void setWiresDiameterText(const QString& wiresDiameter) { m_wiresDiameter = wiresDiameter; }
+    void setRelativeWirePermeabilityText(const QString& relativeWirePermeability) { m_relativeWirePermeability = relativeWirePermeability; }
+    void setInitialElasticModulusText(const QString& elasticModulus) { m_initialElasticModulus = elasticModulus; }
+    void setFinalElasticModulusText(const QString& elasticModulus) { m_finalElasticModulus = elasticModulus; }
+    void setLinearExpansionCoeff(const QString& linearExpansionCoeff) { m_linearExpansionCoeff = linearExpansionCoeff; }
+    void setConductivityText(const QString& conductivity) { m_conductivity = conductivity; }
+    void setACResistanceText(const QString& acResistance) { m_acResistance = acResistance; }
+    void setACResistanceTemperatureText(const QString& acResistanceTemperature) { m_acResistanceTemperature = acResistanceTemperature; }
+    void setACResistanceFrequencyText(const QString& acResistanceFrequency) { m_acResistanceFrequency = acResistanceFrequency; }
+    void setACResistanceCurrentText(const QString& acResistanceCurrent) { m_acResistanceCurrent = acResistanceCurrent; }
+    void setDCResistanceText(const QString& dcResistance) { m_dcResistance = dcResistance; }
+    void setDCResistanceTemperatureText(const QString& dcResistanceTemperature) { m_dcResistanceTemperature = dcResistanceTemperature; }
+    void setInternalReactance1ftText(const QString& internalReactance1ft) { m_internalReactance1ft = internalReactance1ft; }
+    void setInternalReactance1ftFrequencyText(const QString& internalReactance1ftFrequency) { m_internalReactance1ftFrequency = internalReactance1ftFrequency; }
+    void setInternalReactance1ftCurrentText(const QString& internalReactance1ftCurrent) { m_internalReactance1ftCurrent = internalReactance1ftCurrent; }
+    void setCrossSectionText(const QString& crossSection) { m_crossSection = crossSection; }
+    void setLinearWeightText(const QString& linearWeight) { m_linearWeight = linearWeight; }
+    void setUnitPriceText(const QString& unitPrice) { m_unitPrice = unitPrice; }
+    void setTensileStrengthText(const QString& tensileStrength) { m_tensileStrength = tensileStrength; }
+    void setCurrentCapacity(const QString& currentCapacity) { m_currentCapacity = currentCapacity; }
+    void setSaleUnit(const CableSaleUnit saleUnit) { m_saleUnit = saleUnit; }
+
+    QString getTranslatedType();
+
+    static uint uidGen;
 
 private:
-    CableTypeWeakPtr m_cableType;
-    InputOption m_inputOption = InputOption_InputSags;
-    QVector<CableSagPtr> m_sags;
-    QVector<CableCondition*> m_governingConditions;
-    QVector<CableCondition*> m_loadings;
-    QVector<QString> m_spans;
+    uint m_id = 0;
+    QString m_code;
+    CableCategory m_category;
+    QString m_type;
+    QString m_size;
+    QString m_stranding;
+    QString m_diameter;
+    QString m_numberWiresExternalLayer;
+    QString m_wiresDiameter;
+    QString m_relativeWirePermeability;
+    QString m_initialElasticModulus;
+    QString m_finalElasticModulus;
+    QString m_linearExpansionCoeff;
+    QString m_conductivity;
+    QString m_acResistance;
+    QString m_acResistanceTemperature;
+    QString m_acResistanceFrequency;
+    QString m_acResistanceCurrent;
+    QString m_dcResistance;
+    QString m_dcResistanceTemperature;
+    QString m_internalReactance1ft;
+    QString m_internalReactance1ftFrequency;
+    QString m_internalReactance1ftCurrent;
+    QString m_crossSection;
+    QString m_linearWeight;
+    QString m_unitPrice;
+    QString m_tensileStrength;
+    QString m_currentCapacity;
+    CableSaleUnit m_saleUnit;
 
-    QString m_description;
-    QString m_averageSag; // meters
-    QString m_longDurationSag; // meters
-    QString m_shortDurationSag; // meters
-    QString m_initialTemperature; // oC
-    QString m_finalTemperature; // oC
-    QString m_temperatureInterval; // oC
-    QString m_surfaceFactor;
-    QString m_emissivityCoefficient;
-    QString m_solarAbsorptivityCoefficient;
-
-    TransmissionLineWeakPtr m_transmissionLine;
-
-    // Cache
-    QMap<QString, bool> m_hasFinalWithCreep;
-
-    friend class SagTension;
 };
 
 #endif // CABLE_H

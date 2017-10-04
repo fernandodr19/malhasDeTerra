@@ -8,7 +8,7 @@
 #include <vector3d.h>
 
 class QSettings;
-class CableType;
+class Cable;
 
 struct ConductorSegment
 {
@@ -29,7 +29,7 @@ struct ConductorSegment
 struct Conductor
 {
     Conductor() {}
-    Conductor(const Vector3Dd& v0, const Vector3Dd& v1, const CableTypePtr& c) :
+    Conductor(const Vector3Dd& v0, const Vector3Dd& v1, const CablePtr& c) :
         p0(v0), p1(v1), cable(c)
     {
     }
@@ -43,7 +43,7 @@ struct Conductor
 
     Vector3Dd p0;
     Vector3Dd p1;
-    CableTypePtr cable;
+    CablePtr cable;
 
     bool operator==(const Conductor& c) const {
         return p0 == c.p0 && p1 == c.p1 && cable == c.cable;
@@ -69,18 +69,18 @@ public:
     T maxStepVoltagePos2;
 };
 
-class GroundingSystem
+class GroundingSystem : public std::enable_shared_from_this<GroundingSystem>
 {
 public:
     GroundingSystem();
 
-    void load();
-    void save();
+    void load(QSettings *settings);
+    void save(QSettings *settings, bool saveTemporary);
 
     bool validate(QString& error);
     bool calculate(QString& error);
 
-    void addConductor(const Vector3Dd& pos1, const Vector3Dd& pos2, const CableTypePtr& cable);
+    void addConductor(const Vector3Dd& pos1, const Vector3Dd& pos2, const CablePtr& cable);
     Conductor& getConductor(int index) { return m_conductors[index]; }
     QVector<Conductor>& getConductors() { return m_conductors; }
     void clearConductors() { m_conductors.clear(); }
@@ -99,7 +99,6 @@ public:
     void setFirstLayerResistivity(const QString& rho) { m_firstLayerResistivity = rho; }
     void setSecondLayerResistivity(const QString& rho) { m_secondLayerResistivity = rho; }
     void setInjectedCurrent(const QString& injectedCurrent) { m_injectedCurrent = injectedCurrent; }
-    void setIgnored(bool ignored) { m_ignored = ignored; }
 
     QString getName() { return m_name; }
     int getNumberOfLayers() { return m_numberOfLayers; }
@@ -117,7 +116,6 @@ public:
     QString getSecondLayerResistivityText() { return m_secondLayerResistivity; }
     double getInjectedCurrent() { return m_injectedCurrent.toDouble(); }
     QString getInjectedCurrentText() { return m_injectedCurrent; }
-    QString getDxfFile() { return m_dxfFile; }
 
     bool calculateResistance(QString& error);
     double calculateSurfaceVoltage(const Vector3Dd& p);
@@ -127,10 +125,12 @@ public:
     double calculateStepPotentialLimit2013(double faultTime, int weight);
     bool isConnected(int& disconnectedSegment);
 
+    bool calculateResistance(GroundingSystemPtr gs, QString& error);
+    void calculateSurfaceVoltage(GroundingSystemPtr gs);
+
     // Cache
     double getResistance() { return m_resistance; }
     double getSurfaceVoltage(const Vector3Dd& p);
-    bool isIgnored() { return m_ignored; }
 
     static double calculateNumericalM(const ConductorSegment& c1, const ConductorSegment& c2);
     static double calculateM(const ConductorSegment& c1, const ConductorSegment& c2);
@@ -140,7 +140,7 @@ private:
     bool calculateMutualResistance(const ConductorSegment& c1, const ConductorSegment& cj, double& r, QString& error);
     void calculateSegments();
     void calculateConductorSegments(const Conductor& conductor);
-    CableTypePtr getCableByDiameter(double diameter);
+    CablePtr getCableByDiameter(double diameter);
     QString getErrorLocation();
 
     QString m_name;
@@ -158,12 +158,14 @@ private:
     QVector<Vector3Dd> m_surfaceVoltagePoints;
     QVector<SurfaceVoltageProfile<Vector3Dd>> m_surfaceVoltageProfiles;
 
+    bool m_showPoints = false;
+    bool m_showConductors = true;
+
     // Cache
     double m_k; // reflection factor
     QVector<ConductorSegment> m_segments;
     double m_resistance; // ohm
     QMap<Vector3Dd, double> m_surfaceVoltages;
-    bool m_ignored = false;
 };
 
 #endif // GROUNDINGSYSTEM_H
