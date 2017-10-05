@@ -27,7 +27,7 @@ void Database::load(QSettings *settings)
     }
     settings->endGroup();
 
-
+    //GS
     settings->beginGroup("GroundingSystems");
     for(const QString& gsGroup : settings->childGroups()) {
         settings->beginGroup(gsGroup);

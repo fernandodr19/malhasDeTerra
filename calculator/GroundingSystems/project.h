@@ -11,10 +11,23 @@ class Project
 public:
     Project();
 
+    void load(QSettings *settings);
+
     bool calculate(QString& error);
 
-private:
+    void generateReport();
 
+private:
+    uint m_transmitterId;
+    uint m_designerId;
+    uint m_epcId;
+    ProjectType m_type;
+    QString m_reference;
+    QString m_auctionNumber;
+    QString m_lotNumber;
+    QString m_title;
+    QString m_description;
+    QString m_date;
 };
 
 extern Project *g_project;
