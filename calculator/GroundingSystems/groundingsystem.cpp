@@ -49,8 +49,8 @@ void GroundingSystem::load(QSettings *settings)
         conductor.p1.setY(settings->value("y1").toDouble());
         conductor.p1.setZ(settings->value("z1").toDouble());
 
-        uint typeId = settings->value("typeId").toUInt();//rename to cableId
-        conductor.cable = g_database->getCableById(typeId);
+        int cableId = settings->value("cableId").toInt();
+        conductor.cable = g_database->getCableById(cableId);
 
         if(!conductor.cable) {
             const QVector<CablePtr>& shieldWires = g_database->getCablesByCategory(CableCategory_ShieldWire);
@@ -307,10 +307,6 @@ void GroundingSystem::mergeConductors()
         Conductor& c1 = m_conductors[i];
         const Conductor& c2 = m_conductors[j];
 
-        qDebug() << "Merging " << i << j;
-        qDebug() << "C1: " << c1.p0.x() << c1.p0.y() << c1.p0.z() << c1.p1.x() << c1.p1.y() << c1.p1.z();
-        qDebug() << "C2: " << c2.p0.x() << c2.p0.y() << c2.p0.z() << c2.p1.x() << c2.p1.y() << c2.p1.z();
-
         Vector3Dd dir1 = (c1.p1 - c1.p0).normalized();
 
         double dot0 = dir1.dotProduct(c2.p0 - c1.p0);
@@ -355,12 +351,10 @@ bool GroundingSystem::calculateResistance(QString& error)
     Eigen::MatrixXd V = Eigen::MatrixXd::Constant(size, 1, v0);
     Eigen::MatrixXd R(size, size);
 
-    unsigned int total = (size * size) / 2. + size / 2.;
     unsigned int current = 0;
 
     for(int i = 0; i < size; ++i) {
         const ConductorSegment& c1 = m_segments[i];
-        qDebug() << current << total << 100. * current / total << "%" << size;
 
         for(int j = i; j < size; ++j) {
             ++current;
@@ -376,7 +370,6 @@ bool GroundingSystem::calculateResistance(QString& error)
         }
     }
 
-    qDebug() << "Time to fill R" << t.elapsed();
     t.restart();
 
     Eigen::ConjugateGradient<Eigen::MatrixXd, Eigen::Lower | Eigen::Upper> cg(R);
@@ -409,8 +402,6 @@ bool GroundingSystem::calculateResistance(QString& error)
     }
 
     m_resistance = v0 / sumI;
-    qDebug() << m_resistance;
-    qDebug() << "Time to solve R" << t.elapsed();
     return true;
 }
 
@@ -1258,8 +1249,10 @@ QString Conductor::getCode() const
 
 double Conductor::getDiameter() const
 {
-    if(cable)
+    if(cable) {
+        double d =  cable->getDiameter();
         return cable->getDiameter();
+    }
     return 1;
 }
 

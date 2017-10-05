@@ -14,6 +14,7 @@ void GroundingSystemReport::generateResources()
     QString path = "C:\\Users\\fdaros\\Desktop\\";
     int gsCount = 0;
     for(GroundingSystemPtr gs : g_database->getGroundingSystems()) {
+        gsCount++;
         bool hasCurrent = gs->getInjectedCurrent() > 0;
         if(!hasCurrent)
             continue;
@@ -21,6 +22,7 @@ void GroundingSystemReport::generateResources()
         const QVector<SurfaceVoltageProfile<Vector3Dd>>& profiles = gs->getSurfaceVoltageProfiles();
         int profileCount = 0;
         for(const SurfaceVoltageProfile<Vector3Dd>& profile : profiles) {
+            profileCount++;
 
             if(profile.step) {
                 QString surfaceFilename = QString("groundingsystem_surface_%1_%2.png").arg(gsCount).arg(profileCount);
@@ -31,9 +33,7 @@ void GroundingSystemReport::generateResources()
                 QString touchFilename = QString("groundingsystem_touch_%1_%2.png").arg(gsCount).arg(profileCount);
                 saveTouchVoltagePlot(gs, profile, path + touchFilename);
             }
-            profileCount++;
         }
-        gsCount++;
     }
 }
 

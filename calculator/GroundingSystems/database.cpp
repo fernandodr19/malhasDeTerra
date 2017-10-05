@@ -2,9 +2,7 @@
 #include <QSettings>
 #include "cable.h"
 #include "groundingsystem.h"
-#include <QDebug>
 #include "const.h"
-#include <memory>
 
 Database *g_database = nullptr;
 
@@ -22,7 +20,6 @@ void Database::load(QSettings *settings)
         CablePtr cable = std::make_shared<Cable>();
         cable->load(settings);
         m_cables.push_back(cable);
-        qDebug() << cable->getId();
         settings->endGroup();
     }
     settings->endGroup();
@@ -34,7 +31,6 @@ void Database::load(QSettings *settings)
         GroundingSystemPtr gs = std::make_shared<GroundingSystem>();
         gs->load(settings);
         m_groundingSystems.push_back(gs);
-        qDebug() << gs->getName();
         settings->endGroup();
     }
     settings->endGroup();
