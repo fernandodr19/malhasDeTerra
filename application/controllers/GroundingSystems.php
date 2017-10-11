@@ -25,7 +25,7 @@
         public function add_gs($projectId) {
 			$this->form_validation->set_rules('newGSName', 'Nome da malha', 'required');
 
-			if ($this->form_validation->run() == FALSE){
+			if ($this->form_validation->run() == FALSE){//checkHere
 				//print_r('expression<br>expression<br>expression<br>expression<br>expression<br>');
 				//$this->form_validation->set_message("The %s value does not exist");
 				//$this->index();
@@ -116,20 +116,46 @@
             $this->form_validation->set_rules('profiles[y1]', "Perfil de potencial superficial X2", "numeric");
             $this->form_validation->set_rules('profiles[y2]', "Perfil de potencial superficial Y2", "numeric");
             $this->form_validation->set_rules('profiles[precision]', "Perfil de potencial superficial Precisão", "numeric");
-            
+                        
             //I can't run this validation because it's from another form. checkHere
 //            if ($this->form_validation->run() == FALSE){
 //                $data['error'] = validation_errors();
 //            } else {
-                $data['success'] = 'success'; //checkHere do i need it?
-                //now i need to generate the file
-                $currentPath = getcwd();
-                $myfile = fopen($currentPath."/calculator/input.ftl", "w");
-                $txt = "Test123\n";
-                fwrite($myfile, $txt);
-                fclose($myfile);
+            $data['success'] = 'success'; //checkHere do i need it?
+            //now i need to generate the file
+            $currentPath = getcwd();
+            $file = fopen($currentPath."/calculator/input.txt", "w"); //change to .ftl checkHere
+
+            $project = $this->project_model->get_project($projectId);
+            fwrite($file, "[Project]");
+            fwrite($file, "\nshowInput=".($this->input->post('showInput') != null));
+            fwrite($file, "\nshowGS=".($this->input->post('showGS') != null));
+            fwrite($file, "\nshowConductors=".($this->input->post('showConductors') != null));
+            $content = $this->write_ini_file($project, $file);
+            
+            $gs = $this->groundingSystem_model->get_groundingSystem($gsId);
+            fwrite($file, $content);
+            fclose($file);
 //            }    
             
             redirect(site_url('projects/'.$projectId.'/reportTab'));
+        }
+        
+        function write_ini_file($assoc_arr, $file) { 
+            $content = "\n"; 
+             
+            foreach ($assoc_arr as $key=>$elem) { 
+                if(is_array($elem)) 
+                { 
+                    for($i=0;$i<count($elem);$i++) 
+                    { 
+                        $content .= $key."[]=\"".$elem[$i]."\"\n"; 
+                    } 
+                } 
+                else if($elem=="") $content .= $key."=\n"; 
+                else $content .= $key."=\"".$elem."\"\n"; 
+            } 
+
+            return $content; 
         }
 	}
