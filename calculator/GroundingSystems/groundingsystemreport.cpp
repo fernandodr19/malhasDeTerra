@@ -11,7 +11,9 @@ GroundingSystemReport::GroundingSystemReport()
 
 void GroundingSystemReport::generateResources()
 {
-    QString path = "C:\\Users\\fdaros\\Desktop\\";
+    QDir prev = QDir::current();
+    prev.cd("..");
+    QString path = prev.path() + "/";
     int gsCount = 0;
     for(GroundingSystemPtr gs : g_database->getGroundingSystems()) {
         gsCount++;

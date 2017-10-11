@@ -15,7 +15,7 @@ public:
 
     bool calculate(QString& error);
 
-    void generateReport();
+    void generateReport(QSettings *settings);
 
 private:
     uint m_transmitterId;

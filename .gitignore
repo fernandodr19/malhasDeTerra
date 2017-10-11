@@ -1,3 +1,6 @@
 calculator/GroundingSystems/build/
-calculator/GroundingSystems/GroundingSystems.pro.user
+calculator/GroundingSystems/GroundingSystems.pro.user*
 calculator/GroundingSystems/libs/
+calculator/libs/
+calculator/*.png
+calculator/*.ftl

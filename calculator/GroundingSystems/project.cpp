@@ -11,8 +11,10 @@ Project *g_project = nullptr;
 
 Project::Project()
 {
-    QString filename = "C:\\Users\\fdaros\\Desktop\\chevron - Adaptado.ftl";
-    QSettings *settings = new QSettings(filename, QSettings::IniFormat);
+//    QString filename = "C:\\Users\\fdaros\\Desktop\\chevron - Adaptado.ftl";
+    QDir prev = QDir::current();
+    prev.cd("..");
+    QSettings *settings = new QSettings(prev.path() + "/chevron.ftl", QSettings::IniFormat);
 
     load(settings);
 
@@ -37,7 +39,10 @@ Project::Project()
 //    if(!error.isEmpty())
 //        qDebug() << error;
 
-    generateReport();
+    QDir dir;
+    dir.remove(prev.path() + "/results.ftl");
+    QSettings *saveSettings = new QSettings(prev.path() + "/results.ftl", QSettings::IniFormat);
+    generateReport(saveSettings);
 }
 
 void Project::load(QSettings *settings)
@@ -68,57 +73,80 @@ bool Project::calculate(QString& error)
     return true;
 }
 
-void Project::generateReport()
+void Project::generateReport(QSettings *settings)
 {
     GroundingSystemReport *gsReport = new GroundingSystemReport();
     gsReport->generateResources();
 
-    for(GroundingSystemPtr gs : g_database->getGroundingSystems()) {
-        qDebug() << "\nGeneral info";
-        qDebug() << gs->getName();
-        qDebug() << gs->getResistance();
-        qDebug() << gs->getInjectedCurrent();
-        qDebug() << gs->getResistance() * gs->getInjectedCurrent();//voltage
-        qDebug() << "\nSurface points";
-        for(const Vector3Dd& point : gs->getSurfaceVoltagePoints()) {
-            qDebug() << point.x();
-            qDebug() << point.y();
-            qDebug() << gs->calculateSurfaceVoltage(point);
-        }
-        qDebug() << "\nSurface voltage profile";
-        for(SurfaceVoltageProfile<Vector3Dd> profile : gs->getSurfaceVoltageProfiles()) {
-            qDebug() << profile.maxTouchVoltage;
-            qDebug() << "(" << profile.maxTouchVoltagePos.x() << "," << profile.maxTouchVoltagePos.y() << ")";
-            qDebug() << profile.maxStepVoltage;
-            qDebug() << "(" << profile.maxStepVoltagePos1.x() << "," << profile.maxStepVoltagePos1.y() << ") ; (" << profile.maxStepVoltagePos2.x() << "," << profile.maxStepVoltagePos2.y() << ")";
+    settings->beginWriteArray("GroundingSystems");
+    settings->setValue("_isKeyArray", true);
+    for(int i = 0; i < g_database->getGroundingSystems().size(); i++) {
+        GroundingSystemPtr gs = g_database->getGroundingSystems()[i];
+        settings->setArrayIndex(i);
+        settings->setValue("name", gs->getName());
+        settings->setValue("resistance", gs->getResistance());
+        settings->setValue("injectedCurrent", gs->getInjectedCurrent());
+        settings->setValue("voltage", gs->getResistance() * gs->getInjectedCurrent());
 
-            qDebug() << "\nPoints";
+        settings->beginWriteArray("SurfacePoints");
+        settings->setValue("_isKeyArray", true);
+        for(int j = 0; j < gs->getSurfaceVoltagePoints().size(); j++) {
+            const Vector3Dd& point = gs->getSurfaceVoltagePoints()[j];
+            settings->setArrayIndex(j);
+            settings->setValue("x", point.x());
+            settings->setValue("y", point.y());
+            settings->setValue("surfaceVoltage", gs->calculateSurfaceVoltage(point));
+        }
+        settings->endArray();
+
+        settings->beginWriteArray("SurfaceProfiles");
+        settings->setValue("_isKeyArray", true);
+        for(int j = 0; j < gs->getSurfaceVoltageProfiles().size(); j++) {
+            SurfaceVoltageProfile<Vector3Dd> profile = gs->getSurfaceVoltageProfiles()[j];
+            settings->setArrayIndex(j);
+            settings->setValue("touchX", profile.maxTouchVoltagePos.x());
+            settings->setValue("touchY", profile.maxTouchVoltagePos.y());
+            settings->setValue("maxTouchVoltage", profile.maxTouchVoltage);
+            settings->setValue("stepX0", profile.maxStepVoltagePos1.x());
+            settings->setValue("stepY0", profile.maxStepVoltagePos1.y());
+            settings->setValue("stepX1", profile.maxStepVoltagePos2.x());
+            settings->setValue("stepY1", profile.maxStepVoltagePos2.y());
+            settings->setValue("maxStepVoltage", profile.maxStepVoltage);
+            settings->setValue("precision", profile.precision);
+
             double x1 = profile.pi.distanceTo(profile.pf);
             double precision = profile.precision;
             Vector3Dd dir = (profile.pf - profile.pi).normalized();
-            for(double x = 0; x < x1; x+=precision) {
-                Vector3Dd point = profile.pi + (dir * x);
-                double voltage = gs->calculateSurfaceVoltage(point);
-                qDebug() << point.x();
-                qDebug() << point.y();
-                qDebug() << voltage;
-            }
 
-            qDebug() << "generate ('groundingsystem_surface_%d_%d.png', gs.id, profileCount)";
-            qDebug() << "generate ('groundingsystem_touch_%d_%d.png', gs.id, profileCount)";
+            settings->beginWriteArray("Points");
+            settings->setValue("_isKeyArray", true);
+            int pointIndex = 0;
+            for(double x = 0; x < x1; x+=precision) {
+                settings->setArrayIndex(pointIndex++);
+                Vector3Dd point = profile.pi + (dir * x);
+                settings->setValue("x", point.x());
+                settings->setValue("y", point.y());
+                settings->setValue("voltage", gs->calculateSurfaceVoltage(point));
+            }
+            settings->endArray();
         }
-        qDebug() << "\nLimits";
+        settings->endArray();
+
         QVector<double> weights = {50, 70};
-        for(double weight : weights) {
+        settings->beginWriteArray("Limits");
+        for(int j = 0; j < weights.size(); j++) {
+            double weight = weights[j];
+            settings->setArrayIndex(weight-1);
             for(double faultTime = 0.5; faultTime <= 3; faultTime += 0.5) {
                 double touchPotential = gs->calculateTouchPotentialLimit2013(faultTime, weight);
                 double stepPotential = gs->calculateStepPotentialLimit2013(faultTime, weight);
-                qDebug() << faultTime;
-                qDebug() << touchPotential;
-                qDebug() << stepPotential;
-                qDebug() << "";
+
+                settings->setValue("faultTime", faultTime);
+                settings->setValue("touchPotential", touchPotential);
+                settings->setValue("stepPotential", stepPotential);
             }
         }
-
+        settings->endArray();
     }
+    settings->endArray();
 }
