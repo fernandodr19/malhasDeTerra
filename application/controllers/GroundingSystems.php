@@ -127,14 +127,28 @@
             $file = fopen($currentPath."/calculator/input.txt", "w"); //change to .ftl checkHere
 
             $project = $this->project_model->get_project($projectId);
-            fwrite($file, "[Project]");
-            fwrite($file, "\nshowInput=".($this->input->post('showInput') != null));
+            fwrite($file, "[Project]\n");
+            $content = $this->write_ini_file($project, $file);
+            fwrite($file, $content);
+            fwrite($file, "showInput=".($this->input->post('showInput') != null));
             fwrite($file, "\nshowGS=".($this->input->post('showGS') != null));
             fwrite($file, "\nshowConductors=".($this->input->post('showConductors') != null));
-            $content = $this->write_ini_file($project, $file);
+            fwrite($file, "\n\n");
             
+            fwrite($file, "[GroundingSystems]\n");
             $gs = $this->groundingSystem_model->get_groundingSystem($gsId);
+            $content = $this->write_ini_file($gs, $file);
             fwrite($file, $content);
+            fwrite($file, "\n\n");
+            
+            fwrite($file, "[Points]\n");
+            $points = $this->point_model->get_points($gsId);
+            foreach ($points as $point) { 
+                $content = $this->write_ini_file($point, $file);
+                fwrite($file, $content);
+            }
+            fwrite($file, "\n\n");
+            
             fclose($file);
 //            }    
             
@@ -142,7 +156,7 @@
         }
         
         function write_ini_file($assoc_arr, $file) { 
-            $content = "\n"; 
+            $content = ""; 
              
             foreach ($assoc_arr as $key=>$elem) { 
                 if(is_array($elem)) 
