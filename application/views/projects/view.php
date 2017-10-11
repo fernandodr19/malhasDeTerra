@@ -217,7 +217,7 @@
 			</div>
 			<div id="report" class="tab-pane fade <?php echo ($tab == 'reportTab') ? 'in active' : ''; ?>">
 		  		<div class="form-group">
-				    <form>
+                    <form action="<?php echo base_url(); ?>groundingSystems/generate_report/<?= $project['id'] ?>/<?= $gs['id'] ?>" method="POST">
 				    	<table border="0" style="width: 200px">  
 				    		<tr style="width: 30%">
 				      			<td><label>Exibir entrada</label></td>
@@ -232,9 +232,10 @@
 				      			<td><input type="checkbox" name="showConductors" checked></td>
 			      			</tr>
 			      		</table>
+                        <input type="submit" value="Gerar Relatório" class="btn btn-success" style="float:right">
 				    </form>
 			  	</div>
-		  		<a href="#" class="btn btn-success" style="float:right">Gerar Relatório</a>
+<!--		  		<a href="#" class="btn btn-success" style="float:right">Gerar Relatório</a>-->
 			</div>
 		</div>
 	</div>

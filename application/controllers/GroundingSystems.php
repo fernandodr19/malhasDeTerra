@@ -66,7 +66,6 @@
             $this->form_validation->set_rules('profiles[y2]', "Perfil de potencial superficial Y2", "numeric");
             $this->form_validation->set_rules('profiles[precision]', "Perfil de potencial superficial Precisão", "numeric");
             
-            $data['tab'] = 'gs';
             if ($this->form_validation->run() == FALSE){
                 $data['error'] = validation_errors();
             } else {
@@ -88,5 +87,49 @@
             }
             
             redirect(site_url('projects/'.$projectId.'/gsTab'));
+        }
+        
+        public function generate_report($projectId, $gsId) {
+            $this->form_validation->set_rules('gs_name', "Nome", "required");
+            $this->form_validation->set_rules('gs_conductorsMaxLength', "Comprimento máximo do segmento do condutor", "numeric");
+            $this->form_validation->set_rules('gs_firstLayerDepth', "Profundidade da primeira camada do solo", "numeric");
+            $this->form_validation->set_rules('gs_firstLayerResistivity', "Resistividade da primeira camada do solo", "numeric");
+            if($this->input->post('nLayers') == 2) {
+                $this->form_validation->set_rules('gs_secondLayerResistivity', "Resistividade da segunda camada do solo", "numeric");
+                $this->form_validation->set_rules('gs_crushedStoneLayerDepth', "Profundidade da camada de brita", "numeric");
+            }
+            $this->form_validation->set_rules('gs_crushedStoneLayerResistivity', "Resistividade da camada de brita", "numeric");
+            $this->form_validation->set_rules('gs_injectedCurrent', "Corrente injetada", "numeric");
+            
+            $this->form_validation->set_rules('conductors[x1]', "Condutores X1", "numeric");
+            $this->form_validation->set_rules('conductors[y1]', "Condutores Y1", "numeric");
+            $this->form_validation->set_rules('conductors[z1]', "Condutores Z1", "numeric");
+            $this->form_validation->set_rules('conductors[x2]', "Condutores X2", "numeric");
+            $this->form_validation->set_rules('conductors[y2]', "Condutores Y2", "numeric");
+            $this->form_validation->set_rules('conductors[z2]', "Condutores Z2", "numeric");
+            
+            $this->form_validation->set_rules('points[x]', "Pontos de potencial superficial X", "numeric");
+            $this->form_validation->set_rules('points[y]', "Pontos de potencial superficial Y", "numeric");
+            
+            $this->form_validation->set_rules('profiles[x1]', "Perfil de potencial superficial X1", "numeric");
+            $this->form_validation->set_rules('profiles[x2]', "Perfil de potencial superficial Y1", "numeric");
+            $this->form_validation->set_rules('profiles[y1]', "Perfil de potencial superficial X2", "numeric");
+            $this->form_validation->set_rules('profiles[y2]', "Perfil de potencial superficial Y2", "numeric");
+            $this->form_validation->set_rules('profiles[precision]', "Perfil de potencial superficial Precisão", "numeric");
+            
+            //I can't run this validation because it's from another form. checkHere
+//            if ($this->form_validation->run() == FALSE){
+//                $data['error'] = validation_errors();
+//            } else {
+                $data['success'] = 'success'; //checkHere do i need it?
+                //now i need to generate the file
+                $currentPath = getcwd();
+                $myfile = fopen($currentPath."/calculator/input.ftl", "w");
+                $txt = "Test123\n";
+                fwrite($myfile, $txt);
+                fclose($myfile);
+//            }    
+            
+            redirect(site_url('projects/'.$projectId.'/reportTab'));
         }
 	}
