@@ -110,7 +110,7 @@
                     <div class="input-group">
                       <input class="form-control" type="text"  name="gs_conductorsMaxLength" value="<?php echo $gs['conductorsMaxLength']; ?>">
                       <span class="input-group-btn">
-                         <a href="#" class="btn btn-info">?</a>
+                          <a class="btn btn-info" onClick="showHelp('Digite a help aqui')" >?</a>
                       </span>
                     </div>
 			      	<br>
@@ -241,26 +241,6 @@
 	</div>
 </div>
 
-<div class="modal fade" id="add_gs">
-	<div class="modal-dialog">
-		<div class="modal-content">
-    		<div class="modal-header">
-      			<h4 class="modal-title">New Project</h4>
-    		</div>
-    		<div class="modal-body">
-      			<form action="<?php echo base_url(); ?>projects/add_project" method="POST">
-				    <label>Project name</label>
-	                <input class="form-control" placeholder="Enter name" type="text" name="newProjectName" id="newProjectName">
-	                <?php echo form_error('newProjectName'); ?>
-			    	<div class="modal-footer">
-			    		<input class="btn btn-primary" type="submit" value="Create">
-		    		</div>
-	  			</form>
-	  		</div>
-  		</div>
-	</div>
-</div>
-
 <style> /*checkHere Passar pro css*/
     .tableInput {
         width: 60px;
@@ -269,6 +249,12 @@
 </style>
 
 <script type="text/javascript">
+
+    function showHelp(help) {
+        document.getElementById('helpLabel').innerHTML = help;
+        $('#helpModal').modal('show');
+    }
+    
 	function addConductorRow(x1 = '0.000', y1 = '0.000', z1 = '0.000', x2 = '0.000', y2 = '0.000', z2 = '0.000', cableId = 0) {
         var body = 
 		 '<tr>' +
