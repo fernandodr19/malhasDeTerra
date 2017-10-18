@@ -137,17 +137,41 @@
             
             fwrite($file, "[GroundingSystems]\n");
             $gs = $this->groundingSystem_model->get_groundingSystem($gsId);
-            $content = $this->write_ini_file($gs, $file);
+            $content = $this->write_ini_file($gs, $file, "GroundingSystem");
             fwrite($file, $content);
-            fwrite($file, "\n\n");
+            fwrite($file, "\n");
+            
+            fwrite($file, "[Cables]\n");
+            $cables = $this->cable_model->get_cables($gsId);
+            foreach ($cables as $cable) { 
+                $content = $this->write_ini_file($cable, $file, "Cable");
+                fwrite($file, $content);
+            }
+            fwrite($file, "\n");
+            
+            fwrite($file, "[Conductors]\n");
+            $conductors = $this->conductor_model->get_conductors($gsId);
+            foreach ($conductors as $conductor) { 
+                $content = $this->write_ini_file($conductor, $file, "Conductor");
+                fwrite($file, $content);
+            }
+            fwrite($file, "\n");
             
             fwrite($file, "[Points]\n");
             $points = $this->point_model->get_points($gsId);
             foreach ($points as $point) { 
-                $content = $this->write_ini_file($point, $file);
+                $content = $this->write_ini_file($point, $file, "Point");
                 fwrite($file, $content);
             }
-            fwrite($file, "\n\n");
+            fwrite($file, "\n");
+            
+            fwrite($file, "[Profiles]\n");
+            $profiles = $this->profile_model->get_profiles($gsId);
+            foreach ($profiles as $profile) { 
+                $content = $this->write_ini_file($profile, $file, "Profile");
+                fwrite($file, $content);
+            }
+            fwrite($file, "\n");
             
             fclose($file);
 //            }    
@@ -155,19 +179,28 @@
             redirect(site_url('projects/'.$projectId.'/reportTab'));
         }
         
-        function write_ini_file($assoc_arr, $file) { 
+        function write_ini_file($assoc_arr, $file, $prefix = "") { 
             $content = ""; 
              
+            $lastId = "";
             foreach ($assoc_arr as $key=>$elem) { 
-                if(is_array($elem)) 
-                { 
-                    for($i=0;$i<count($elem);$i++) 
-                    { 
-                        $content .= $key."[]=\"".$elem[$i]."\"\n"; 
-                    } 
-                } 
-                else if($elem=="") $content .= $key."=\n"; 
-                else $content .= $key."=\"".$elem."\"\n"; 
+                //if(is_array($elem)) 
+                //{ 
+                //    for($i=0;$i<count($elem);$i++) 
+                //    { 
+                //        $content .= $key."[]=\"".$elem[$i]."\"\n"; 
+                //    } 
+                //} 
+                if($key == "id")
+                    $lastId = $elem;
+                
+                if($lastId != "" and $prefix != "")
+                    $content .= $prefix.$lastId."/";
+
+                if($elem=="") 
+                    $content .= $key."=\n"; 
+                else 
+                    $content .= $key."=\"".$elem."\"\n"; 
             } 
 
             return $content; 
