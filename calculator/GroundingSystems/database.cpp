@@ -14,7 +14,15 @@ Database::Database()
 
 void Database::load(QSettings *settings)
 {
-
+//    settings->beginGroup("GroundingSystems");
+//    for(const QString& gsGroup : settings->childGroups()) {
+//        settings->beginGroup(gsGroup);
+//        GroundingSystemPtr gs = std::make_shared<GroundingSystem>();
+//        gs->load(settings);
+//        m_groundingSystems.push_back(gs);
+//        settings->endGroup();
+//    }
+//    settings->endGroup();
 
     settings->beginGroup("Cables");
     for(const QString& cableGroup : settings->childGroups()) {
@@ -25,16 +33,6 @@ void Database::load(QSettings *settings)
         settings->endGroup();
     }
     settings->endGroup();
-
-//    settings->beginGroup("GroundingSystems");
-//    for(const QString& gsGroup : settings->childGroups()) {
-//        settings->beginGroup(gsGroup);
-//        GroundingSystemPtr gs = std::make_shared<GroundingSystem>();
-//        gs->load(settings);
-//        m_groundingSystems.push_back(gs);
-//        settings->endGroup();
-//    }
-//    settings->endGroup();
 
     settings->beginGroup("GroundingSystems");
     for(const QString& gsGroup : settings->childGroups()) {
@@ -56,8 +54,7 @@ void Database::load(QSettings *settings)
     settings->endGroup();
 
     settings->beginGroup("Conductors");
-    QStringList conductors = settings->childGroups();
-    for(const QString& conductorGroup : conductors) {
+    for(const QString& conductorGroup : settings->childGroups()) {
         settings->beginGroup(conductorGroup);
         Conductor conductor;
         int gsId = settings->value("gsId").toInt();
@@ -84,8 +81,7 @@ void Database::load(QSettings *settings)
     settings->endGroup();
 
     settings->beginGroup("Points");
-    QStringList points = settings->childGroups();
-    for(const QString& group : points) {
+    for(const QString& group : settings->childGroups()) {
         settings->beginGroup(group);
         Vector3Dd point;
         int gsId = settings->value("gsId").toInt();
@@ -98,8 +94,7 @@ void Database::load(QSettings *settings)
     settings->endGroup();
 
     settings->beginGroup("Profiles");
-    QStringList profiles = settings->childGroups();
-    for(const QString& group : profiles) {
+    for(const QString& group : settings->childGroups()) {
         settings->beginGroup(group);
         SurfaceVoltageProfile<Vector3Dd> profile;
         int gsId = settings->value("gsId").toInt();
@@ -115,7 +110,6 @@ void Database::load(QSettings *settings)
         settings->endGroup();
     }
     settings->endGroup();
-
 }
 
 void Database::save(QSettings *settings)

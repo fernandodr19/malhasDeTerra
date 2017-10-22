@@ -141,14 +141,6 @@
             fwrite($file, $content);
             fwrite($file, "\n");
             
-            fwrite($file, "[Cables]\n");
-            $cables = $this->cable_model->get_cables($gsId);
-            foreach ($cables as $cable) { 
-                $content = $this->write_ini_file($cable, $file, "Cable");
-                fwrite($file, $content);
-            }
-            fwrite($file, "\n");
-            
             fwrite($file, "[Conductors]\n");
             $conductors = $this->conductor_model->get_conductors($gsId);
             foreach ($conductors as $conductor) { 
@@ -169,6 +161,14 @@
             $profiles = $this->profile_model->get_profiles($gsId);
             foreach ($profiles as $profile) { 
                 $content = $this->write_ini_file($profile, $file, "Profile");
+                fwrite($file, $content);
+            }
+            fwrite($file, "\n");
+            
+            fwrite($file, "[Cables]\n");
+            $cables = $this->cable_model->get_cables($gsId);
+            foreach ($cables as $cable) { 
+                $content = $this->write_ini_file($cable, $file, "Cable");
                 fwrite($file, $content);
             }
             fwrite($file, "\n");
