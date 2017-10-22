@@ -17,6 +17,7 @@ public:
     QVector<CablePtr> getCablesByCategory(CableCategory cableCategory);
     CablePtr getCableByDiameter(CableCategory category, double diameter);
     CablePtr getCableByDiameterAndType(CableCategory category, double diameter, const QString& type);
+    GroundingSystemPtr getGroundSystemById(int id);
 
     const QVector<GroundingSystemPtr>& getGroundingSystems() { return m_groundingSystems; }
     const QVector<CablePtr>& getCables() { return m_cables; }

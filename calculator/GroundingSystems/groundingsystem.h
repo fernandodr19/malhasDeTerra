@@ -90,6 +90,7 @@ public:
     QVector<Vector3Dd>& getSurfaceVoltagePoints() { return m_surfaceVoltagePoints; }
     QVector<SurfaceVoltageProfile<Vector3Dd>>& getSurfaceVoltageProfiles() { return m_surfaceVoltageProfiles; }
 
+    void setId(int id) { m_id = id; }
     void setName(const QString& name) { m_name = name; }
     void setNumberOfLayers(int numberOfLayers) { m_numberOfLayers = numberOfLayers; }
     void setSegmentMaximumLength(const QString& segmentMaximumLength) { m_segmentMaximumLength = segmentMaximumLength; }
@@ -100,6 +101,7 @@ public:
     void setSecondLayerResistivity(const QString& rho) { m_secondLayerResistivity = rho; }
     void setInjectedCurrent(const QString& injectedCurrent) { m_injectedCurrent = injectedCurrent; }
 
+    int getId() { return m_id; }
     QString getName() { return m_name; }
     int getNumberOfLayers() { return m_numberOfLayers; }
     double getSegmentMaximumLength() { return m_segmentMaximumLength.toDouble(); }
@@ -143,6 +145,7 @@ private:
     CablePtr getCableByDiameter(double diameter);
     QString getErrorLocation();
 
+    int m_id;
     QString m_name;
     int m_numberOfLayers = 1;
     QString m_segmentMaximumLength; // m

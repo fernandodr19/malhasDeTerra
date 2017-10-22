@@ -124,7 +124,7 @@
             $data['success'] = 'success'; //checkHere do i need it?
             //now i need to generate the file
             $currentPath = getcwd();
-            $file = fopen($currentPath."/calculator/input.txt", "w"); //change to .ftl checkHere
+            $file = fopen($currentPath."/calculator/input.ftl", "w");
 
             $project = $this->project_model->get_project($projectId);
             fwrite($file, "[Project]\n");

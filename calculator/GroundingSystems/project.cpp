@@ -14,7 +14,7 @@ Project::Project()
 //    QString filename = "C:\\Users\\fdaros\\Desktop\\chevron - Adaptado.ftl";
     QDir prev = QDir::current();
     prev.cd("..");
-    QSettings *settings = new QSettings(prev.path() + "/chevron.ftl", QSettings::IniFormat);
+    QSettings *settings = new QSettings(prev.path() + "/input.ftl", QSettings::IniFormat);
 
     load(settings);
 
@@ -39,10 +39,12 @@ Project::Project()
 //    if(!error.isEmpty())
 //        qDebug() << error;
 
-    QDir dir;
-    dir.remove(prev.path() + "/results.ftl");
-    QSettings *saveSettings = new QSettings(prev.path() + "/results.ftl", QSettings::IniFormat);
-    generateReport(saveSettings);
+    if(error.isEmpty()) {
+        QDir dir;
+        dir.remove(prev.path() + "/results.ftl");
+        QSettings *saveSettings = new QSettings(prev.path() + "/results.ftl", QSettings::IniFormat);
+        generateReport(saveSettings);
+    }
 }
 
 void Project::load(QSettings *settings)
