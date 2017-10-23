@@ -176,7 +176,27 @@
             fclose($file);
 //            }    
             
-            redirect(site_url('projects/'.$projectId.'/reportTab'));
+            //run C++ program
+//            shell_exec($currentPath."/calculator/libs/GroundingSystems");
+            
+            //once calculation is done get result
+  
+            $ini_array = parse_ini_file($currentPath."/calculator/results.ftl", true);
+
+            $result = array();
+            foreach($ini_array as $key => $value)
+            {
+                $p = &$result;
+                foreach(explode('.', $key) as $k)
+                    $p = &$p[$k];
+                $p = $value;
+            }
+            unset($p);
+
+//            print_r(sizeof($ini['GroundingSystems']));
+            print_r($result);
+
+//            redirect(site_url('projects/'.$projectId.'/reportTab'));
         }
         
         function write_ini_file($assoc_arr, $file, $prefix = "") { 

@@ -9,5 +9,5 @@ int main(int argc, char *argv[])
     qDebug() << "start";
     g_project = new Project();
     qDebug() << "end";
-    return a.exec();
+    return a.exec(); //checkHere application does not terminate.
 }
