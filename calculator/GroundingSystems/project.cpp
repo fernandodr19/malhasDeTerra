@@ -125,6 +125,23 @@ void Project::generateReport(const QString &fileName)
                 out << profilePointsArray << "y = " << point.y() << "\n";
                 out << profilePointsArray << "voltage = " << gs->calculateSurfaceVoltage(point) << "\n";
             }
+
+            QVector<double> weights = {50, 70};
+            for(int j = 0; j < weights.size(); j++) {
+                QString limitsArray = gsArray + "Limits." + QString::number(j+1) + ".";
+                double weight = weights[j];
+                out << limitsArray << "weight = " << weight << "\n";
+                int faultClearCount = 1;
+                for(double faultTime = 0.5; faultTime <= 3; faultTime += 0.5) {
+                    QString faultTimesArray = limitsArray + "FaultTimes." + QString::number(faultClearCount++) + ".";
+                    double touchPotential = gs->calculateTouchPotentialLimit2013(faultTime, weight);
+                    double stepPotential = gs->calculateStepPotentialLimit2013(faultTime, weight);
+                    out << faultTimesArray << "faultTime = " << faultTime << "\n";
+                    out << faultTimesArray << "touchPotential = " << touchPotential << "\n";
+                    out << faultTimesArray << "stepPotential = " << stepPotential << "\n";
+                }
+            }
+
         }
     }
 
