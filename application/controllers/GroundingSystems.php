@@ -177,12 +177,14 @@
 //            }    
             
             //run C++ program
-//            shell_exec($currentPath."/calculator/libs/GroundingSystems");
+            shell_exec($currentPath."/calculator/libs/GroundingSystems");
+            
+            //wait until result is ready
+            while (!file_exists($currentPath."/calculator/results.ftl")) sleep(1);
             
             //once calculation is done get result
-  
             $ini_array = parse_ini_file($currentPath."/calculator/results.ftl", true);
-
+            
             $result = array();
             foreach($ini_array as $key => $value)
             {
@@ -193,8 +195,9 @@
             }
             unset($p);
 
-//            print_r(sizeof($ini['GroundingSystems']));
             print_r($result);
+            
+            $this->generateReportDoc($result);
 
 //            redirect(site_url('projects/'.$projectId.'/reportTab'));
         }
@@ -204,13 +207,6 @@
              
             $lastId = "";
             foreach ($assoc_arr as $key=>$elem) { 
-                //if(is_array($elem)) 
-                //{ 
-                //    for($i=0;$i<count($elem);$i++) 
-                //    { 
-                //        $content .= $key."[]=\"".$elem[$i]."\"\n"; 
-                //    } 
-                //} 
                 if($key == "id")
                     $lastId = $elem;
                 
@@ -224,5 +220,22 @@
             } 
 
             return $content; 
+        }
+        
+        function generateReportDoc($data) {
+            $this->load->library('parser');
+            $doc = '';
+            $template1 = '<li><a href="{name}">{voltage}</a></li>';
+            $data1 = array(
+                    array('title' => 'First Link', 'link' => '/first'),
+                    array('title' => 'Second Link', 'link' => '/second'),
+            );
+
+            $gss = $data['GroundingSystems'];
+            foreach ($gss as $gs)
+            {
+                $doc .= $this->parser->parse_string($template1, $gs, TRUE);
+                print('<ul>'.$doc.'</ul>');
+            }
         }
 	}
