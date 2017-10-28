@@ -110,7 +110,7 @@
                     <div class="input-group">
                       <input class="form-control" type="text"  name="gs_conductorsMaxLength" value="<?php echo $gs['conductorsMaxLength']; ?>">
                       <span class="input-group-btn">
-                          <a class="btn btn-info" onClick="showHelp('Digite a help aqui')" >?</a>
+                          <a class="btn btn-info" onClick="showHelp('Valor sugerido: 1m<br><br>Valores maiores do que 8m podem causar o cálculo incorreto dos potencias superficiais.')" >?</a>
                       </span>
                     </div>
 			      	<br>
@@ -120,25 +120,40 @@
 						<option value="2">2</option>
 		 		 	</select>
 		 		 	<br>
-		 		 	<label>Profundidade da primeira camada do solo (m)</label>
-			      	<input class="form-control" type="text"  name="gs_firstLayerDepth" value="<?php echo $gs['firstLayerDepth']; ?>">
-			      	<br>
 			      	<label>Resistividade da primeira camada do solo (&Omega;.m)</label>
 			      	<input class="form-control" type="text"  name="gs_firstLayerResistivity" value="<?php echo $gs['firstLayerResistivity']; ?>">
 			      	<br>
+                    <label>Profundidade da camada de brita (m)</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text"  name="gs_crushedStoneLayerDepth" value="<?php echo $gs['crushedStoneLayerDepth']; ?>">
+                        <span class="input-group-btn">
+                          <a class="btn btn-info" onClick="showHelp('Valor sugerido: 0.1m')" >?</a>
+                        </span>    
+                    </div>
+                    <br>
 			      	<div id="visibleIf2Layers" style="display: none">
+                        <label>Profundidade da primeira camada do solo (m)</label>
+                        <input class="form-control" type="text"  name="gs_firstLayerDepth" value="<?php echo $gs['firstLayerDepth']; ?>">
+                        <br>
 						<label>Resistividade da segunda camada do solo (&Omega;.m)</label>
 						<input class="form-control" type="text"  name="gs_secondLayerResistivity" value="<?php echo $gs['secondLayerResistivity']; ?>">
-						  <br>
-						  <label>Profundidade da camada de brita (m)</label>
-						<input class="form-control" type="text"  name="gs_crushedStoneLayerDepth" value="<?php echo $gs['crushedStoneLayerDepth']; ?>">
-						<br>
+				        <br>
 					</div>
 					<label>Resistividade da camada de brita (&Omega;.m)</label>
-					<input class="form-control" type="text"  name="gs_crushedStoneLayerResistivity" value="<?php echo $gs['crushedStoneLayerResistivity']; ?>">
+                    <div class="input-group">
+                        <input class="form-control" type="text"  name="gs_crushedStoneLayerResistivity" value="<?php echo $gs['crushedStoneLayerResistivity']; ?>">
+                        <span class="input-group-btn">
+                          <a class="btn btn-info" onClick="showHelp('Valor sugerido: 3000&Omega;.m')" >?</a>
+                        </span>
+                    </div>
 					<br>
 					<label>Corrente injetada (A)</label>
-					<input class="form-control" type="text"  name="gs_injectedCurrent" value="<?php echo $gs['injectedCurrent']; ?>">
+                    <div class="input-group">
+					   <input class="form-control" type="text"  name="gs_injectedCurrent" value="<?php echo $gs['injectedCurrent']; ?>">
+                        <span class="input-group-btn">
+                          <a class="btn btn-info" onClick="showHelp('Deixe este campo em branco para ignorar os potenciais superficiais.')" >?</a>
+                        </span>
+                    </div>
 					<br>
 					<label>Arquivo DXF</label>
 					<input class="" type="file"  name="gs_file" value="" >
