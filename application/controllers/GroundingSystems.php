@@ -126,6 +126,7 @@
             $currentPath = getcwd();
             $file = fopen($currentPath."/calculator/input.ftl", "w");
 
+            
             $project = $this->project_model->get_project($projectId);
             fwrite($file, "[Project]\n");
             $content = $this->write_ini_file($project, $file);
@@ -176,6 +177,17 @@
             fclose($file);
 //            }    
             
+            $input;
+            $input['project'] = $project;
+            $input['gs'] = $gs;
+            $input['conductors'] = $conductors;
+            $input['points'] = $points;
+            $input['profiles'] = $profiles;
+            $input['cables'] = $cables;
+            $input['showInput'] = ($this->input->post('showInput') != null);
+            $input['showGS'] = ($this->input->post('showGS') != null);
+            $input['showConductors'] = ($this->input->post('showConductors') != null);
+            
             //run C++ program
             shell_exec($currentPath."/calculator/libs/GroundingSystems");
             
@@ -197,7 +209,7 @@
 
             print_r($result);
             
-            $this->generateReportDoc($result);
+            $this->generateReportDoc($input, $result);
 
 //            redirect(site_url('projects/'.$projectId.'/reportTab'));
         }
@@ -222,20 +234,70 @@
             return $content; 
         }
         
-        function generateReportDoc($data) {
+        function generateReportDoc($input, $result) {
             $this->load->library('parser');
             $doc = '';
-            $template1 = '<li><a href="{name}">{voltage}</a></li>';
-            $data1 = array(
-                    array('title' => 'First Link', 'link' => '/first'),
-                    array('title' => 'Second Link', 'link' => '/second'),
-            );
-
-            $gss = $data['GroundingSystems'];
-            foreach ($gss as $gs)
-            {
-                $doc .= $this->parser->parse_string($template1, $gs, TRUE);
-                print('<ul>'.$doc.'</ul>');
+            $margin = 0.5;
+            $gs = $input['gs'];
+            
+            //INPUT
+            $doc .= '<table border="0" class="output" style="margin-left: '.$margin.'cm;">
+                        <tr>
+                            <td>Nome:</td>
+                            <td>'.$gs['name'].'</td>
+                        </tr>
+                        <tr>
+                            <td>Comprimento máximo do segmento de condutor:</td>
+                            <td>'.$gs['conductorsMaxLength'].' m</td>
+                        </tr>';
+            if($gs['nLayers'] > 1) {
+                $doc .= '<tr>
+                            <td>Profundidade da primeira camada do solo:</td>
+                            <td>'.$gs['firstLayerDepth'].' m</td>
+                        </tr>
+                        <tr>
+                            <td>Resistividade da primeira camada do solo:</td>
+                            <td>'.$gs['firstLayerResistivity'].' &Omega;.m</td>
+                        </tr>
+                        <tr>
+                            <td>Resistividade da segunda camada do solo:</td>
+                            <td>'.$gs['secondLayerResistivity'].' &Omega;.m</td>
+                        </tr>';
+            } else {
+                $doc .= '<tr>
+                            <td>Resistividade do solo:</td>
+                            <td>'.$gs['firstLayerResistivity'].' &Omega;.m</td>
+                        </tr>';
             }
+            if($gs['injectedCurrent'] > 0) {
+                if($gs['crushedStoneLayerDepth'] > 0) {
+                    $doc .= '<tr>
+                                <td>Profundidade da camada de brita:</td>
+                                <td>'.$gs['crushedStoneLayerDepth'].' m</td>
+                            </tr>
+                            <tr>
+                                <td>Resistividade da camada de brita:</td>
+                                <td>'.$gs['crushedStoneLayerResistivity'].' &Omega;.m</td>
+                            </tr>';
+                }
+                $doc .= '<tr>
+                            <td>Corrente injetada:</td>
+                            <td>'.$gs['injectedCurrent'].' A</td>
+                        </tr>';
+            }
+            
+            $doc .= '</table>
+                    <br/>';
+            
+            print($doc);
+            
+//            $template1 = '<li><a href="{name}">{voltage}</a></li>';
+//            
+//            $gss = $result['GroundingSystems'];
+//            foreach ($gss as $gs)
+//            {
+//                $doc .= $this->parser->parse_string($template1, $gs, TRUE);
+//                print('<ul>'.$doc.'</ul>');
+//            }
         }
 	}
