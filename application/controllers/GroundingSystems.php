@@ -289,6 +289,83 @@
             $doc .= '</table>
                     <br/>';
             
+            $cableIndex = 1;
+            foreach($input['cables'] as $cable) {
+                $doc .= '<p class="oHeader" style="margin-left: '.($margin).'cm;">';
+                $doc .= 'Cabo ';
+                if(sizeof($input['cables']) > 1) {
+                    $doc .= $cableIndex;
+                    $cableIndex += 1;
+                }
+                $doc .= '</p>';
+                $doc .= '<table border="0" class="output" style="margin-left: '.($margin+0.5).'cm;">
+                            <tr>
+                                <td>Nome:</td>
+                                <td>'.$cable['code'].'</td>
+                            </tr>
+                            <tr>
+                                <td>Diâmetro:</td>
+                                <td>'.$cable['diameter'].'</td>
+                            </tr>
+                        </tr>
+                    </table><br/>';
+            }
+                
+            if($input['showConductors'] == true) {
+                //$doc .= '<table border="0" class="output" style="margin-left: '.$margin.'cm;">
+                $doc .= '<table border="1" class="output" cellspacing="0" cellpadding="3" style="margin-left: '.($margin).'cm; text-align: right; border: 1px solid #000000;">';
+                    $doc .= '<thead>
+                                <tr style="text-align: center;">
+                                    <th>Initial X (m)</th>
+                                    <th>Initial Y (m)</th>
+                                    <th>Initial Z (m)</th>
+                                    <th>Final X (m)</th>
+                                    <th>Final Y (m)</th>
+                                    <th>Final Z (m)</th>
+                                    <th>Cable</th>
+                                </tr>
+                                </thead>
+                                <tbody>';
+                        foreach($input['conductors'] as $conductor) {
+                            if($conductor['gsId'] == $gs['id']) {
+                                $cable = $this->cable_model->get_cable($conductor['cableId']);
+                                $doc.='<tr>
+                                        <td>'.number_format($conductor['x1'], 3, '.', ',').'</td>
+                                        <td>'.number_format($conductor['y1'], 3, '.', ',').'</td>
+                                        <td>'.number_format($conductor['z1'], 3, '.', ',').'</td>
+                                        <td>'.number_format($conductor['x2'], 3, '.', ',').'</td>
+                                        <td>'.number_format($conductor['y2'], 3, '.', ',').'</td>
+                                        <td>'.number_format($conductor['z2'], 3, '.', ',').'</td>
+                                        <td>'.$cable['code'].'</td>
+                                    </tr>';
+                            }
+                        }
+                
+                    $doc .= '</tbody>
+                        </table>';
+            }
+            
+            $doc .= '<br/><br/>Resultados:<br/><br/>';
+            $gs = $result['GroundingSystems'][1]; //so far i just generate result for one gs
+            $doc .= '<table border="0" class="output" style="margin-left: '.($margin+0.5).'cm;">
+                <tr>
+                    <td>Nome:</td>
+                    <td>'.$gs['name'].'</td>
+                </tr>
+                <tr>
+                    <td>Resistência:</td>
+                    <td>'.number_format($gs['resistance'], 2, '.', ',').' &Omega;</td>
+                </tr>
+                <tr>
+                    <td>Tensão:</td>
+                    <td>'.number_format($gs['voltage'], 2, '.', ',').' V</td>
+                </tr>
+                <tr>
+                    <td>Corrent injetada:</td>
+                    <td>'.number_format($gs['injectedCurrent'], 2, '.', '').' A</td>
+                </tr>';
+            $doc .= '</table>';
+            
             print($doc);
             
 //            $template1 = '<li><a href="{name}">{voltage}</a></li>';
@@ -300,4 +377,5 @@
 //                print('<ul>'.$doc.'</ul>');
 //            }
         }
+        
 	}

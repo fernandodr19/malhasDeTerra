@@ -9,4 +9,11 @@
             $query = $this->db->get();
             return $query->result_array();
 		}
+        
+        public function get_cable($id) {
+            $this->db->where('id', $id); 
+            $this->db->from('cables');
+            $query = $this->db->get();
+            return $query->row_array();
+		}
 	}
