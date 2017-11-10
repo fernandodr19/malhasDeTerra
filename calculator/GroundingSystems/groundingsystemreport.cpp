@@ -12,7 +12,7 @@ GroundingSystemReport::GroundingSystemReport()
 void GroundingSystemReport::generateResources()
 {
     QDir prev = QDir::current();
-    prev.cd("..");
+    prev.cd("../../assets/resultImages");
     QString path = prev.path() + "/";
     int gsCount = 0;
     for(GroundingSystemPtr gs : g_database->getGroundingSystems()) {
@@ -78,9 +78,9 @@ void GroundingSystemReport::saveSurfaceVoltagePlot(GroundingSystemPtr groundingS
 
     QCustomPlot customPlot;
     customPlot.plotLayout()->insertRow(0);
-    customPlot.plotLayout()->addElement(0, 0, new QCPPlotTitle(&customPlot, "Surface potential profile"));
-    customPlot.xAxis->setLabel("Profile position (m)");
-    customPlot.yAxis->setLabel("Potential (V)");
+    customPlot.plotLayout()->addElement(0, 0, new QCPPlotTitle(&customPlot, "Perfil de potencial superficial"));
+    customPlot.xAxis->setLabel("Posição no perfil (m)");
+    customPlot.yAxis->setLabel("Potencial (V)");
     customPlot.xAxis->setRange(xList.first(), xList.last());
     customPlot.yAxis->setRange(min, max);
 
@@ -167,9 +167,9 @@ void GroundingSystemReport::saveTouchVoltagePlot(GroundingSystemPtr groundingSys
 
     QCustomPlot customPlot;
     customPlot.plotLayout()->insertRow(0);
-    customPlot.plotLayout()->addElement(0, 0, new QCPPlotTitle(&customPlot, QObject::tr("Touch potential profile")));
-    customPlot.xAxis->setLabel(QObject::tr("Profile position") + " (m)");
-    customPlot.yAxis->setLabel(QObject::tr("Potential") + " (V)");
+    customPlot.plotLayout()->addElement(0, 0, new QCPPlotTitle(&customPlot, "Perfil de potencial de toque"));
+    customPlot.xAxis->setLabel("Posição no perfil (m)");
+    customPlot.yAxis->setLabel("Potencial (V)");
     customPlot.xAxis->setRange(xList.first(), xList.last());
     customPlot.yAxis->setRange(min, max);
 

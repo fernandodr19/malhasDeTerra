@@ -87,6 +87,7 @@ void Project::generateReport(const QString &fileName)
     for(int i = 0; i < g_database->getGroundingSystems().size(); i++) {
         GroundingSystemPtr gs = g_database->getGroundingSystems()[i];
         QString gsArray = "GroundingSystems." + QString::number(i+1) + ".";
+        out << gsArray << "id = " << gs->getId() << "\n";
         out << gsArray << "name = " << gs->getName() << "\n";
         out << gsArray << "resistance = " << gs->getResistance() << "\n";
         out << gsArray << "injectedCurrent = " << gs->getInjectedCurrent() << "\n";
@@ -103,9 +104,11 @@ void Project::generateReport(const QString &fileName)
         for(int j = 0; j < gs->getSurfaceVoltageProfiles().size(); j++) {
             SurfaceVoltageProfile<Vector3Dd> profile = gs->getSurfaceVoltageProfiles()[j];
             QString profileArray = gsArray + "Profiles." + QString::number(j+1) + ".";
+            out << profileArray << "touch = " << profile.touch << "\n";
             out << profileArray << "touchX = " << profile.maxTouchVoltagePos.x() << "\n";
             out << profileArray << "touchY = " << profile.maxTouchVoltagePos.y() << "\n";
             out << profileArray << "maxTouchVoltage = " << profile.maxTouchVoltage << "\n";
+            out << profileArray << "step = " << profile.step << "\n";
             out << profileArray << "stepX0 = " << profile.maxStepVoltagePos1.x() << "\n";
             out << profileArray << "stepY0 = " << profile.maxStepVoltagePos1.y() << "\n";
             out << profileArray << "stepX1 = " << profile.maxStepVoltagePos2.x() << "\n";
@@ -113,7 +116,7 @@ void Project::generateReport(const QString &fileName)
             out << profileArray << "maxStepVoltage = " << profile.maxStepVoltage << "\n";
             out << profileArray << "precision = " << profile.precision << "\n";
 
-            double x1 = profile.pi.distanceTo(profile.pf);
+            double x1 = profile.pi.distanceTo(profile.pf); //CHECKHERE; CONFERIR COM PROGRAMA ANTIGO; ERRADO
             double precision = profile.precision;
             Vector3Dd dir = (profile.pf - profile.pi).normalized();
 
