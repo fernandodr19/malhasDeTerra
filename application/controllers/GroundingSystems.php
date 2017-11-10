@@ -206,8 +206,6 @@
                 $p = $value;
             }
             unset($p);
-
-            print_r($result);
             
             $this->generateReportDoc($input, $result);
 
@@ -241,6 +239,7 @@
             $gs = $input['gs'];
             
             //INPUT
+            $doc .= '<br/><br/><b>Sistema de aterramento:</b><br/>';
             $doc .= '<table border="0" class="output" style="margin-left: '.$margin.'cm;">
                         <tr>
                             <td>Nome:</td>
@@ -291,10 +290,10 @@
             
             $cableIndex = 1;
             foreach($input['cables'] as $cable) {
-                $doc .= '<p class="oHeader" style="margin-left: '.($margin).'cm;">';
-                $doc .= 'Cabo ';
+                $doc .= '<p class="oHeader" style="margin-left: '.($margin).'cm; display:inline">';
+                $doc .= '<b>Cabo</b> ';
                 if(sizeof($input['cables']) > 1) {
-                    $doc .= $cableIndex;
+                    $doc .= '<b>'.$cableIndex.'</b>';
                     $cableIndex += 1;
                 }
                 $doc .= '</p>';
@@ -312,7 +311,6 @@
             }
                 
             if($input['showConductors'] == true) {
-                //$doc .= '<table border="0" class="output" style="margin-left: '.$margin.'cm;">
                 $doc .= '<table border="1" class="output" cellspacing="0" cellpadding="3" style="margin-left: '.($margin).'cm; text-align: right; border: 1px solid #000000;">';
                     $doc .= '<thead>
                                 <tr style="text-align: center;">
@@ -345,7 +343,8 @@
                         </table>';
             }
             
-            $doc .= '<br/><br/>Resultados:<br/><br/>';
+            $doc .= '<br/><br/><b>Resultados:</b><br/><br/>';
+            $doc .= '<p class="oHeader" style="margin-left: '.($margin).'cm; display:inline"><b>Sistema de aterramento:</b></p>';
             $gs = $result['GroundingSystems'][1]; //so far i just generate result for one gs
             $doc .= '<table border="0" class="output" style="margin-left: '.($margin+0.5).'cm;">
                 <tr>
@@ -364,7 +363,123 @@
                     <td>Corrent injetada:</td>
                     <td>'.number_format($gs['injectedCurrent'], 2, '.', '').' A</td>
                 </tr>';
-            $doc .= '</table>';
+            $doc .= '</table><br/>';
+            
+            $doc .= '<p class="oHeader" style="margin-left: '.($margin+0.5).'cm; display:inline"><b>Pontos de potencial superficial:</b></p>';
+            $doc .= '<table border="1" class="output" cellspacing="0" cellpadding="3" style="margin-left: '.($margin+1).'cm; text-align: right; border: 1px solid #000000;">
+                        <thead>
+                        <tr>
+                            <th>X (m)</th>
+                            <th>Y (m)</th>
+                            <th>Tensão (V)</th>
+                        </tr>
+                        </thead>
+                        <tbody>';
+                        foreach($gs['Points'] as $point) {      
+                            $doc .= '<tr>
+                                <td>'.number_format($point['x'], 2, '.', '').'</td>
+                                <td>'.number_format($point['y'], 2, '.', '').'</td>
+                                <td>'.number_format($point['surfaceVoltage'], 2, '.', '').'</td>
+                            </tr>';
+                        }
+            $doc .= '</tbody></table><br/>';
+            
+            $profileIndex = 1;
+            foreach($gs['Profiles'] as $profile) {
+                $doc .= '<p class="oHeader" style="margin-left: '.($margin+0.5).'cm; display:inline">';
+                $doc .= '<b>Perfil de potencial superficial </b> ';
+                if(sizeof($gs['Profiles']) > 1) {
+                    $doc .= '<b>'.$profileIndex.':</b>';
+                    $profileIndex += 1;
+                } else {
+                    $doc .= '<b>:</b>';
+                }
+                $doc .= '</p>';
+                $doc .= '<table border="0" class="output" style="margin-left: '.($margin+1).'cm;">';
+                if($profile['touch']) {
+                    $doc .= '<tr>
+                                <td>Potencial de toque máximo:</td>
+                                <td>'.number_format($profile['maxTouchVoltage'], 2, '.', '').' V</td>
+                            </tr>
+                            <tr>
+                                <td>Posição do potencial de toque máximo:</td>
+                                <td>('.number_format($profile['touchX'], 2, '.', '').'; '.number_format($profile['touchY'], 2, '.', '').') m</td>
+                            </tr>';
+                }
+                if($profile['step']) {
+                    $doc .= '<tr>
+                                <td>Potencial de passo máximo:</td>
+                                <td>'.number_format($profile['maxStepVoltage'], 2, '.', '').' V</td>
+                            </tr>
+                            <tr>
+                                <td>Posições do potencial de passo máximo:</td>
+                                <td>('.number_format($profile['stepX0'], 2, '.', '').'; '.number_format($profile['stepY0'], 2, '.', '').') m ('.number_format($profile['stepX1'], 2, '.', '').'; '.number_format($profile['stepY1'], 2, '.', '').') m</td>
+                            </tr>';
+                }
+                $doc .= '</table><br/>';
+                
+                //if showPoints (add)
+                $doc .= '<table border="1" class="output" cellspacing="0" cellpadding="3" style="margin-left: '.($margin+1).'cm; text-align: right; border: 1px solid #000000;">
+                            <thead>
+                            <tr>
+                                <th>X (m)</th>
+                                <th>Y (m)</th>
+                                <th>Tensão (V)</th>
+                            </tr>
+                            </thead>
+                            <tbody>';
+                            foreach($profile['Points'] as $point) {
+                                $doc .= '<tr>
+                                            <td>'.number_format($point['x'], 2, '.', '').'</td>
+                                            <td>'.number_format($point['y'], 2, '.', '').'</td>
+                                            <td>'.number_format($point['voltage'], 2, '.', '').'</td>
+                                        </tr>';
+                            }
+                $doc .= '</tbody></table>';
+                
+                if($profile['step']) {
+                    $filePath = base_url().'assets/resultImages/groundingsystem_surface_'.$gs['id'].'_'.$profileIndex.'.png';
+                    $doc .= '<p style="text-align:center;">
+                                <img src="'.$filePath.'">
+                            </p>';
+                }
+                
+                if($profile['touch']) {
+                    $filePath = base_url().'assets/resultImages/groundingsystem_touch_'.$gs['id'].'_'.$profileIndex.'.png';
+                    $doc .= '<p style="text-align:center;">
+                                <img src="'.$filePath.'">
+                            </p>';
+                }
+            }
+            
+            $doc .= '<p class="oHeader" style="margin-left: '.($margin+0.5).'cm;">
+                        <b>Limites de potencial de toque e passo segundo a ANSI/IEEE - Std 80 - 2013:</b>
+                    </p>
+                    <br/>';
+            
+            foreach($gs['Limits'] as $limit) {
+                $doc .= '<p class="oHeader" style="margin-left: '.($margin+1).'cm;">
+                            <b>Considerando uma pessoa de '.$limit['weight'].' kgf</b>
+                        </p>';
+                
+                $doc .= '<table border="1" class="output" cellspacing="0" cellpadding="3" style="margin-left: '.($margin+1.5).'cm; text-align: right; border: 1px solid #000000;">
+                            <thead>
+                            <tr>
+                                <th>Tempo de falta (s)</th>
+                                <th>Potencial de toque (V)</th>
+                                <th>Potencial de passo (V)</th>
+                             </tr>
+                            </thead>
+                            <tbody>';
+                            foreach($limit['FaultTimes'] as $faultTime) {
+                                $doc .= '<tr>
+                                            <td>'.number_format($faultTime['faultTime'], 1, '.', '').'</td>
+                                            <td>'.number_format($faultTime['touchPotential'], 1, '.', '').'</td>
+                                            <td>'.number_format($faultTime['stepPotential'], 1, '.', '').'</td>
+                                        </tr>';
+                            }
+                    $doc .= '</tbody></table>';
+            }
             
             print($doc);
             
