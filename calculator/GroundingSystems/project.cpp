@@ -116,7 +116,7 @@ void Project::generateReport(const QString &fileName)
             out << profileArray << "maxStepVoltage = " << profile.maxStepVoltage << "\n";
             out << profileArray << "precision = " << profile.precision << "\n";
 
-            double x1 = profile.pi.distanceTo(profile.pf); //CHECKHERE; CONFERIR COM PROGRAMA ANTIGO; ERRADO
+            double x1 = profile.pi.distanceTo(profile.pf);
             double precision = profile.precision;
             Vector3Dd dir = (profile.pf - profile.pi).normalized();
 

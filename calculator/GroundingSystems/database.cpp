@@ -98,10 +98,10 @@ void Database::load(QSettings *settings)
         settings->beginGroup(group);
         SurfaceVoltageProfile<Vector3Dd> profile;
         int gsId = settings->value("gsId").toInt();
-        profile.pi.setX(settings->value("x0").toDouble());
-        profile.pi.setY(settings->value("y0").toDouble());
-        profile.pf.setX(settings->value("x1").toDouble());
-        profile.pf.setY(settings->value("y1").toDouble());
+        profile.pi.setX(settings->value("x1").toDouble());
+        profile.pi.setY(settings->value("y1").toDouble());
+        profile.pf.setX(settings->value("x2").toDouble());
+        profile.pf.setY(settings->value("y2").toDouble());
         profile.precision = settings->value("precision", 1).toDouble();
         profile.touch = settings->value("touch", true).toBool();
         profile.step = settings->value("step", true).toBool();

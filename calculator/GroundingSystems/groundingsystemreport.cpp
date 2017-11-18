@@ -11,7 +11,7 @@ GroundingSystemReport::GroundingSystemReport()
 
 void GroundingSystemReport::generateResources()
 {
-    QDir prev = QDir::current();
+    QDir prev = QCoreApplication::applicationDirPath();
     prev.cd("../../assets/resultImages");
     QString path = prev.path() + "/";
     int gsCount = 0;
