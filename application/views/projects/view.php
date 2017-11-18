@@ -45,6 +45,8 @@
             var step = <?= $profile['step'] ?>;
             addProfileRow(x1, y1, x2, y2, precision, touch, step);
         <?php endforeach; ?> 
+            
+        numberOfLayersChanged(<?= $gs['nLayers'] ?>);
     });
        
     
@@ -328,6 +330,7 @@
 	}
 
 	function numberOfLayersChanged(value) {
+        document.getElementById('numberOfLayers').value=value;
 		var div = document.getElementById('visibleIf2Layers');
 		if(value == 1)
 			div.style.display = 'none';
