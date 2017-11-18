@@ -27,7 +27,7 @@ CREATE TABLE `GroundingSystems` (
 	`projectId` INT NOT NULL,
 	`name` varchar(30) NOT NULL,
 	`conductorsMaxLength` FLOAT,
-	`nLayers` FLOAT DEFAULT '1',
+	`nLayers` FLOAT DEFAULT '2',
 	`firstLayerDepth` FLOAT,
 	`firstLayerResistivity` FLOAT,
 	`secondLayerResistivity` FLOAT,
@@ -106,7 +106,7 @@ INSERT INTO `Users` VALUES (1,'fdr','123','Fernando','Da Rós Filho');
 INSERT INTO `Projects` VALUES (1,'Projeto 1','SE 1','Projeto teste','Fluxo',NULL, NULL);
 INSERT INTO `UserProjects` VALUES (1,1,1,0);
 INSERT INTO `Cables` VALUES (1,'Cobre 70 mm²',10.35),(2,'DOTTEREL',15.42),(3,'AÇO 3/8\"',9.14);
-INSERT INTO `GroundingSystems` VALUES (1,1,'Malha 1',0.5,1,0,60,1000,0.15,3000,9170);
+INSERT INTO `GroundingSystems` VALUES (1,1,'Malha 1',0.5,2,0,60,1000,0.15,3000,9170);
 INSERT INTO `Conductors` VALUES (1,1,0,0,-0.5,0,14.3,-0.5,1),(2,1,1,0,-0.5,1,14.3,-0.5,1),(3,1,2,0,-0.5,2,14.3,-0.5,1),(4,1,3.8,0,-0.5,3.8,14.3,-0.5,1),(5,1,6.4,0,-0.5,6.4,14.3,-0.5,1),(6,1,9.1,0,-0.5,9.1,14.3,-0.5,1),(7,1,11.8,0,-0.5,11.8,14.3,-0.5,1),(8,1,14.4,0,-0.5,14.4,14.3,-0.5,1),(9,1,16.4,0,-0.5,16.4,14.3,-0.5,1),(10,1,17.4,0,-0.5,17.4,14.3,-0.5,1),(11,1,18.4,0,-0.5,18.4,14.3,-0.5,1),(12,1,0,0,-0.5,18.4,0,-0.5,1),(13,1,0,1,-0.5,18.4,1,-0.5,1),(14,1,0,2,-0.5,18.4,2,-0.5,1),(15,1,0,4,-0.5,18.4,4,-0.5,1),(16,1,0,6.2,-0.5,18.4,6.2,-0.5,1),(17,1,0,8.4,-0.5,18.4,8.4,-0.5,1),(18,1,0,10.6,-0.5,18.4,10.6,-0.5,1),(19,1,0,12.3,-0.5,18.4,12.3,-0.5,1),(20,1,0,13.3,-0.5,18.4,13.3,-0.5,1),(21,1,0,14.3,-0.5,18.4,14.3,-0.5,1),(22,1,0,0,-0.5,0,0,-3.5,1),(23,1,18.4,0,-0.5,18.4,0,-3.5,1),(24,1,0,14.3,-0.5,0,14.3,-3.5,1),(25,1,18.4,14.3,-0.5,18.4,14.3,-3.5,1);
 INSERT INTO `Points` VALUES (1,1,5,1);
 INSERT INTO `Profiles` VALUES (1,1,1,-1,1,15.3,0.1,1,1);
