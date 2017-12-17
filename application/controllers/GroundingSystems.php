@@ -239,6 +239,8 @@
             $gs = $input['gs'];
             
             //INPUT
+//            $doc .= '<div align="center">';
+            $doc .= '<div>';
             $doc .= '<br/><br/><b>Sistema de aterramento:</b><br/>';
             $doc .= '<table border="0" class="output" style="margin-left: '.$margin.'cm;">
                         <tr>
@@ -480,6 +482,7 @@
                             }
                     $doc .= '</tbody></table>';
             }
+            $doc .= '</div>';
             
             print($doc);
             
