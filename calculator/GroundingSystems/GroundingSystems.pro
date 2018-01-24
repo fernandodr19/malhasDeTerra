@@ -19,6 +19,8 @@ SOURCES += main.cpp \
     database.cpp \
     qcustomplot.cpp \
     luainterface.cpp \
+    graphicsview.cpp \
+    groundingsystemgraph.cpp
 
 
 HEADERS += const.h \
@@ -33,6 +35,9 @@ HEADERS += const.h \
     database.h \
     qcustomplot.h \
     luainterface.h \
+    graphicsview.h \
+    graphicsitem.h \
+    groundingsystemgraph.h
 
 
 # The following define makes your compiler emit warnings if you use

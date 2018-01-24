@@ -1,5 +1,6 @@
 #include "groundingsystemreport.h"
 #include <groundingsystem.h>
+#include "groundingsystemgraph.h"
 #include "database.h"
 #include <qcustomplot.h>
 #include <QFile>
@@ -36,6 +37,10 @@ void GroundingSystemReport::generateResources()
                 saveTouchVoltagePlot(gs, profile, path + touchFilename);
             }
         }
+
+        GroundingSystemGraph *groundingSystemGraph = new GroundingSystemGraph();
+        groundingSystemGraph->setGroundingSystem(gs);
+        groundingSystemGraph->exportImage(path+"graph_"+QString::number(gsCount)+".png");
     }
 }
 
