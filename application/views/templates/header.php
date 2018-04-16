@@ -45,7 +45,7 @@
                     <?php foreach ($this->project_model->get_projects() as $project) : ?>
                       <li><a href="<?php echo site_url('projects/'.$project['id']); ?>"><?php echo $project['name']; ?></a></li>
                     <?php endforeach; ?>
-                    <li><a href="#" class="add-project" data-toggle="modal" data-target="#add_project" onClick="clearModal()">New Project</a></li>
+                    <li><a href="#" class="add-project" data-toggle="modal" data-target="#add_project" onClick="clearModal()">Novo projeto &nbsp;<i class="fa fa-plus"></i></a></li>
                   </ul>
               </li>
               <li><a href="<?php echo base_url(); ?>projects">Ir para projetos </a></li>
@@ -55,7 +55,7 @@
               <li class="dropdown"><a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="userFirstName"><i class="fa fa-user circle" aria-hidden="true"></i>  <?php echo $this->session->userdata('firstName') ?> <span class="caret"></span></a>
                   <ul class="dropdown-menu">
                       <li><a href="<?php echo base_url(); ?>settings/profile">Configurações</a></li>
-                      <li><a href="<?php echo base_url(); ?>login/logout"">Logout</a></li>
+                      <li><a href="<?php echo base_url(); ?>login/logout"">Sair</a></li>
                   </ul>
               </li>
           </ul>

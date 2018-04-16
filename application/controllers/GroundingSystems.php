@@ -193,6 +193,7 @@
             
             //wait until result is ready
             while (!file_exists($currentPath."/calculator/results.ftl")) sleep(1);
+            while (!file_exists($currentPath."/assets/resultImages/graph_1.png")) sleep(1);
             
             //once calculation is done get result
             $ini_array = parse_ini_file($currentPath."/calculator/results.ftl", true);
@@ -453,6 +454,12 @@
                             </p>';
                 }
             }
+            
+            //Graph
+            $filePath = base_url().'assets/resultImages/graph_'.$gs['id'].'.png';
+            $doc .= '<p style="text-align:center;">
+                        <img src="'.$filePath.'">
+                    </p>';
             
             $doc .= '<p class="oHeader" style="margin-left: '.($margin+0.5).'cm;">
                         <b>Limites de potencial de toque e passo segundo a ANSI/IEEE - Std 80 - 2013:</b>

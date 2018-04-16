@@ -1,12 +1,13 @@
-        <div class="modal fade" id="add_project">
+
+    <div class="modal fade" id="add_project">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">New Project</h4>
+                        <h4 class="modal-title">Novo projeto</h4>
                     </div>
                     <div class="modal-body">
-                        <form action="<?php echo base_url(); ?>projects/add_project" method="POST">
-                            <label>Project name</label>
+                        <form name="newProject" action="<?php echo base_url(); ?>projects/add_project" onsubmit="return validateForm()" method="POST">
+                            <label>Nome do projeto</label>
                             <input class="form-control" placeholder="Enter name" type="text" name="newProjectName" id="newProjectName">
                             <?php echo form_error('newProjectName'); ?>
                             <div class="modal-footer">
@@ -52,3 +53,13 @@
         </div>
     </body>
 </html> 
+
+<script>
+function validateForm() {
+    var x = document.forms["newProject"]["newProjectName"].value;
+    if (x == "") {
+        alert("O nome não pode ser vazio."); //verificar se ja existe tambem
+        return false;
+    }
+}
+</script>     

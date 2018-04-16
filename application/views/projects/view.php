@@ -157,10 +157,7 @@
                         </span>
                     </div>
 					<br>
-					<label>Arquivo DXF</label>
-					<input class="" type="file"  name="gs_file" value="" >
-					<br>
-                    <div class="panel with-nav-tabs panel-primary">
+					<div class="panel with-nav-tabs panel-primary">
                         <div class="panel-heading">
                             <h3 class="panel-title"><?php echo $gs['name']; ?></h3>
                             <span class="pull-right">
