@@ -241,7 +241,13 @@
             
             //INPUT
 //            $doc .= '<div align="center">';
-            $doc .= '<div>';
+            $doc .= '<html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>Relatório</title>
+                        <link rel="shortcut icon" type="image/png" href="'.base_url().'/assets/icons/lightning.png"/>    
+                    </head>';
+            $doc .= '<div >';
             $doc .= '<br/><br/><b>Sistema de aterramento:</b><br/>';
             $doc .= '<table border="0" class="output" style="margin-left: '.$margin.'cm;">
                         <tr>
@@ -489,7 +495,7 @@
                             }
                     $doc .= '</tbody></table>';
             }
-            $doc .= '</div>';
+            $doc .= '</div></html>';
             
             print($doc);
             
