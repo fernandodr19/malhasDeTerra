@@ -1300,6 +1300,9 @@ void GroundingSystem::calculateSurfaceVoltage(GroundingSystemPtr gs)
             Vector3Dd point = profile.pi + dir * x;
             double v = gs->getSurfaceVoltage(point);
 
+            if(point.y() < 1 || point.y() > 13.3)
+                continue;
+
             double touchVoltage = std::abs(meshVoltage - v);
             if(touchVoltage > profile.maxTouchVoltage) {
                 profile.maxTouchVoltage = touchVoltage;
