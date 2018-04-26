@@ -245,6 +245,10 @@
 				      			<td><label>Exibir condutores</label></td>
 				      			<td><input type="checkbox" name="showConductors" checked></td>
 			      			</tr>
+                            <tr>
+				      			<td><label>Exibir pontos do perfil</label></td>
+				      			<td><input type="checkbox" name="showCalculatedPoints" checked></td>
+			      			</tr>
 			      		</table>
                         <input type="submit" value="Gerar Relatório" class="btn btn-success" style="float:right">
 				    </form>

@@ -134,6 +134,7 @@
             fwrite($file, "showInput=".($this->input->post('showInput') != null));
             fwrite($file, "\nshowGS=".($this->input->post('showGS') != null));
             fwrite($file, "\nshowConductors=".($this->input->post('showConductors') != null));
+            fwrite($file, "\nshowCalculatedPoints=".($this->input->post('showCalculatedPoints') != null));
             fwrite($file, "\n\n");
             
             fwrite($file, "[GroundingSystems]\n");
@@ -187,6 +188,7 @@
             $input['showInput'] = ($this->input->post('showInput') != null);
             $input['showGS'] = ($this->input->post('showGS') != null);
             $input['showConductors'] = ($this->input->post('showConductors') != null);
+            $input['showCalculatedPoints'] = ($this->input->post('showCalculatedPoints') != null);
             
             //run C++ program
             shell_exec($currentPath."/calculator/libs/GroundingSystems");
@@ -318,7 +320,7 @@
                         </tr>
                     </table><br/>';
             }
-                
+                //checkHere showCalculatedPoints
             if($input['showConductors'] == true) {
                 $doc .= '<table border="1" class="output" cellspacing="0" cellpadding="3" style="margin-left: '.($margin).'cm; text-align: right; border: 1px solid #000000;">';
                     $doc .= '<thead>
@@ -428,23 +430,25 @@
                 $doc .= '</table><br/>';
                 
                 //if showPoints (add)
-                $doc .= '<table border="1" class="output" cellspacing="0" cellpadding="3" style="margin-left: '.($margin+1).'cm; text-align: right; border: 1px solid #000000;">
-                            <thead>
-                            <tr>
-                                <th>X (m)</th>
-                                <th>Y (m)</th>
-                                <th>Tensão (V)</th>
-                            </tr>
-                            </thead>
-                            <tbody>';
-                            foreach($profile['Points'] as $point) {
-                                $doc .= '<tr>
-                                            <td>'.number_format($point['x'], 2, '.', '').'</td>
-                                            <td>'.number_format($point['y'], 2, '.', '').'</td>
-                                            <td>'.number_format($point['voltage'], 2, '.', '').'</td>
-                                        </tr>';
-                            }
-                $doc .= '</tbody></table>';
+                if($input['showCalculatedPoints'] == true) {
+                    $doc .= '<table border="1" class="output" cellspacing="0" cellpadding="3" style="margin-left: '.($margin+1).'cm; text-align: right; border: 1px solid #000000;">
+                                <thead>
+                                <tr>
+                                    <th>X (m)</th>
+                                    <th>Y (m)</th>
+                                    <th>Tensão (V)</th>
+                                </tr>
+                                </thead>
+                                <tbody>';
+                                foreach($profile['Points'] as $point) {
+                                    $doc .= '<tr>
+                                                <td>'.number_format($point['x'], 2, '.', '').'</td>
+                                                <td>'.number_format($point['y'], 2, '.', '').'</td>
+                                                <td>'.number_format($point['voltage'], 2, '.', '').'</td>
+                                            </tr>';
+                                }
+                    $doc .= '</tbody></table>';
+                }
                 
                 if($profile['step']) {
                     $filePath = base_url().'assets/resultImages/groundingsystem_surface_'.$gs['id'].'_'.$profileIndex.'.png';
