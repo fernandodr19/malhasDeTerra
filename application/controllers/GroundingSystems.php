@@ -323,13 +323,13 @@
                 $doc .= '<table border="1" class="output" cellspacing="0" cellpadding="3" style="margin-left: '.($margin).'cm; text-align: right; border: 1px solid #000000;">';
                     $doc .= '<thead>
                                 <tr style="text-align: center;">
-                                    <th>Initial X (m)</th>
-                                    <th>Initial Y (m)</th>
-                                    <th>Initial Z (m)</th>
-                                    <th>Final X (m)</th>
-                                    <th>Final Y (m)</th>
-                                    <th>Final Z (m)</th>
-                                    <th>Cable</th>
+                                    <th>X inicial (m)</th>
+                                    <th>Y inicial (m)</th>
+                                    <th>Z incial (m)</th>
+                                    <th>X final (m)</th>
+                                    <th>Y final (m)</th>
+                                    <th>Z final (m)</th>
+                                    <th>Cabo</th>
                                 </tr>
                                 </thead>
                                 <tbody>';
