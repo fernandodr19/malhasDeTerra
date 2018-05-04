@@ -1,11 +1,16 @@
-body
+#body
 {
-    background: url('http://casteel-corp.com/wp-content/uploads/2015/04/header_renewable_energy_70.jpg') fixed;
+/*    background: url('http://casteel-corp.com/wp-content/uploads/2015/04/header_renewable_energy_70.jpg') fixed;*/
 /*    background: url('<?php echo base_url(); ?>/assets/icons/lightning.png') fixed;*/
+/*    background: url('/Users/fernandodr/Desktop/subestação-de-energia-1024x576-1.jpg') fixed;*/
+    background-color: lightblue;
     
+/*
+            background: url('https://cdn.pixabay.com/photo/2017/08/30/01/05/milky-way-2695569_960_720.jpg') fixed;
     background-size: cover;
     padding: 0;
     margin: 0;
+*/
 }
 
 .wrap
