@@ -27,19 +27,19 @@
                     <div class="pr-wrap">
                         <div class="pass-reset">
                             <label>
-                                Enter the email you signed up with</label>
+                                Informe o email do seu cadastro</label>
                             <input type="email" placeholder="Email" />
-                            <input type="submit" value="Submit" class="pass-reset-submit btn btn-success btn-sm" />
+                            <input type="submit" value="Enviar" class="pass-reset-submit btn btn-success btn-sm" />
                         </div>
                     </div>
                     <div class="wrap">
                         <p class="form-title">
-                            Sign In
+                            Malhas de terra
                         </p>
                         <form class="login" action="<?php echo base_url(); ?>login" method="POST">
                             <input type="text" placeholder="Email" name="email">
                             <input type="password" placeholder="Senha" name="password">
-                            <input type="submit" value="Sign In" class="btn btn-success btn-sm">
+                            <input type="submit" value="Entrar" class="btn btn-success btn-sm">
                             <div class="register-forgot">
                                 <div class="row">
                                     <div class="col-md-6 forgot-pass-content">

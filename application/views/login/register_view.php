@@ -27,7 +27,7 @@
                     <div class="pr-wrap">
                         <div class="pass-reset">
                             <label>
-                                Enter the email you signed up with</label>
+                                Informe o email do seu cadastro</label>
                             <input type="email" placeholder="Email" />
                             <input type="submit" value="Submit" class="pass-reset-submit btn btn-success btn-sm" />
                         </div>
