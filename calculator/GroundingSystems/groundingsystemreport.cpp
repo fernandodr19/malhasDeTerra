@@ -83,7 +83,7 @@ void GroundingSystemReport::saveSurfaceVoltagePlot(GroundingSystemPtr groundingS
 
     QCustomPlot customPlot;
     customPlot.plotLayout()->insertRow(0);
-    customPlot.plotLayout()->addElement(0, 0, new QCPPlotTitle(&customPlot, "Perfil de potencial de passo"));
+    customPlot.plotLayout()->addElement(0, 0, new QCPPlotTitle(&customPlot, "Perfil de potencial superficial"));
     customPlot.xAxis->setLabel("Posição no perfil (m)");
     customPlot.yAxis->setLabel("Potencial (V)");
     customPlot.xAxis->setRange(xList.first(), xList.last());
