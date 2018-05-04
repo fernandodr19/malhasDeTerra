@@ -238,10 +238,6 @@
 				      			<td><input type="checkbox" name="showInput" checked></td>
 				      		</tr>
 				      		<tr>
-			      				<td><label>Exibir malhas de terra</label></td>
-				      			<td><input type="checkbox" name="showGS" checked></td>
-				      		</tr>
-				      		<tr>
 				      			<td><label>Exibir condutores</label></td>
 				      			<td><input type="checkbox" name="showConductors" checked></td>
 			      			</tr>

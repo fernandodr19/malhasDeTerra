@@ -132,7 +132,6 @@
             $content = $this->write_ini_file($project, $file);
             fwrite($file, $content);
             fwrite($file, "showInput=".($this->input->post('showInput') != null));
-            fwrite($file, "\nshowGS=".($this->input->post('showGS') != null));
             fwrite($file, "\nshowConductors=".($this->input->post('showConductors') != null));
             fwrite($file, "\nshowCalculatedPoints=".($this->input->post('showCalculatedPoints') != null));
             fwrite($file, "\n\n");
@@ -186,7 +185,6 @@
             $input['profiles'] = $profiles;
             $input['cables'] = $cables;
             $input['showInput'] = ($this->input->post('showInput') != null);
-            $input['showGS'] = ($this->input->post('showGS') != null);
             $input['showConductors'] = ($this->input->post('showConductors') != null);
             $input['showCalculatedPoints'] = ($this->input->post('showCalculatedPoints') != null);
             
@@ -249,109 +247,112 @@
                         <title>Relatório</title>
                         <link rel="shortcut icon" type="image/png" href="'.base_url().'/assets/icons/lightning.png"/>    
                     </head>';
-            $doc .= '<div >';
-            $doc .= '<br/><br/><b>Sistema de aterramento:</b><br/>';
-            $doc .= '<table border="0" class="output" style="margin-left: '.$margin.'cm;">
-                        <tr>
-                            <td>Nome:</td>
-                            <td>'.$gs['name'].'</td>
-                        </tr>
-                        <tr>
-                            <td>Comprimento máximo do segmento de condutor:</td>
-                            <td>'.$gs['conductorsMaxLength'].' m</td>
-                        </tr>';
-            if($gs['nLayers'] > 1) {
-                $doc .= '<tr>
-                            <td>Profundidade da primeira camada do solo:</td>
-                            <td>'.$gs['firstLayerDepth'].' m</td>
-                        </tr>
-                        <tr>
-                            <td>Resistividade da primeira camada do solo:</td>
-                            <td>'.$gs['firstLayerResistivity'].' &Omega;.m</td>
-                        </tr>
-                        <tr>
-                            <td>Resistividade da segunda camada do solo:</td>
-                            <td>'.$gs['secondLayerResistivity'].' &Omega;.m</td>
-                        </tr>';
-            } else {
-                $doc .= '<tr>
-                            <td>Resistividade do solo:</td>
-                            <td>'.$gs['firstLayerResistivity'].' &Omega;.m</td>
-                        </tr>';
-            }
-            if($gs['injectedCurrent'] > 0) {
-                if($gs['crushedStoneLayerDepth'] > 0) {
-                    $doc .= '<tr>
-                                <td>Profundidade da camada de brita:</td>
-                                <td>'.$gs['crushedStoneLayerDepth'].' m</td>
-                            </tr>
-                            <tr>
-                                <td>Resistividade da camada de brita:</td>
-                                <td>'.$gs['crushedStoneLayerResistivity'].' &Omega;.m</td>
-                            </tr>';
-                }
-                $doc .= '<tr>
-                            <td>Corrente injetada:</td>
-                            <td>'.$gs['injectedCurrent'].' A</td>
-                        </tr>';
-            }
             
-            $doc .= '</table>
-                    <br/>';
-            
-            $cableIndex = 1;
-            foreach($input['cables'] as $cable) {
-                $doc .= '<p class="oHeader" style="margin-left: '.($margin).'cm; display:inline">';
-                $doc .= '<b>Cabo</b> ';
-                if(sizeof($input['cables']) > 1) {
-                    $doc .= '<b>'.$cableIndex.'</b>';
-                    $cableIndex += 1;
-                }
-                $doc .= '</p>';
-                $doc .= '<table border="0" class="output" style="margin-left: '.($margin+0.5).'cm;">
+            if($input['showInput'] == true) {
+                $doc .= '<div >';
+                $doc .= '<br/><br/><b>Sistema de aterramento:</b><br/>';
+                $doc .= '<table border="0" class="output" style="margin-left: '.$margin.'cm;">
                             <tr>
                                 <td>Nome:</td>
-                                <td>'.$cable['code'].'</td>
+                                <td>'.$gs['name'].'</td>
                             </tr>
                             <tr>
-                                <td>Diâmetro:</td>
-                                <td>'.$cable['diameter'].'</td>
+                                <td>Comprimento máximo do segmento de condutor:</td>
+                                <td>'.$gs['conductorsMaxLength'].' m</td>
+                            </tr>';
+                if($gs['nLayers'] > 1) {
+                    $doc .= '<tr>
+                                <td>Profundidade da primeira camada do solo:</td>
+                                <td>'.$gs['firstLayerDepth'].' m</td>
                             </tr>
-                        </tr>
-                    </table><br/>';
-            }
-                //checkHere showCalculatedPoints
-            if($input['showConductors'] == true) {
-                $doc .= '<table border="1" class="output" cellspacing="0" cellpadding="3" style="margin-left: '.($margin).'cm; text-align: right; border: 1px solid #000000;">';
-                    $doc .= '<thead>
-                                <tr style="text-align: center;">
-                                    <th>X inicial (m)</th>
-                                    <th>Y inicial (m)</th>
-                                    <th>Z incial (m)</th>
-                                    <th>X final (m)</th>
-                                    <th>Y final (m)</th>
-                                    <th>Z final (m)</th>
-                                    <th>Cabo</th>
+                            <tr>
+                                <td>Resistividade da primeira camada do solo:</td>
+                                <td>'.$gs['firstLayerResistivity'].' &Omega;.m</td>
+                            </tr>
+                            <tr>
+                                <td>Resistividade da segunda camada do solo:</td>
+                                <td>'.$gs['secondLayerResistivity'].' &Omega;.m</td>
+                            </tr>';
+                } else {
+                    $doc .= '<tr>
+                                <td>Resistividade do solo:</td>
+                                <td>'.$gs['firstLayerResistivity'].' &Omega;.m</td>
+                            </tr>';
+                }
+                if($gs['injectedCurrent'] > 0) {
+                    if($gs['crushedStoneLayerDepth'] > 0) {
+                        $doc .= '<tr>
+                                    <td>Profundidade da camada de brita:</td>
+                                    <td>'.$gs['crushedStoneLayerDepth'].' m</td>
                                 </tr>
-                                </thead>
-                                <tbody>';
-                        foreach($input['conductors'] as $conductor) {
-                            if($conductor['gsId'] == $gs['id']) {
-                                $cable = $this->cable_model->get_cable($conductor['cableId']);
-                                $doc.='<tr>
-                                        <td>'.number_format($conductor['x1'], 3, '.', ',').'</td>
-                                        <td>'.number_format($conductor['y1'], 3, '.', ',').'</td>
-                                        <td>'.number_format($conductor['z1'], 3, '.', ',').'</td>
-                                        <td>'.number_format($conductor['x2'], 3, '.', ',').'</td>
-                                        <td>'.number_format($conductor['y2'], 3, '.', ',').'</td>
-                                        <td>'.number_format($conductor['z2'], 3, '.', ',').'</td>
-                                        <td>'.$cable['code'].'</td>
-                                    </tr>';
+                                <tr>
+                                    <td>Resistividade da camada de brita:</td>
+                                    <td>'.$gs['crushedStoneLayerResistivity'].' &Omega;.m</td>
+                                </tr>';
+                    }
+                    $doc .= '<tr>
+                                <td>Corrente injetada:</td>
+                                <td>'.$gs['injectedCurrent'].' A</td>
+                            </tr>';
+                }
+
+                $doc .= '</table>
+                        <br/>';
+
+                $cableIndex = 1;
+                foreach($input['cables'] as $cable) {
+                    $doc .= '<p class="oHeader" style="margin-left: '.($margin).'cm; display:inline">';
+                    $doc .= '<b>Cabo</b> ';
+                    if(sizeof($input['cables']) > 1) {
+                        $doc .= '<b>'.$cableIndex.'</b>';
+                        $cableIndex += 1;
+                    }
+                    $doc .= '</p>';
+                    $doc .= '<table border="0" class="output" style="margin-left: '.($margin+0.5).'cm;">
+                                <tr>
+                                    <td>Nome:</td>
+                                    <td>'.$cable['code'].'</td>
+                                </tr>
+                                <tr>
+                                    <td>Diâmetro:</td>
+                                    <td>'.$cable['diameter'].'</td>
+                                </tr>
+                            </tr>
+                        </table><br/>';
+                }
+
+                if($input['showConductors'] == true) {
+                    $doc .= '<table border="1" class="output" cellspacing="0" cellpadding="3" style="margin-left: '.($margin).'cm; text-align: right; border: 1px solid #000000;">';
+                        $doc .= '<thead>
+                                    <tr style="text-align: center;">
+                                        <th>X inicial (m)</th>
+                                        <th>Y inicial (m)</th>
+                                        <th>Z incial (m)</th>
+                                        <th>X final (m)</th>
+                                        <th>Y final (m)</th>
+                                        <th>Z final (m)</th>
+                                        <th>Cabo</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>';
+                            foreach($input['conductors'] as $conductor) {
+                                if($conductor['gsId'] == $gs['id']) {
+                                    $cable = $this->cable_model->get_cable($conductor['cableId']);
+                                    $doc.='<tr>
+                                            <td>'.number_format($conductor['x1'], 3, '.', ',').'</td>
+                                            <td>'.number_format($conductor['y1'], 3, '.', ',').'</td>
+                                            <td>'.number_format($conductor['z1'], 3, '.', ',').'</td>
+                                            <td>'.number_format($conductor['x2'], 3, '.', ',').'</td>
+                                            <td>'.number_format($conductor['y2'], 3, '.', ',').'</td>
+                                            <td>'.number_format($conductor['z2'], 3, '.', ',').'</td>
+                                            <td>'.$cable['code'].'</td>
+                                        </tr>';
+                                }
                             }
-                        }
-                
-                    $doc .= '</tbody>
-                        </table>';
+
+                        $doc .= '</tbody>
+                            </table>';
+                }
             }
             
             $doc .= '<br/><br/><b>Resultados:</b><br/><br/>';
@@ -429,7 +430,6 @@
                 }
                 $doc .= '</table><br/>';
                 
-                //if showPoints (add)
                 if($input['showCalculatedPoints'] == true) {
                     $doc .= '<table border="1" class="output" cellspacing="0" cellpadding="3" style="margin-left: '.($margin+1).'cm; text-align: right; border: 1px solid #000000;">
                                 <thead>
