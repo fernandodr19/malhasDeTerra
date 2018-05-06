@@ -370,10 +370,6 @@
                 <tr>
                     <td>Tensão:</td>
                     <td>'.number_format($gs['voltage'], 2, '.', ',').' V</td>
-                </tr>
-                <tr>
-                    <td>Corrent injetada:</td>
-                    <td>'.number_format($gs['injectedCurrent'], 2, '.', '').' A</td>
                 </tr>';
             $doc .= '</table><br/>';
             

@@ -58,6 +58,8 @@ void GroundingSystemGraph::setGroundingSystem(const GroundingSystemPtr& groundin
     m_surfaceVoltageRects.clear();
     m_scene.clear();
 
+    double offsetY;
+    double offset = 1;
     for(const Conductor& conductor : groundingSystem->getConductors()) {
         if(conductor.p0.z() == conductor.p1.z()) { // Horizontal conductor
             m_scene.addLine(conductor.p0.x(), -conductor.p0.y(), conductor.p1.x(), -conductor.p1.y(), QPen(Qt::black, 0));
@@ -68,6 +70,21 @@ void GroundingSystemGraph::setGroundingSystem(const GroundingSystemPtr& groundin
             QGraphicsEllipseItem *item = m_scene.addEllipse(-r2, -r2, r, r, QPen(Qt::blue, 0));
             item->setToolTip(tr("Length") + QString(": %1 m").arg(conductor.p0.distanceTo(conductor.p1)));
             item->setPos(conductor.p0.x(), -conductor.p0.y());
+
+            offsetY = 0;
+            if(conductor.p0.y() == 0) {
+                offsetY = -offset;
+            } else {
+                offsetY = offset/2.;
+            }
+
+            QGraphicsTextItem *textItem = m_scene.addText("(" + QString::number(conductor.p0.x()) + ", "
+                                                          + QString::number(conductor.p0.y()) + ")");
+            textItem->setFlag(QGraphicsItem::ItemIsMovable);
+            textItem->setFont(QFont("Arial", 1));
+            textItem->setScale(0.5);
+            QRectF rect = textItem->sceneBoundingRect();
+            textItem->setPos(conductor.p0.x() - rect.width() / 2, -conductor.p0.y() -offsetY - rect.height() / 2.);
         }
     }
 
@@ -78,8 +95,8 @@ void GroundingSystemGraph::setGroundingSystem(const GroundingSystemPtr& groundin
         Vector3Dd posA = profile.pi - dir * profile.stepSearchMargin;
         Vector3Dd posB = profile.pf + dir * profile.stepSearchMargin;
 
-        m_scene.addLine(posA.x(), -posA.y(), profile.pi.x(), -profile.pi.y(), QPen(Qt::red, 0, Qt::DashLine));
-        m_scene.addLine(profile.pf.x(), -profile.pf.y(), posB.x(), -posB.y(), QPen(Qt::red, 0, Qt::DashLine));
+//        m_scene.addLine(posA.x(), -posA.y(), profile.pi.x(), -profile.pi.y(), QPen(Qt::green, 0));
+//        m_scene.addLine(profile.pf.x(), -profile.pf.y(), posB.x(), -posB.y(), QPen(Qt::green, 0));
 
         QGraphicsLineItem *line = m_scene.addLine(profile.pi.x(), -profile.pi.y(), profile.pf.x(), -profile.pf.y(), QPen(Qt::red, 0));
         line->setToolTip(QString::number(profileIndex));
