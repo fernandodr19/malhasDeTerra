@@ -206,7 +206,7 @@ QPair<QPointF, QPointF> GraphicsView::getDistancePoints()
         return {m_distanceItem->line().p1(), m_distanceItem->line().p2()};
     return {QPointF(), QPointF()};
 }
-
+#include <QCoreApplication>
 bool GraphicsView::exportImage(const QString& filename, QRectF sceneRect)
 {
     if(sceneRect.isNull())
@@ -225,7 +225,29 @@ bool GraphicsView::exportImage(const QString& filename, QRectF sceneRect)
     painter.fillRect(0, 0, image.width(), image.height(), Qt::transparent);
     painter.setRenderHint(QPainter::Antialiasing);
     m_scene.render(&painter, QRectF(), sceneRect);
-    return image.save(filename);
+//    return image.save(filename);
+
+    QDir prev = QCoreApplication::applicationDirPath();
+    prev.cd("..");
+    prev.cd("..");
+    QImage graphLegend(prev.path() + "/assets/images/legend_graph.png");
+    QImage imageWithLegend =
+      QImage(QSize(image.width() + graphLegend.height() + 100, image.height() - 50),
+             QImage::Format_ARGB32_Premultiplied);
+    QPainter painter2(&imageWithLegend);
+
+    painter2.setCompositionMode(QPainter::CompositionMode_Source);
+    painter2.fillRect(imageWithLegend.rect(), Qt::white);
+
+    painter2.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter2.drawImage(0,0, image);
+
+    painter2.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter2.drawImage(image.width() - 70, image.height()/2 - graphLegend.height()/2, graphLegend);
+
+    painter2.end();
+
+    return imageWithLegend.save(filename);
 }
 
 void GraphicsView::distance(QPointF position)
